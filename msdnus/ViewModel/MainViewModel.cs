@@ -17,28 +17,29 @@ namespace msdnus.ViewModel
 
         public MainViewModel()
         {
-            Init();
+            try
+            {
+                Init();
+            }
+            catch (Exception ex)
+            {
+                
+            }
         }
 
         private async void Init()
         {
-            try
-            {
-                TempRezult = string.Empty;
+            TempRezult = string.Empty;
 
-                YourKey zz = await Utils.ReadObjectFromXmlFileAsync<YourKey>(@"KeysExport.xml");
-                foreach (var xx in zz.Items)
-                {
-                    TempRezult += "\n" + xx.Name;
-                    foreach (var ff in xx.Key)
-                    {
-                        var tt = "\n\t" + ff.ID + " " + ff.ClaimedDate + " " + ff.Type + " " + ff.Value;
-                        TempRezult += tt.Replace("&gt;", ">").Replace("&lt;", "<");
-                    }
-                }
-            }
-            catch (Exception ex)
+            YourKey zz = await Utils.ReadObjectFromXmlFileAsync<YourKey>(@"KeysExport.xml");
+            foreach (var xx in zz.Items)
             {
+                TempRezult += "\n" + xx.Name;
+                foreach (var ff in xx.Key)
+                {
+                    var tt = "\n\t" + ff.ID + " " + ff.ClaimedDate + " " + ff.Type + " " + ff.Value;
+                    TempRezult += tt.Replace("&gt;", ">").Replace("&lt;", "<");
+                }
             }
         }
     }

@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "msdnus", "msdnus\msdnus.csproj", "{D5830A47-B371-490C-9A90-D45765AAEFB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "masdnus.Tests", "masdnus.Tests\masdnus.Tests.csproj", "{006700B5-C980-45F1-8EB2-B7BD85F4FBA6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "msdnus.Tests", "masdnus.Tests\msdnus.Tests.csproj", "{006700B5-C980-45F1-8EB2-B7BD85F4FBA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

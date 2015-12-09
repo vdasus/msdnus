@@ -1,5 +1,4 @@
-﻿using Windows.ApplicationModel.DataTransfer;
-using msdnus.Model;
+﻿using msdnus.Model;
 using msdnus.Shared;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 
@@ -11,7 +10,7 @@ namespace masdnus.Tests.Model
         [TestMethod]
         public void ShouldCreateMsdnItem()
         {
-            YourKey zz = Utils.ReadObjectFromXmlFileAsync<YourKey>(@"KeysExport.xml").Result;
+            //YourKey zz = Utils.ReadObjectFromXmlFileAsync<YourKey>(@"KeysExport.xml").Result;
 
         }
     }
