@@ -13,11 +13,6 @@ namespace msdnus.Model
     </Product_Key>
         */
 
-    public class MsdnItem
-    {
-
-    }
-
     [XmlTypeAttribute(AnonymousType = true)]
     [XmlRootAttribute(Namespace = "", IsNullable = false)]
     public class YourKey
@@ -25,8 +20,8 @@ namespace msdnus.Model
 
         private YourKeyProduct_Key[] itemsField;
 
-        /// <remarks/>
-        [XmlElementAttribute("Product_Key", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [XmlElementAttribute("Product_Key", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)
+        ]
         public YourKeyProduct_Key[] Items
         {
             get { return itemsField; }
@@ -43,7 +38,8 @@ namespace msdnus.Model
         private string nameField;
 
         /// <remarks/>
-        [XmlElementAttribute("Key", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = true)]
+        [XmlElementAttribute("Key", Form = System.Xml.Schema.XmlSchemaForm.Unqualified,
+            IsNullable = true)]
         public YourKeyProduct_KeyKey[] Key
         {
             get { return keyField; }

@@ -9,7 +9,12 @@
     DataContext="{Binding Source={StaticResource Locator}, Path=Main}">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBox x:Uid="AppVersion" Text="{x:Bind Vm.AppVersion, Mode=OneTime}"  HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340"/>
+        <StackPanel>
+            <TextBox x:Uid="AppVersion" Text="{x:Bind Vm.AppVersion, Mode=OneTime}"  HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340"/>
+            <ScrollViewer>
+                <TextBox x:Uid="Log" Text="{x:Bind Vm.TempRezult, Mode=OneTime}" Height="500"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" />
+            </ScrollViewer>
+        </StackPanel>
 
     </Grid>
 </Page>
