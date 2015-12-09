@@ -14,7 +14,11 @@ namespace msdnus.Core.Shared
             T objectFromXml = default(T);
             var serializer = new XmlSerializer(typeof (T));
             StorageFolder folder = ApplicationData.Current.LocalFolder;
+
             StorageFile file = await folder.GetFileAsync(filename);
+            //Just snippet for other place
+            //if (!file.IsAvailable) file = await StorageFile.GetFileFromApplicationUriAsync(new Uri($"ms-appx:///{filename}"));
+
             Stream stream = await file.OpenStreamForReadAsync();
             objectFromXml = (T) serializer.Deserialize(stream);
             stream.Dispose();

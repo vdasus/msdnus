@@ -34,15 +34,13 @@ namespace msdnus.ViewModel
             SimpleIoc.Default.Register<MainViewModel>();
 
             SimpleIoc.Default.Register<IDataSource, FileDataSource>();
-            /*SimpleIoc.Default.Register<IDataFileSource, ADataFileHelper>();
-            SimpleIoc.Default.Register<IDataWebSource, ADataWebHelper>();*/
         }
 
         public static MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();
 
         public static void Cleanup()
         {
-            // TODO Clear the ViewModels
+            // TODO: Clear the ViewModels
         }
     }
 }

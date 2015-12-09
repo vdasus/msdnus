@@ -7,7 +7,8 @@ namespace msdnus.Tests.Model
     [TestClass]
     public class ModelTests
     {
-        [TestMethod] public void ShouldReadXmlFileToVar()
+        [TestMethod]
+        public void ShouldReadXmlFileToVar()
         {
             SimpleIoc.Default.Register<IDataSource, FileDataSource>();
 
