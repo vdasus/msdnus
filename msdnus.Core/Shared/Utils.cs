@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Windows.Storage;
 
-namespace msdnus.Shared
+namespace msdnus.Core.Shared
 {
     public static class Utils
     {
@@ -20,7 +20,7 @@ namespace msdnus.Shared
             stream.Dispose();
             return objectFromXml;
         }
-
+        
         public static async Task SaveObjectToXmlAsync<T>(T objectToSave, string filename)
         {
             // stores an object in XML format in file called 'filename'

@@ -1,8 +1,8 @@
 ﻿<Application
-    x:Class="masdnus.Tests.App"
+    x:Class="msdnus.Tests.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:masdnus.Tests"
+    xmlns:local="using:msdnus.Tests"
     RequestedTheme="Light">
 
 </Application>

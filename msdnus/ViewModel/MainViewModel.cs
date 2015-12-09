@@ -1,7 +1,8 @@
 ﻿using System;
 using Windows.ApplicationModel;
 using GalaSoft.MvvmLight;
-using msdnus.Model;
+using msdnus.Core.Model;
+using msdnus.Core.Shared;
 using msdnus.Shared;
 
 namespace msdnus.ViewModel
@@ -13,10 +14,12 @@ namespace msdnus.ViewModel
     $"v.{Package.Current.Id.Version.Major}.{Package.Current.Id.Version.Minor}.{Package.Current.Id.Version.Build}.{Package.Current.Id.Version.Revision}";
 
         public string TempRezult { get; set; }
-        
 
-        public MainViewModel()
+        private readonly IDataSource _datasource;
+
+        public MainViewModel(IDataSource datasource)
         {
+            _datasource = datasource;
             try
             {
                 Init();
@@ -31,7 +34,8 @@ namespace msdnus.ViewModel
         {
             TempRezult = string.Empty;
 
-            YourKey zz = await Utils.ReadObjectFromXmlFileAsync<YourKey>(@"KeysExport.xml");
+            //YourKey zz = await Utils.ReadObjectFromXmlFileAsync<YourKey>(@"KeysExport.xml");
+            YourKey zz = await _datasource.GetData(@"KeysExport.xml");
             foreach (var xx in zz.Items)
             {
                 TempRezult += "\n" + xx.Name;

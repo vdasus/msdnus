@@ -7,8 +7,8 @@
     <ProjectGuid>{006700B5-C980-45F1-8EB2-B7BD85F4FBA6}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>masdnus.Tests</RootNamespace>
-    <AssemblyName>masdnus.Tests</AssemblyName>
+    <RootNamespace>msdnus.Tests</RootNamespace>
+    <AssemblyName>msdnus.Tests</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
@@ -16,7 +16,7 @@
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <PackageCertificateKeyFile>masdnus.Tests_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>msdnus.Tests_TemporaryKey.pfx</PackageCertificateKeyFile>
     <UnitTestPlatformVersion Condition="'$(UnitTestPlatformVersion)' == ''">14.0</UnitTestPlatformVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
@@ -111,7 +111,7 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="masdnus.Tests_TemporaryKey.pfx" />
+    <None Include="msdnus.Tests_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\UnitTestApp.rd.xml" />
@@ -123,14 +123,13 @@
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\msdnus\msdnus.csproj">
-      <Project>{d5830a47-b371-490c-9a90-d45765aaefb1}</Project>
-      <Name>msdnus</Name>
+    <ProjectReference Include="..\msdnus.Core\msdnus.Core.csproj">
+      <Project>{43c451d9-ceeb-41d8-be2e-2617b70977bc}</Project>
+      <Name>msdnus.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

@@ -13,6 +13,7 @@
 */
 
 using GalaSoft.MvvmLight.Ioc;
+using msdnus.Core.Model;
 using Microsoft.Practices.ServiceLocation;
 
 namespace msdnus.ViewModel
@@ -31,6 +32,8 @@ namespace msdnus.ViewModel
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
             SimpleIoc.Default.Register<MainViewModel>();
+
+            SimpleIoc.Default.Register<IDataSource, FileDataSource>();
             /*SimpleIoc.Default.Register<IDataFileSource, ADataFileHelper>();
             SimpleIoc.Default.Register<IDataWebSource, ADataWebHelper>();*/
         }

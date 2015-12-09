@@ -98,9 +98,7 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\MsdnItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Shared\Utils.cs" />
     <Compile Include="Shared\PropertyChangedBase.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
@@ -131,7 +129,12 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\msdnus.Core\msdnus.Core.csproj">
+      <Project>{43c451d9-ceeb-41d8-be2e-2617b70977bc}</Project>
+      <Name>msdnus.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

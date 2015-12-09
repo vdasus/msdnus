@@ -1,7 +1,8 @@
 ﻿using System.Xml.Serialization;
+
 // ReSharper disable InconsistentNaming
 
-namespace msdnus.Model
+namespace msdnus.Core.Model
 {
     /*
     <Product_Key Name="Windows 8 Pro">
@@ -13,14 +14,14 @@ namespace msdnus.Model
     </Product_Key>
         */
 
-    [XmlTypeAttribute(AnonymousType = true)]
-    [XmlRootAttribute(Namespace = "", IsNullable = false)]
+    [XmlType(AnonymousType = true)]
+    [XmlRoot(Namespace = "", IsNullable = false)]
     public class YourKey
     {
 
         private YourKeyProduct_Key[] itemsField;
 
-        [XmlElementAttribute("Product_Key", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)
+        [XmlElement("Product_Key", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)
         ]
         public YourKeyProduct_Key[] Items
         {
@@ -29,7 +30,7 @@ namespace msdnus.Model
         }
     }
 
-    [XmlTypeAttribute(AnonymousType = true)]
+    [XmlType(AnonymousType = true)]
     public class YourKeyProduct_Key
     {
 
@@ -38,7 +39,7 @@ namespace msdnus.Model
         private string nameField;
 
         /// <remarks/>
-        [XmlElementAttribute("Key", Form = System.Xml.Schema.XmlSchemaForm.Unqualified,
+        [XmlElement("Key", Form = System.Xml.Schema.XmlSchemaForm.Unqualified,
             IsNullable = true)]
         public YourKeyProduct_KeyKey[] Key
         {
@@ -47,7 +48,7 @@ namespace msdnus.Model
         }
 
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute()]
         public string Name
         {
             get { return nameField; }
@@ -55,7 +56,7 @@ namespace msdnus.Model
         }
     }
 
-    [XmlTypeAttribute(AnonymousType = true)]
+    [XmlType(AnonymousType = true)]
     public class YourKeyProduct_KeyKey
     {
 
@@ -68,7 +69,7 @@ namespace msdnus.Model
         private string valueField;
 
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute()]
         public string ID
         {
             get { return idField; }
@@ -76,7 +77,7 @@ namespace msdnus.Model
         }
 
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute()]
         public string Type
         {
             get { return typeField; }
@@ -84,7 +85,7 @@ namespace msdnus.Model
         }
 
         /// <remarks/>
-        [XmlAttributeAttribute()]
+        [XmlAttribute()]
         public string ClaimedDate
         {
             get { return claimedDateField; }
@@ -92,7 +93,7 @@ namespace msdnus.Model
         }
 
         /// <remarks/>
-        [XmlTextAttribute()]
+        [XmlText()]
         public string Value
         {
             get { return valueField; }
