@@ -8,29 +8,19 @@ namespace msdnus.Core.Shared
 {
     public static class Utils
     {
-        public static async Task<T> ReadObjectFromXmlFileAsync<T>(string filename)
+        public static async Task<T> ReadObjectFromXmlFileAsync<T>(StorageFile file)
         {
-            // this reads XML content from a file ("filename") and returns an object  from the XML
-            T objectFromXml = default(T);
             var serializer = new XmlSerializer(typeof (T));
-            StorageFolder folder = ApplicationData.Current.LocalFolder;
-
-            StorageFile file = await folder.GetFileAsync(filename);
-            //Just snippet for other place
-            //if (!file.IsAvailable) file = await StorageFile.GetFileFromApplicationUriAsync(new Uri($"ms-appx:///{filename}"));
 
             Stream stream = await file.OpenStreamForReadAsync();
-            objectFromXml = (T) serializer.Deserialize(stream);
+            var objectFromXml = (T) serializer.Deserialize(stream);
             stream.Dispose();
             return objectFromXml;
         }
         
-        public static async Task SaveObjectToXmlAsync<T>(T objectToSave, string filename)
+        public static async Task SaveObjectToXmlAsync<T>(T objectToSave, StorageFile file)
         {
-            // stores an object in XML format in file called 'filename'
             var serializer = new XmlSerializer(typeof (T));
-            StorageFolder folder = ApplicationData.Current.LocalFolder;
-            StorageFile file = await folder.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
             Stream stream = await file.OpenStreamForWriteAsync();
 
             using (stream)
