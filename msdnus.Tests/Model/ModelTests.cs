@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using Windows.Storage;
+﻿using System.Collections.Generic;
+using System.Linq;
 using GalaSoft.MvvmLight.Ioc;
 using msdnus.Core.Model;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
@@ -9,12 +9,23 @@ namespace msdnus.Tests.Model
     [TestClass]
     public class ModelTests
     {
+        const string FNAME = @"KeysExport.xml";
+
         private static IDataSource _datasource;
         private static IDataTarget _datatarget;
+
+        private static YourKey _dataFromArray;
+        private static YourKey _yk;
 
         ModelTests()
         {
             InitDatasources();
+        }
+
+        [ClassInitialize]
+        public static void ClassInit(TestContext ctx)
+        {
+            Lex.Db.Serialization.Extender.RegisterType<YourKeyKeyDTO, CustomTypesSerializers>(1000);
         }
 
         #region Init
@@ -24,6 +35,9 @@ namespace msdnus.Tests.Model
             SimpleIoc.Default.Register<IDataTarget, DataTarget>();
             _datasource = SimpleIoc.Default.GetInstance<IDataSource>();
             _datatarget = SimpleIoc.Default.GetInstance<IDataTarget>();
+
+            _dataFromArray = InitYourKey();
+            _yk = PrepareFileInLocalFolder();
         }
 
         private static YourKey InitYourKey()
@@ -57,30 +71,27 @@ namespace msdnus.Tests.Model
             };
             return yk;
         }
+
+        private static YourKey PrepareFileInLocalFolder()
+        {
+            var bl = _datasource.SaveData(_dataFromArray, FNAME).Result;
+            return _datasource.GetData(FNAME).Result;
+        }
         #endregion
 
         [TestMethod]
         public void ShouldFileWriteReadYourKey()
         {
-            const string FNAME = @"KeysExport.xml";
+            Assert.IsNotNull(_yk);
+            Assert.AreEqual(_yk.Items.Length, _dataFromArray.Items.Length);
+            Assert.AreEqual(_yk.Items[0].Name, _dataFromArray.Items[0].Name);
 
-            var yk = InitYourKey();
+            Assert.AreEqual(_yk.Items[0].Key.Length, _dataFromArray.Items[0].Key.Length);
 
-            var isokwrite = _datasource.SaveData(yk, FNAME).Result;
-
-            YourKey zz = _datasource.GetData(FNAME).Result;
-
-            Assert.IsTrue(isokwrite);
-            Assert.IsNotNull(zz);
-            Assert.AreEqual(yk.Items.Length, zz.Items.Length);
-            Assert.AreEqual(yk.Items[0].Name, zz.Items[0].Name);
-
-            Assert.AreEqual(yk.Items[0].Key.Length, zz.Items[0].Key.Length);
-
-            foreach (var zzz in yk.Items[0].Key)
+            foreach (var zzz in _yk.Items[0].Key)
             {
                 bool isok =
-                    zz.Items[0].Key.Any(
+                    _dataFromArray.Items[0].Key.Any(
                         yyy =>
                             (zzz.ClaimedDate == yyy.ClaimedDate) && (zzz.ID == yyy.ID) &&
                             (zzz.Type == yyy.Type) && (zzz.Value == yyy.Value));
@@ -91,11 +102,18 @@ namespace msdnus.Tests.Model
         [TestMethod]
         public void ShouldSaveYourKeyToDb()
         {
-            StorageFolder folder = ApplicationData.Current.LocalFolder;
-            var isok = _datatarget.SaveData(InitYourKey()).Result;
+            //StorageFolder folder = ApplicationData.Current.LocalFolder;
+            List<YourKeyDTO> lst = new List<YourKeyDTO>();
 
-
-
+            foreach (var ff in _yk.Items)
+            {
+                YourKeyDTO dt = new YourKeyDTO();
+                dt.MapFromYourKeyProduct_Key(ff);
+                lst.Add(dt);
+            }
+            
+            var isok = _datatarget.SaveData(lst).Result;
+            
             Assert.IsTrue(isok);
         }
     }

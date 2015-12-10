@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Lex.Db;
 
@@ -38,18 +39,21 @@ namespace msdnus.Core.Model
             return yk;
         }
 
-        public async Task<bool> SaveData(YourKey yk)
+        public async Task<bool> SaveData(List<YourKeyDTO> yk)
         {
             using (var db = new DbInstance("msdnus_db"))
             {
                 try
                 {
-                    db.Map<YourKeyProduct_KeyKey>().Automap(i => i.Id);
+                    db.Map<YourKeyDTO>().Automap(i => i.Id, true);
                     db.Initialize();
 
                     foreach (var zz in InitYourKey().Items)
                     {
-                        db.Save(zz.Key);
+                        var tmp = new YourKeyDTO();
+                        tmp.MapFromYourKeyProduct_Key(zz);
+
+                        db.Save(tmp);
                     }
                 }
                 catch (Exception ex)

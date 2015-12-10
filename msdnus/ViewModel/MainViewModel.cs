@@ -30,6 +30,8 @@ namespace msdnus.ViewModel
         {
             try
             {
+                Lex.Db.Serialization.Extender.RegisterType<YourKeyKeyDTO, CustomTypesSerializers>(1000);
+
                 TempRezult = string.Empty;
 
                 YourKey zz = await _datasource.GetData(@"KeysExport.xml");
