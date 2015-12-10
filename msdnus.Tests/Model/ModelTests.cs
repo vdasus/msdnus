@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Windows.Storage;
 using GalaSoft.MvvmLight.Ioc;
 using msdnus.Core.Model;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
@@ -8,10 +9,23 @@ namespace msdnus.Tests.Model
     [TestClass]
     public class ModelTests
     {
-        private IDataSource datasource;
-        private IDataTarget datatarget;
+        private static IDataSource _datasource;
+        private static IDataTarget _datatarget;
+
+        ModelTests()
+        {
+            InitDatasources();
+        }
 
         #region Init
+        public static void InitDatasources()
+        {
+            SimpleIoc.Default.Register<IDataSource, FileDataSource>();
+            SimpleIoc.Default.Register<IDataTarget, DataTarget>();
+            _datasource = SimpleIoc.Default.GetInstance<IDataSource>();
+            _datatarget = SimpleIoc.Default.GetInstance<IDataTarget>();
+        }
+
         private static YourKey InitYourKey()
         {
             YourKey yk = new YourKey
@@ -43,14 +57,6 @@ namespace msdnus.Tests.Model
             };
             return yk;
         }
-
-        private void InitDatasources()
-        {
-            SimpleIoc.Default.Register<IDataSource, FileDataSource>();
-            SimpleIoc.Default.Register<IDataTarget, DataTarget>();
-            datasource = SimpleIoc.Default.GetInstance<IDataSource>();
-            datatarget = SimpleIoc.Default.GetInstance<IDataTarget>();
-        }
         #endregion
 
         [TestMethod]
@@ -58,13 +64,11 @@ namespace msdnus.Tests.Model
         {
             const string FNAME = @"KeysExport.xml";
 
-            InitDatasources();
-
             var yk = InitYourKey();
 
-            var isokwrite = datasource.SaveData(yk, FNAME).Result;
+            var isokwrite = _datasource.SaveData(yk, FNAME).Result;
 
-            YourKey zz = datasource.GetData(FNAME).Result;
+            YourKey zz = _datasource.GetData(FNAME).Result;
 
             Assert.IsTrue(isokwrite);
             Assert.IsNotNull(zz);
@@ -87,7 +91,12 @@ namespace msdnus.Tests.Model
         [TestMethod]
         public void ShouldSaveYourKeyToDb()
         {
-            
+            StorageFolder folder = ApplicationData.Current.LocalFolder;
+            var isok = _datatarget.SaveData(InitYourKey()).Result;
+
+
+
+            Assert.IsTrue(isok);
         }
     }
 }

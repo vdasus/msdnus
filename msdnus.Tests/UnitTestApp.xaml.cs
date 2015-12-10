@@ -60,7 +60,6 @@ namespace msdnus.Tests
 
             // Ensure the current window is active
             Window.Current.Activate();
-
             Microsoft.VisualStudio.TestPlatform.TestExecutor.UnitTestClient.Run(e.Arguments);
         }
 
