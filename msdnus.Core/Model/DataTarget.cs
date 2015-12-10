@@ -13,7 +13,7 @@ namespace msdnus.Core.Model
         {
             _db = new DbInstance("msdnus_db");
             _db.Map<YourKeyDTO>().Automap(i => i.Id, true);
-            _db.Map<YourKeyKeyDTO>().Automap(i => i.Id, true);
+            
             _db.Initialize();
         }
 

@@ -35,9 +35,9 @@ namespace msdnus.ViewModel
         {
             try
             {
-                TempRezult = string.Empty;
+                /*TempRezult = string.Empty;
 
-                /*YourKey zz = await _datasource.GetData(@"KeysExport.xml");
+                YourKey zz = await _datasource.GetData(@"KeysExport.xml");
                 foreach (var xx in zz.Items)
                 {
                     TempRezult += "\n" + xx.Name;

@@ -27,6 +27,7 @@
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
                                                 <TextBox Text="{Binding Type, Mode=OneTime}"></TextBox>
+                                                <TextBox Text="{Binding Value, Mode=OneTime}"></TextBox>
                                                 <TextBox Text="{Binding ClaimedDate, Mode=OneTime}"></TextBox>
                                                 </StackPanel>
                                             </DataTemplate>

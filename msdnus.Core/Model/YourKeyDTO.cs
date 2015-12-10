@@ -40,12 +40,12 @@ namespace msdnus.Core.Model
 
         public string Value { get; set; }
 
-        public void MapFromYourKeyProduct_KeyKey(YourKeyProduct_KeyKey yk)
+        public void MapFromYourKeyProduct_KeyKey(YourKeyProduct_KeyKey ykk)
         {
-            ID = yk.ID;
-            Type = yk.Type;
-            ClaimedDate = yk.ClaimedDate;
-            Value = yk.Value;
+            ID = ykk.ID;
+            Type = ykk.Type;
+            ClaimedDate = ykk.ClaimedDate;
+            Value = ykk.Value;
         }
     }
 
@@ -68,8 +68,8 @@ namespace msdnus.Core.Model
             writer.Write(value.Id);
             writer.Write(value.ID);
             writer.Write(value.Type);
-            writer.Write(value.ClaimedDate);
             writer.Write(value.Value);
+            writer.Write(value.ClaimedDate);
         }
     }
 }
