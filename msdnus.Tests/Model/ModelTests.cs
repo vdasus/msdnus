@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.Ioc;
+﻿using System.Linq;
+using GalaSoft.MvvmLight.Ioc;
 using msdnus.Core.Model;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 
@@ -7,6 +8,9 @@ namespace msdnus.Tests.Model
     [TestClass]
     public class ModelTests
     {
+        private IDataSource datasource;
+        private IDataTarget datatarget;
+
         #region Init
         private static YourKey InitYourKey()
         {
@@ -39,15 +43,22 @@ namespace msdnus.Tests.Model
             };
             return yk;
         }
+
+        private void InitDatasources()
+        {
+            SimpleIoc.Default.Register<IDataSource, FileDataSource>();
+            SimpleIoc.Default.Register<IDataTarget, DataTarget>();
+            datasource = SimpleIoc.Default.GetInstance<IDataSource>();
+            datatarget = SimpleIoc.Default.GetInstance<IDataTarget>();
+        }
         #endregion
 
         [TestMethod]
-        public void ShouldReadXmlFileToVar()
+        public void ShouldFileWriteReadYourKey()
         {
             const string FNAME = @"KeysExport.xml";
 
-            SimpleIoc.Default.Register<IDataSource, FileDataSource>();
-            var datasource = SimpleIoc.Default.GetInstance<IDataSource>();
+            InitDatasources();
 
             var yk = InitYourKey();
 
@@ -57,20 +68,26 @@ namespace msdnus.Tests.Model
 
             Assert.IsTrue(isokwrite);
             Assert.IsNotNull(zz);
-            Assert.AreEqual(1, zz.Items.Length);
-            Assert.AreEqual("TEST1", zz.Items[0].Name);
+            Assert.AreEqual(yk.Items.Length, zz.Items.Length);
+            Assert.AreEqual(yk.Items[0].Name, zz.Items[0].Name);
 
-            Assert.AreEqual(2,zz.Items[0].Key.Length);
+            Assert.AreEqual(yk.Items[0].Key.Length, zz.Items[0].Key.Length);
 
-            Assert.AreEqual("2015-01-01", zz.Items[0].Key[0].ClaimedDate);
-            Assert.AreEqual("ID1", zz.Items[0].Key[0].ID);
-            Assert.AreEqual("TYPE1", zz.Items[0].Key[0].Type);
-            Assert.AreEqual("VALUE1", zz.Items[0].Key[0].Value);
+            foreach (var zzz in yk.Items[0].Key)
+            {
+                bool isok =
+                    zz.Items[0].Key.Any(
+                        yyy =>
+                            (zzz.ClaimedDate == yyy.ClaimedDate) && (zzz.ID == yyy.ID) &&
+                            (zzz.Type == yyy.Type) && (zzz.Value == yyy.Value));
+                Assert.IsTrue(isok, zzz.ToString());
+            }
+        }
 
-            Assert.AreEqual("2015-01-02", zz.Items[0].Key[1].ClaimedDate);
-            Assert.AreEqual("ID2", zz.Items[0].Key[1].ID);
-            Assert.AreEqual("TYPE2", zz.Items[0].Key[1].Type);
-            Assert.AreEqual("VALUE2", zz.Items[0].Key[1].Value);
+        [TestMethod]
+        public void ShouldSaveYourKeyToDb()
+        {
+            
         }
     }
 }

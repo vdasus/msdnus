@@ -107,9 +107,11 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\DataTarget.cs" />
     <Compile Include="Model\FileDataSource.cs" />
     <Compile Include="Model\IDataSource.cs" />
-    <Compile Include="Model\MsdnItem.cs" />
+    <Compile Include="Model\IDataTarget.cs" />
+    <Compile Include="Model\YourKey.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shared\Utils.cs" />
     <EmbeddedResource Include="Properties\msdnus.Core.rd.xml" />
