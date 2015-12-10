@@ -5,6 +5,7 @@ namespace msdnus.Core.Model
 {
     public interface IDataTarget
     {
-        Task<bool> SaveData(List<YourKeyDTO> yk);
+        bool SaveData(List<YourKeyDTO> ykl);
+        List<YourKeyDTO> GetAllData();
     }
 }

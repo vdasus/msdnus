@@ -29,11 +29,14 @@ namespace msdnus.ViewModel
         /// </summary>
         public ViewModelLocator()
         {
+            Lex.Db.Serialization.Extender.RegisterType<YourKeyKeyDTO, CustomTypesSerializers>(1000);
+
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
             SimpleIoc.Default.Register<MainViewModel>();
 
             SimpleIoc.Default.Register<IDataSource, FileDataSource>();
+            SimpleIoc.Default.Register<IDataTarget, DataTarget>();
         }
 
         public static MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();

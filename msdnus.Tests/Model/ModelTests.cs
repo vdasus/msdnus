@@ -112,9 +112,18 @@ namespace msdnus.Tests.Model
                 lst.Add(dt);
             }
             
-            var isok = _datatarget.SaveData(lst).Result;
+            var isok = _datatarget.SaveData(lst);
             
             Assert.IsTrue(isok);
+        }
+
+        [TestMethod]
+        public void ShoudLoadAllDataFromDb()
+        {
+            ShouldSaveYourKeyToDb();
+            var zz = _datatarget.GetAllData();
+            Assert.IsNotNull(zz);
+            Assert.IsTrue(zz.Count>0);
         }
     }
 }

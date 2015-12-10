@@ -12,9 +12,32 @@
         <StackPanel>
             <TextBox x:Uid="AppVersion" Text="{x:Bind Vm.AppVersion, Mode=OneTime}"  HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340"/>
             <TextBox x:Uid="TempFile" Text="{x:Bind Vm.TempFolder, Mode=TwoWay}"  HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340"/>
-            <ScrollViewer>
-                <TextBox x:Uid="Log" Text="{x:Bind Vm.TempRezult, Mode=OneTime}" Height="500"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" />
-            </ScrollViewer>
+            <StackPanel Orientation="Horizontal">
+                <ScrollViewer>
+                    <TextBox x:Uid="Log" Text="{x:Bind Vm.TempRezult, Mode=OneTime}" Height="500"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" />
+                </ScrollViewer>
+                <ScrollViewer>
+                    <ListBox x:Uid="Log2" ItemsSource="{Binding TempList, Mode=OneTime}" Height="500"  HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <TextBox Text="{Binding Path=Name, Mode=OneTime}"></TextBox>
+                                    <ListBox ItemsSource="{Binding Path=Items}">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                <TextBox Text="{Binding Type, Mode=OneTime}"></TextBox>
+                                                <TextBox Text="{Binding ClaimedDate, Mode=OneTime}"></TextBox>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </ScrollViewer>
+            </StackPanel>
         </StackPanel>
 
     </Grid>

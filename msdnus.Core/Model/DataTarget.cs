@@ -1,67 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 using Lex.Db;
 
 namespace msdnus.Core.Model
 {
     public class DataTarget: IDataTarget
     {
-        private static YourKey InitYourKey()
+        private readonly DbInstance _db;
+
+        public DataTarget()
         {
-            YourKey yk = new YourKey
-            {
-                Items = new YourKeyProduct_Key[]
-                {
-                    new YourKeyProduct_Key()
-                    {
-                        Key = new YourKeyProduct_KeyKey[]
-                        {
-                            new YourKeyProduct_KeyKey()
-                            {
-                                ClaimedDate = "2015-01-01",
-                                ID = "ID1",
-                                Type = "TYPE1",
-                                Value = "VALUE1"
-                            },
-                            new YourKeyProduct_KeyKey()
-                            {
-                                ClaimedDate = "2015-01-02",
-                                ID = "ID2",
-                                Type = "TYPE2",
-                                Value = "VALUE2"
-                            },
-                        },
-                        Name = "TEST1"
-                    }
-                }
-            };
-            return yk;
+            _db = new DbInstance("msdnus_db");
+            _db.Map<YourKeyDTO>().Automap(i => i.Id, true);
+            _db.Map<YourKeyKeyDTO>().Automap(i => i.Id, true);
+            _db.Initialize();
         }
 
-        public async Task<bool> SaveData(List<YourKeyDTO> yk)
+        public bool SaveData(List<YourKeyDTO> ykl)
         {
-            using (var db = new DbInstance("msdnus_db"))
+            try
             {
-                try
-                {
-                    db.Map<YourKeyDTO>().Automap(i => i.Id, true);
-                    db.Initialize();
-
-                    foreach (var zz in InitYourKey().Items)
-                    {
-                        var tmp = new YourKeyDTO();
-                        tmp.MapFromYourKeyProduct_Key(zz);
-
-                        db.Save(tmp);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return false;
-                }
+                _db.Save(ykl.ToArray());
+            }
+            catch (Exception)
+            {
+                return false;
             }
             return true;
+        }
+
+        public List<YourKeyDTO> GetAllData()
+        {
+            return _db.LoadAll<YourKeyDTO>().ToList();
         }
     }
 }

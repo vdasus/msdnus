@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Windows.ApplicationModel;
 using Windows.Storage;
 using GalaSoft.MvvmLight;
@@ -15,26 +16,28 @@ namespace msdnus.ViewModel
 
         public string TempRezult { get; set; }
         public string TempFolder { get; set; }
+
+        public List<YourKeyDTO> TempList { get; set; }
         
         private readonly IDataSource _datasource;
+        private readonly IDataTarget _datatarget;
 
-        public MainViewModel(IDataSource datasource)
+        public MainViewModel(IDataSource datasource, IDataTarget datatarget)
         {
             TempFolder = ApplicationData.Current.LocalFolder.Path;
             _datasource = datasource;
-            
-                Init();
+            _datatarget = datatarget;
+
+            Init();
         }
 
         private async void Init()
         {
             try
             {
-                Lex.Db.Serialization.Extender.RegisterType<YourKeyKeyDTO, CustomTypesSerializers>(1000);
-
                 TempRezult = string.Empty;
 
-                YourKey zz = await _datasource.GetData(@"KeysExport.xml");
+                /*YourKey zz = await _datasource.GetData(@"KeysExport.xml");
                 foreach (var xx in zz.Items)
                 {
                     TempRezult += "\n" + xx.Name;
@@ -44,6 +47,19 @@ namespace msdnus.ViewModel
                         TempRezult += tt.Replace("&gt;", ">").Replace("&lt;", "<");
                     }
                 }
+
+                List<YourKeyDTO> lst = new List<YourKeyDTO>();
+
+                foreach (var ff in zz.Items)
+                {
+                    YourKeyDTO dt = new YourKeyDTO();
+                    dt.MapFromYourKeyProduct_Key(ff);
+                    lst.Add(dt);
+                }
+
+                _datatarget.SaveData(lst);*/
+
+                TempList = _datatarget.GetAllData();
             }
             catch (Exception ex)
             {
