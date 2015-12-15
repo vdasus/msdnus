@@ -3,6 +3,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:msdnus"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:command="http://www.galasoft.ch/mvvmlight"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -11,14 +13,19 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <TextBox Grid.Row="0" x:Uid="AppVersion" Text="{x:Bind Vm.AppVersion, Mode=OneTime}"  HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340"/>
+        <TextBox Grid.Row="0" x:Uid="AppVersion" Text="{x:Bind Vm.AppVersion, Mode=OneTime}"  
+                 HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340" BorderThickness="0"/>
+        <TextBox Grid.Row="1" Text="{Binding TextToSearch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                 HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340" TextChanged="TextBox_OnTextChanged">
+        </TextBox>
         <!--<TextBox x:Uid="TempFile" Text="{x:Bind Vm.TempFolder, Mode=TwoWay}"  HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340"/>-->
         <!--                <ScrollViewer>
                     <TextBox x:Uid="Log" Text="{x:Bind Vm.TempRezult, Mode=OneTime}" Height="500"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" />
                 </ScrollViewer>-->
-        <ScrollViewer Grid.Row="1">
+        <ScrollViewer Grid.Row="2">
             <ListBox x:Uid="Log2" ItemsSource="{Binding TempList, Mode=OneTime}" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -33,9 +40,9 @@
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">
                                             <Button Command="{Binding Source={StaticResource Locator}, Path=Main.CopyToClipboard, Mode=OneTime}"
-                                                    CommandParameter="{Binding Value, Mode=OneTime}" 
+                                                    CommandParameter="{Binding Value, Mode=OneTime}"
                                                     Padding="0" BorderThickness="0">
-                                                <Image Source="Assets/Copy_Dark.png" Stretch="UniformToFill"/>
+                                                <Image Source="Assets/Copy_Dark.png" />
                                             </Button>
                                             <TextBox Text="{Binding Value, Mode=OneTime}" BorderThickness="0" VerticalAlignment="Center" />
                                             <TextBox Text="{Binding Type, Mode=OneTime}" BorderThickness="0" VerticalAlignment="Center" />

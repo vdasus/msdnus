@@ -1,5 +1,6 @@
 ﻿{
   "dependencies": {
+    "KindOfMagic": "1.2.6",
     "Lex.Db": "1.2.5",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0"
   },

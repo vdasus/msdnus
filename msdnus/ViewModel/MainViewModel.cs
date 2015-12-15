@@ -12,7 +12,7 @@ using msdnus.Shared;
 namespace msdnus.ViewModel
 {
     [Magic]
-    public class MainViewModel: ViewModelBase
+    public class MainViewModel: PropertyChangedBase
     {
         public string AppVersion { get; } =
     $"v.{Package.Current.Id.Version.Major}.{Package.Current.Id.Version.Minor}.{Package.Current.Id.Version.Build}.{Package.Current.Id.Version.Revision}";
@@ -20,9 +20,12 @@ namespace msdnus.ViewModel
         public string TempRezult { get; set; }
         public string TempFolder { get; set; }
 
+        public string TextToSearch { get; set; }
+        
         public List<YourKeyDTO> TempList { get; set; }
 
         public RelayCommand<string> CopyToClipboard { get; set; }
+        public RelayCommand SearchStringChanged { get; set; }
 
         private readonly IDataSource _datasource;
         private readonly IDataTarget _datatarget;
@@ -40,19 +43,8 @@ namespace msdnus.ViewModel
         {
             try
             {
-                /*TempRezult = string.Empty;
-
-                YourKey zz = await _datasource.GetData(@"KeysExport.xml");
-                foreach (var xx in zz.Items)
-                {
-                    TempRezult += "\n" + xx.Name;
-                    foreach (var ff in xx.Key)
-                    {
-                        var tt = "\n\t" + ff.ID + " " + ff.ClaimedDate + " " + ff.Type + " " + ff.Value;
-                        TempRezult += tt.Replace("&gt;", ">").Replace("&lt;", "<");
-                    }
-                }
-
+                /*YourKey zz = await _datasource.GetData(@"KeysExport.xml");
+                
                 List<YourKeyDTO> lst = new List<YourKeyDTO>();
 
                 foreach (var ff in zz.Items)
@@ -64,8 +56,6 @@ namespace msdnus.ViewModel
 
                 _datatarget.SaveData(lst);*/
 
-                TempList = _datatarget.GetAllData();
-
                 CopyToClipboard = new RelayCommand<string>(async (e) =>
                 {
                     MessageDialog msg = new MessageDialog(e);
@@ -74,6 +64,20 @@ namespace msdnus.ViewModel
                     dp.SetText(e);
                     Clipboard.SetContent(dp);
                 });
+
+                SearchStringChanged = new RelayCommand(async () =>
+                {
+                    if (string.IsNullOrEmpty(TextToSearch)) return;
+
+                    TempList = await _datatarget.GetDataValueByName(TextToSearch);
+                    RaisePropertyChanged("TempList");
+
+                    /*MessageDialog msg = new MessageDialog(TextToSearch);
+                    await msg.ShowAsync();*/
+                });
+
+                TempList = await _datatarget.GetAllData();
+                RaisePropertyChanged("TempList");
             }
             catch (Exception ex)
             {

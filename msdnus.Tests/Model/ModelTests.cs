@@ -121,7 +121,7 @@ namespace msdnus.Tests.Model
         public void ShoudLoadAllDataFromDb()
         {
             ShouldSaveYourKeyToDb();
-            var zz = _datatarget.GetAllData();
+            var zz = _datatarget.GetAllData().Result;
             Assert.IsNotNull(zz);
             Assert.IsTrue(zz.Count>0);
         }

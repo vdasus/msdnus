@@ -1,4 +1,5 @@
-﻿using msdnus.ViewModel;
+﻿using Windows.UI.Xaml.Controls;
+using msdnus.ViewModel;
 
 namespace msdnus
 {
@@ -11,7 +12,12 @@ namespace msdnus
 
         public MainPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
+        }
+
+        private async void TextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if(Vm.SearchStringChanged.CanExecute(null)) Vm.SearchStringChanged.Execute(null);
         }
     }
 }
