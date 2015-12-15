@@ -9,37 +9,45 @@
     DataContext="{Binding Source={StaticResource Locator}, Path=Main}">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel>
-            <TextBox x:Uid="AppVersion" Text="{x:Bind Vm.AppVersion, Mode=OneTime}"  HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340"/>
-            <TextBox x:Uid="TempFile" Text="{x:Bind Vm.TempFolder, Mode=TwoWay}"  HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340"/>
-            <StackPanel Orientation="Horizontal">
-                <ScrollViewer>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBox Grid.Row="0" x:Uid="AppVersion" Text="{x:Bind Vm.AppVersion, Mode=OneTime}"  HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340"/>
+        <!--<TextBox x:Uid="TempFile" Text="{x:Bind Vm.TempFolder, Mode=TwoWay}"  HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340"/>-->
+        <!--                <ScrollViewer>
                     <TextBox x:Uid="Log" Text="{x:Bind Vm.TempRezult, Mode=OneTime}" Height="500"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" />
-                </ScrollViewer>
-                <ScrollViewer>
-                    <ListBox x:Uid="Log2" ItemsSource="{Binding TempList, Mode=OneTime}" Height="500"  HorizontalAlignment="Left" VerticalAlignment="Top">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <TextBox Text="{Binding Path=Name, Mode=OneTime}"></TextBox>
-                                    <ListBox ItemsSource="{Binding Path=Items}">
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <StackPanel Orientation="Horizontal">
-                                                <TextBox Text="{Binding Type, Mode=OneTime}"></TextBox>
-                                                <TextBox Text="{Binding Value, Mode=OneTime}"></TextBox>
-                                                <TextBox Text="{Binding ClaimedDate, Mode=OneTime}"></TextBox>
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                    </ListBox>
-                                </Grid>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </ScrollViewer>
-            </StackPanel>
-        </StackPanel>
-
+                </ScrollViewer>-->
+        <ScrollViewer Grid.Row="1">
+            <ListBox x:Uid="Log2" ItemsSource="{Binding TempList, Mode=OneTime}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <TextBox Text="{Binding Name, Mode=OneTime}" Grid.Row="0" BorderThickness="0" />
+                                <ListBox ItemsSource="{Binding Items, Mode=OneTime}" Grid.Row="1">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                            <Button Command="{Binding Source={StaticResource Locator}, Path=Main.CopyToClipboard, Mode=OneTime}"
+                                                    CommandParameter="{Binding Value, Mode=OneTime}" 
+                                                    Padding="0" BorderThickness="0">
+                                                <Image Source="Assets/Copy_Dark.png" Stretch="UniformToFill"/>
+                                            </Button>
+                                            <TextBox Text="{Binding Value, Mode=OneTime}" BorderThickness="0" VerticalAlignment="Center" />
+                                            <TextBox Text="{Binding Type, Mode=OneTime}" BorderThickness="0" VerticalAlignment="Center" />
+                                            <TextBox Text="{Binding ClaimedDate, Mode=OneTime}" BorderThickness="0" VerticalAlignment="Center" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </ScrollViewer>
     </Grid>
 </Page>

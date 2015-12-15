@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Windows.ApplicationModel;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
+using Windows.UI.Popups;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using msdnus.Core.Model;
 using msdnus.Shared;
 
@@ -18,7 +21,9 @@ namespace msdnus.ViewModel
         public string TempFolder { get; set; }
 
         public List<YourKeyDTO> TempList { get; set; }
-        
+
+        public RelayCommand<string> CopyToClipboard { get; set; }
+
         private readonly IDataSource _datasource;
         private readonly IDataTarget _datatarget;
 
@@ -60,6 +65,15 @@ namespace msdnus.ViewModel
                 _datatarget.SaveData(lst);*/
 
                 TempList = _datatarget.GetAllData();
+
+                CopyToClipboard = new RelayCommand<string>(async (e) =>
+                {
+                    MessageDialog msg = new MessageDialog(e);
+                    await msg.ShowAsync();
+                    DataPackage dp = new DataPackage();
+                    dp.SetText(e);
+                    Clipboard.SetContent(dp);
+                });
             }
             catch (Exception ex)
             {
