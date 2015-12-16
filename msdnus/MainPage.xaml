@@ -26,7 +26,7 @@
                     <TextBox x:Uid="Log" Text="{x:Bind Vm.TempRezult, Mode=OneTime}" Height="500"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" />
                 </ScrollViewer>-->
         <ScrollViewer Grid.Row="2">
-            <ListBox x:Uid="Log2" ItemsSource="{Binding TempList, Mode=OneTime}" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <ListBox x:Uid="Log2" ItemsSource="{Binding TempList, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                             <Grid>

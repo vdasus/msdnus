@@ -67,13 +67,8 @@ namespace msdnus.ViewModel
 
                 SearchStringChanged = new RelayCommand(async () =>
                 {
-                    if (string.IsNullOrEmpty(TextToSearch)) return;
-
-                    TempList = await _datatarget.GetDataValueByName(TextToSearch);
+                    TempList = await _datatarget.GetDataValueByName(TextToSearch ?? string.Empty);
                     RaisePropertyChanged("TempList");
-
-                    /*MessageDialog msg = new MessageDialog(TextToSearch);
-                    await msg.ShowAsync();*/
                 });
 
                 TempList = await _datatarget.GetAllData();

@@ -50,7 +50,7 @@ namespace msdnus.Core.Model
             if (string.IsNullOrEmpty(name)) return await GetAllData();
 
             var keys = _db.Table<YourKeyDTO>();
-            var index = keys.IndexQuery<string>("Name").Where(x => (x ?? "").Contains("3")).Take(2);
+            var index = keys.IndexQuery<string>("Name").Where(x => (x ?? "").Contains(name));
             return await index.ToListAsync();
         }
     }
