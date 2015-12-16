@@ -67,6 +67,7 @@ namespace msdnus.ViewModel
                     DataPackage dp = new DataPackage();
                     dp.SetText(e);
                     Clipboard.SetContent(dp);
+                    TextToastManager.Instance.ShowToast("Copied.");
                 });
 
                 SearchStringChanged = new RelayCommand(async () =>
