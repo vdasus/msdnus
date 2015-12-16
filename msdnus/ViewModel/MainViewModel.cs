@@ -4,9 +4,9 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
 using Windows.UI.Popups;
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using msdnus.Core.Model;
+using msdnus.Core.Shared;
 using msdnus.Shared;
 
 namespace msdnus.ViewModel
@@ -21,7 +21,7 @@ namespace msdnus.ViewModel
         public string TempFolder { get; set; }
 
         public string TextToSearch { get; set; }
-        
+
         public List<YourKeyDTO> TempList { get; set; }
 
         public RelayCommand<string> CopyToClipboard { get; set; }
@@ -56,10 +56,14 @@ namespace msdnus.ViewModel
 
                 _datatarget.SaveData(lst);*/
 
-                CopyToClipboard = new RelayCommand<string>(async (e) =>
+                TempList = await _datatarget.GetAllData();
+                RaisePropertyChanged("TempList");
+
+                #region commands
+                CopyToClipboard = new RelayCommand<string>((e) =>
                 {
-                    MessageDialog msg = new MessageDialog(e);
-                    await msg.ShowAsync();
+                    /*MessageDialog msg = new MessageDialog(e);
+                    await msg.ShowAsync();*/
                     DataPackage dp = new DataPackage();
                     dp.SetText(e);
                     Clipboard.SetContent(dp);
@@ -70,9 +74,7 @@ namespace msdnus.ViewModel
                     TempList = await _datatarget.GetDataValueByName(TextToSearch ?? string.Empty);
                     RaisePropertyChanged("TempList");
                 });
-
-                TempList = await _datatarget.GetAllData();
-                RaisePropertyChanged("TempList");
+                #endregion
             }
             catch (Exception ex)
             {

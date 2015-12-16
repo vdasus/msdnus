@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
-using Lex.Db.Serialization;
+using System.Threading.Tasks;
+using msdnus.Core.Shared;
+using DataReader = Lex.Db.Serialization.DataReader;
+using DataWriter = Lex.Db.Serialization.DataWriter;
 
 namespace msdnus.Core.Model
 {
@@ -53,23 +56,26 @@ namespace msdnus.Core.Model
     {
         public static YourKeyKeyDTO ReadYourKeyKeyDTO(DataReader reader)
         {
-            return new YourKeyKeyDTO
+            return Task.Run(async () => new YourKeyKeyDTO
             {
                 Id = reader.ReadInt32(),
-                ID = reader.ReadString(),
-                Type = reader.ReadString(),
-                Value = reader.ReadString(),
-                ClaimedDate = reader.ReadString()
-            };
+                ID = await Utils.UnprotectFromBase64Data(reader.ReadString()),
+                Type = await Utils.UnprotectFromBase64Data(reader.ReadString()),
+                Value = await Utils.UnprotectFromBase64Data(reader.ReadString()),
+                ClaimedDate = await Utils.UnprotectFromBase64Data(reader.ReadString()),
+            }).Result;
         }
 
         public static void WriteYourKeyKeyDTO(DataWriter writer, YourKeyKeyDTO value)
         {
-            writer.Write(value.Id);
-            writer.Write(value.ID);
-            writer.Write(value.Type);
-            writer.Write(value.Value);
-            writer.Write(value.ClaimedDate);
+            Task.Run(async () =>
+            {
+                writer.Write(value.Id);
+                writer.Write(await Utils.ProtectToBase64Async(value.ID));
+                writer.Write(await Utils.ProtectToBase64Async(value.Type));
+                writer.Write(await Utils.ProtectToBase64Async(value.Value));
+                writer.Write(await Utils.ProtectToBase64Async(value.ClaimedDate));
+            }).Wait();
         }
     }
 }
