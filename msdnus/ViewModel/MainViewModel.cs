@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
-using Windows.UI.Popups;
 using GalaSoft.MvvmLight.Command;
 using msdnus.Core.Model;
-using msdnus.Core.Shared;
 using msdnus.Shared;
 
 namespace msdnus.ViewModel
