@@ -214,3 +214,4 @@ ModelManifest.xml
 temp/
 *.DotSettings
 /vbinc2.exe
+*.~v
