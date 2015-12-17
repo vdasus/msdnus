@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
+using Windows.Storage.Pickers;
 using GalaSoft.MvvmLight.Command;
 using msdnus.Core.Model;
 using msdnus.Shared;
+using Microsoft.OneDrive.Sdk;
 
 namespace msdnus.ViewModel
 {
@@ -24,6 +26,7 @@ namespace msdnus.ViewModel
 
         public RelayCommand<string> CopyToClipboard { get; set; }
         public RelayCommand SearchStringChanged { get; set; }
+        public RelayCommand GetFromOneDrive { get; set; }
 
         private readonly IDataSource _datasource;
         private readonly IDataTarget _datatarget;
@@ -72,6 +75,25 @@ namespace msdnus.ViewModel
                 {
                     TempList = await _datatarget.GetDataValueByName(TextToSearch ?? string.Empty);
                     RaisePropertyChanged("TempList");
+                });
+
+                GetFromOneDrive = new RelayCommand(async () =>
+                {
+
+                    //ClID: 000000004017CE14
+                    //ClSc: 3Iq0D38qYplvEhpoLGpVpidVXpiEdf1X
+                    /*FileOpenPicker fp = new FileOpenPicker();
+                    await fp.PickSingleFileAsync();*/
+
+                    var oneDriveClient = OneDriveClient.GetMicrosoftAccountClient("000000004017CE14",
+                        "http://vdasus.com", new[] {"wl.signin", "onedrive.readonly"},
+                        "3Iq0D38qYplvEhpoLGpVpidVXpiEdf1X");
+                    await oneDriveClient.AuthenticateAsync();
+                    var drive = await oneDriveClient
+                          .Drive
+                          .Request()
+                          .GetAsync();
+                    var zz = drive.Items;
                 });
                 #endregion
             }
