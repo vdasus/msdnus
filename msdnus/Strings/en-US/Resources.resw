@@ -124,10 +124,19 @@
     <value>Can't unsnap app</value>
   </data>
   <data name="copyedtext" xml:space="preserve">
-    <value>Copied to clipboard</value>
+    <value>Key is copied to clipboard</value>
+  </data>
+  <data name="loadbutton.Label" xml:space="preserve">
+    <value>Import from file</value>
   </data>
   <data name="loadednimported" xml:space="preserve">
     <value>Loaded and imported</value>
+  </data>
+  <data name="refreshbutton.Label" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="settingsbutton.Label" xml:space="preserve">
+    <value>Settings</value>
   </data>
   <data name="srctxt.PlaceholderText" xml:space="preserve">
     <value>Enter text to filter</value>

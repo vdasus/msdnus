@@ -126,8 +126,17 @@
   <data name="copyedtext" xml:space="preserve">
     <value>Скопировано в буфер обмена</value>
   </data>
+  <data name="loadbutton.Label" xml:space="preserve">
+    <value>Импортировать из файла</value>
+  </data>
   <data name="loadednimported" xml:space="preserve">
     <value>Загружено и импортировано</value>
+  </data>
+  <data name="refreshbutton.Label" xml:space="preserve">
+    <value>Обновить</value>
+  </data>
+  <data name="settingsbutton.Label" xml:space="preserve">
+    <value>Установки</value>
   </data>
   <data name="srctxt.PlaceholderText" xml:space="preserve">
     <value>Фильтр</value>

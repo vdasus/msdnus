@@ -15,7 +15,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="50" />
             <RowDefinition />
-            <RowDefinition Height="50" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <StackPanel Height="Auto" Grid.Row="0" Orientation="Horizontal" Margin="10 0 0 10">
@@ -25,7 +24,6 @@
         <TextBox x:Uid="srctxt" Grid.Row="1" Text="{Binding TextToSearch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                  HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="340" 
                  TextChanged="TextBox_OnTextChanged" />
-        <Button Grid.Row="3" Content="OD" Command="{x:Bind Vm.GetFromOneDrive, Mode=OneWay}" />
         <!--<TextBox x:Uid="TempFile" Text="{x:Bind Vm.TempFolder, Mode=TwoWay}"  HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340"/>-->
         <!--                <ScrollViewer>
                     <TextBox x:Uid="Log" Text="{x:Bind Vm.TempRezult, Mode=OneTime}" Height="500"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" />
@@ -59,10 +57,10 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </ScrollViewer>
-        <CommandBar Grid.Row="4">
-            <AppBarButton Icon="Download" Label="Areally&#x00AD;longlabel"/>
-            <AppBarButton Icon="Sync" Label="Areally&#x00AD;longlabel"/>
-            <AppBarButton Icon="Setting" Label="Areally&#x00AD;longlabel"/>
+        <CommandBar Grid.Row="3">
+            <AppBarButton x:Uid="loadbutton" Icon="Download" Label="Load from file" Command="{x:Bind Vm.GetFromOneDrive, Mode=OneWay}"/>
+            <AppBarButton x:Uid="refreshbutton" Icon="Sync" Label="Refresh"/>
+            <AppBarButton x:Uid="settingsbutton"  Icon="Setting" Label="Settings"/>
         </CommandBar>
     </Grid>
 </Page>
