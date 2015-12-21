@@ -22,8 +22,8 @@
             <TextBlock x:Uid="AppVersion" Text="{x:Bind Vm.AppVersion, Mode=OneTime}" Style="{ThemeResource SubtitleTextBlockStyle}" />
         </StackPanel>
         <TextBox x:Uid="srctxt" Grid.Row="1" Text="{Binding TextToSearch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                 HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="340" 
-                 TextChanged="TextBox_OnTextChanged" />
+                 TextChanged="TextBox_OnTextChanged" 
+                 HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" MinWidth="250" Width="Auto"/>
         <!--<TextBox x:Uid="TempFile" Text="{x:Bind Vm.TempFolder, Mode=TwoWay}"  HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340"/>-->
         <!--                <ScrollViewer>
                     <TextBox x:Uid="Log" Text="{x:Bind Vm.TempRezult, Mode=OneTime}" Height="500"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" />
