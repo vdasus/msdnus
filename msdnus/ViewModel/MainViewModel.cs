@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.DataTransfer;
+using Windows.ApplicationModel.Resources;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI.ViewManagement;
@@ -20,9 +21,10 @@ namespace msdnus.ViewModel
         public string AppVersion { get; } =
     $"v.{Package.Current.Id.Version.Major}.{Package.Current.Id.Version.Minor}.{Package.Current.Id.Version.Build}.{Package.Current.Id.Version.Revision}";
 
-        public string TempRezult { get; set; }
-        public string TempFolder { get; set; }
+        private readonly ResourceLoader _loader;
 
+        public string TempRezult { get; set; }
+        
         public string TextToSearch { get; set; }
 
         public List<YourKeyDTO> TempList { get; set; }
@@ -36,10 +38,11 @@ namespace msdnus.ViewModel
 
         public MainViewModel(IDataSource datasource, IDataTarget datatarget)
         {
-            TempFolder = ApplicationData.Current.LocalFolder.Path;
             _datasource = datasource;
             _datatarget = datatarget;
 
+            _loader = new Windows.ApplicationModel.Resources.ResourceLoader();
+            
             Init();
         }
 
@@ -58,7 +61,7 @@ namespace msdnus.ViewModel
                     DataPackage dp = new DataPackage();
                     dp.SetText(e);
                     Clipboard.SetContent(dp);
-                    TextToastManager.Instance.ShowToast("Key Copied.");
+                    TextToastManager.Instance.ShowToast(_loader.GetString("copyedtext"));
                 });
 
                 SearchStringChanged = new RelayCommand(async () =>
@@ -106,7 +109,7 @@ namespace msdnus.ViewModel
 
                             TempList = await _datatarget.GetAllData();
                             RaisePropertyChanged("TempList");
-                            TextToastManager.Instance.ShowToast("Data loaded and imported");
+                            TextToastManager.Instance.ShowToast(_loader.GetString("loadednimported"));
                         }
                     }
                     catch (Exception ex)
@@ -142,7 +145,7 @@ namespace msdnus.ViewModel
             bool unsnapped = ((ApplicationView.Value != ApplicationViewState.Snapped) || ApplicationView.TryUnsnap());
             if (!unsnapped)
             {
-                TextToastManager.Instance.ShowToast($"Cannot unsnap.");
+                TextToastManager.Instance.ShowToast(_loader.GetString("cantunsnap"));
             }
 
             return unsnapped;

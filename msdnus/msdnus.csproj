@@ -92,6 +92,8 @@
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <None Include="msdnus_StoreKey.pfx" />
     <None Include="project.json" />
+    <PRIResource Include="Strings\ru-RU\Resources.resw" />
+    <PRIResource Include="Strings\en-US\Resources.resw" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -141,6 +143,7 @@
       <Name>msdnus.Core</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

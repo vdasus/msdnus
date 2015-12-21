@@ -32,7 +32,7 @@ namespace msdnus.Tests.Model
         }
 
         #region Init
-        public static async void InitDatasources()
+        public static void InitDatasources()
         {
             SimpleIoc.Default.Register<IDataSource, FileDataSource>();
             SimpleIoc.Default.Register<IDataTarget, DataTarget>();
