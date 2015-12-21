@@ -43,6 +43,7 @@
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <AppBarButton Icon="Copy" 
+                                                          Margin="0"
                                                           Command="{Binding Source={StaticResource Locator}, Path=Main.CopyToClipboard, Mode=OneTime}"
                                                           CommandParameter="{Binding Value, Mode=OneTime}" />
                                             <TextBlock Text="{Binding Value, Mode=OneTime}" VerticalAlignment="Center" Margin="5 0 0 5" />
