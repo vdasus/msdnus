@@ -38,7 +38,7 @@
                                 <RowDefinition Height="Auto"></RowDefinition>
                                 <RowDefinition Height="Auto"></RowDefinition>
                             </Grid.RowDefinitions>
-                            <TextBox Text="{Binding Name, Mode=OneTime}" Grid.Row="0" BorderThickness="0" IsReadOnly="True" />
+                            <TextBlock Text="{Binding Name, Mode=OneTime}" Grid.Row="0" />
                             <ItemsControl ItemsSource="{Binding Items, Mode=OneTime}" Grid.Row="1" >
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
@@ -48,9 +48,9 @@
                                                     Padding="0" BorderThickness="0">
                                                 <Image Source="Assets/Copy_Dark.png" Stretch="UniformToFill" Width="32" Height="32" />
                                             </Button>
-                                            <TextBox Text="{Binding Value, Mode=OneTime}" BorderThickness="0" VerticalAlignment="Center" IsReadOnly="True" />
-                                            <TextBox Text="{Binding Type, Mode=OneTime}" BorderThickness="0" VerticalAlignment="Center" IsReadOnly="True" />
-                                            <TextBox Text="{Binding ClaimedDate, Mode=OneTime}" BorderThickness="0" VerticalAlignment="Center" IsReadOnly="True" />
+                                            <TextBlock Text="{Binding Value, Mode=OneTime}" VerticalAlignment="Center" Margin="5 0 0 5" />
+                                            <TextBlock Text="{Binding Type, Mode=OneTime}" VerticalAlignment="Center" Margin="5 0 0 5" />
+                                            <TextBlock Text="{Binding ClaimedDate, Mode=OneTime}" VerticalAlignment="Center" Margin="5 0 0 5" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
