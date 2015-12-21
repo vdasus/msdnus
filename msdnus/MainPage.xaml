@@ -17,7 +17,7 @@
             <RowDefinition />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
-        <Button Grid.Row="3" Content="OD" Command="{x:Bind Vm.GetFromOneDrive, Mode=OneTime}" />
+        <Button Grid.Row="3" Content="OD" Command="{x:Bind Vm.GetFromOneDrive, Mode=OneWay}" />
         <TextBox Grid.Row="0" x:Uid="AppVersion" Text="{x:Bind Vm.AppVersion, Mode=OneTime}"  
                  HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340" BorderThickness="0"/>
         <TextBox Grid.Row="1" Text="{Binding TextToSearch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
