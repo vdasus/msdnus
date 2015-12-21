@@ -15,7 +15,7 @@ namespace msdnus
             InitializeComponent();
         }
 
-        private async void TextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        private void TextBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             if(Vm.SearchStringChanged.CanExecute(null)) Vm.SearchStringChanged.Execute(null);
         }

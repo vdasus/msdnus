@@ -58,7 +58,7 @@ namespace msdnus.ViewModel
                     DataPackage dp = new DataPackage();
                     dp.SetText(e);
                     Clipboard.SetContent(dp);
-                    TextToastManager.Instance.ShowToast("Copied.");
+                    TextToastManager.Instance.ShowToast("Key Copied.");
                 });
 
                 SearchStringChanged = new RelayCommand(async () =>
@@ -111,14 +111,14 @@ namespace msdnus.ViewModel
                     }
                     catch (Exception ex)
                     {
-                        TextToastManager.Instance.ShowToast($"Error {ex.Message}");
+                        TextToastManager.Instance.ShowToast($"msdnus:Err:{ex.Message}");
                     }
                 });
 #endregion
             }
             catch (Exception ex)
             {
-
+                TextToastManager.Instance.ShowToast($"msdnus:Err:{ex.Message}");
             }
         }
 

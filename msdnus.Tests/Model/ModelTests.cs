@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Windows.Storage;
 using GalaSoft.MvvmLight.Ioc;
 using msdnus.Core.Model;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
@@ -29,7 +32,7 @@ namespace msdnus.Tests.Model
         }
 
         #region Init
-        public static void InitDatasources()
+        public static async void InitDatasources()
         {
             SimpleIoc.Default.Register<IDataSource, FileDataSource>();
             SimpleIoc.Default.Register<IDataTarget, DataTarget>();
@@ -37,7 +40,7 @@ namespace msdnus.Tests.Model
             _datatarget = SimpleIoc.Default.GetInstance<IDataTarget>();
 
             _dataFromArray = InitYourKey();
-            _yk = PrepareFileInLocalFolder();
+            _yk = PrepareFileInLocalFolder().Result;
         }
 
         private static YourKey InitYourKey()
@@ -72,12 +75,13 @@ namespace msdnus.Tests.Model
             return yk;
         }
 
-        private static YourKey PrepareFileInLocalFolder()
+        private static async Task<YourKey> PrepareFileInLocalFolder()
         {
-            //TODO: tests turned off
-            //var bl = _datasource.SaveData(_dataFromArray, FNAME).Result;
-            //return _datasource.GetData(FNAME, false).Result;
-            return null;
+            var bl = _datasource.SaveData(_dataFromArray, FNAME).Result;
+            StorageFolder folder = ApplicationData.Current.LocalFolder;
+            StorageFile file = await folder.GetFileAsync(FNAME);
+
+            return await _datasource.GetData(file);
         }
         #endregion
 
