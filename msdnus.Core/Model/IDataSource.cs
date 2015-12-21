@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Windows.Storage;
 
 namespace msdnus.Core.Model
 {
@@ -6,7 +7,7 @@ namespace msdnus.Core.Model
 
     public interface IDataSource
     {
-        Task<YourKey> GetData(string source);
+        Task<YourKey> GetData(StorageFile source);
         Task<bool> SaveData<T>(T objectToSave, string source);
     }
 }

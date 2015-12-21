@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
@@ -10,7 +11,6 @@ using Windows.UI.ViewManagement;
 using GalaSoft.MvvmLight.Command;
 using msdnus.Core.Model;
 using msdnus.Shared;
-using Microsoft.OneDrive.Sdk;
 
 namespace msdnus.ViewModel
 {
@@ -47,18 +47,6 @@ namespace msdnus.ViewModel
         {
             try
             {
-#if LOADDATA
-                YourKey zz = await _datasource.GetData(@"KeysExport.xml");
-                List<YourKeyDTO> lst = new List<YourKeyDTO>();
-                foreach (var ff in zz.Items)
-                {
-                    YourKeyDTO dt = new YourKeyDTO();
-                    dt.MapFromYourKeyProduct_Key(ff);
-                    lst.Add(dt);
-                }
-                _datatarget.SaveData(lst);
-#endif
-
                 TempList = await _datatarget.GetAllData();
                 RaisePropertyChanged("TempList");
 
@@ -89,40 +77,37 @@ namespace msdnus.ViewModel
 
                     try
                     {
-                        var oneDriveClient = OneDriveClientExtensions.GetClientUsingOnlineIdAuthenticator(new[] { "wl.signin", "onedrive.readonly" });
+                        /*var oneDriveClient = OneDriveClientExtensions.GetClientUsingOnlineIdAuthenticator(new[] { "wl.signin", "onedrive.readonly" });
 
                         /*var oneDriveClient = OneDriveClient.GetMicrosoftAccountClient("000000004017CE14",
                             "http://vdasus.com", new[] {"wl.signin", "onedrive.readonly"},
-                            "3Iq0D38qYplvEhpoLGpVpidVXpiEdf1X");*/
+                            "3Iq0D38qYplvEhpoLGpVpidVXpiEdf1X");#1#
 
                         await oneDriveClient.AuthenticateAsync();
                         var drive = await oneDriveClient
                             .Drive
                             .Request()
                             .GetAsync();
-                        var zzz = drive.Items;
+                        var zzz = drive.Items;*/
 
-                        /*if (EnsureUnsnapped())
+                        if (EnsureUnsnapped())
                         {
-                            FileOpenPicker openPicker = new FileOpenPicker();
-                            openPicker.ViewMode = PickerViewMode.Thumbnail;
-                            openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-                            openPicker.FileTypeFilter.Add(".jpg");
-                            openPicker.FileTypeFilter.Add(".jpeg");
-                            openPicker.FileTypeFilter.Add(".png");
-
+                            FileOpenPicker openPicker = new FileOpenPicker
+                            {
+                                ViewMode = PickerViewMode.Thumbnail,
+                                SuggestedStartLocation = PickerLocationId.DocumentsLibrary
+                            };
+                            openPicker.FileTypeFilter.Add(".xml");
+                            
                             StorageFile file = await openPicker.PickSingleFileAsync();
-                            if (file != null)
-                            {
-                                // Application now has read/write access to the picked file
-                                TextToastManager.Instance.ShowToast("Picked photo: " + file.Name);
-                            }
-                            else
-                            {
-                                TextToastManager.Instance.ShowToast("Operation cancelled.");
-                            }
-                        }*/
 
+                            if (file == null) return;
+                            if (!await ImportData(file, true)) return;
+
+                            TempList = await _datatarget.GetAllData();
+                            RaisePropertyChanged("TempList");
+                            TextToastManager.Instance.ShowToast("Data loaded and imported");
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -135,6 +120,19 @@ namespace msdnus.ViewModel
             {
 
             }
+        }
+
+        private async Task<bool> ImportData(StorageFile apath, bool iscleanupbefore)
+        {
+            YourKey zz = await _datasource.GetData(apath);
+            List<YourKeyDTO> lst = new List<YourKeyDTO>();
+            foreach (var ff in zz.Items)
+            {
+                YourKeyDTO dt = new YourKeyDTO();
+                dt.MapFromYourKeyProduct_Key(ff);
+                lst.Add(dt);
+            }
+            return _datatarget.SaveData(lst, iscleanupbefore);
         }
 
         internal bool EnsureUnsnapped()

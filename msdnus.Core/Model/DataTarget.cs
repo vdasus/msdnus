@@ -26,10 +26,15 @@ namespace msdnus.Core.Model
         }
 
 
-        public bool SaveData(List<YourKeyDTO> ykl)
+        public bool SaveData(List<YourKeyDTO> ykl, bool iscleanbefore)
         {
             try
             {
+                if (iscleanbefore)
+                {
+                    _db.Purge();
+                    _db.Compact();
+                }
                 _db.Save(ykl.ToArray());
             }
             catch (Exception)
@@ -42,7 +47,7 @@ namespace msdnus.Core.Model
         public async Task<List<YourKeyDTO>> GetAllData()
         {
             var tmp = await _db.Table<YourKeyDTO>().LoadAllAsync();
-            return tmp.ToList();
+            return tmp.OrderBy(x => x.Name).ToList();
         }
 
         public async Task<List<YourKeyDTO>> GetDataValueByName(string name)
