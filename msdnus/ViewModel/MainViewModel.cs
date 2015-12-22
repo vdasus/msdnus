@@ -10,6 +10,7 @@ using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI.ViewManagement;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Views;
 using msdnus.Core.Model;
 using msdnus.Shared;
 
@@ -23,23 +24,29 @@ namespace msdnus.ViewModel
 
         private readonly ResourceLoader _loader;
 
+        private readonly INavigationService _navigationService;
+
         public string TempRezult { get; set; }
         
         public string TextToSearch { get; set; }
 
         public List<YourKeyDTO> TempList { get; set; }
 
+        #region commands
         public RelayCommand<string> CopyToClipboard { get; set; }
         public RelayCommand SearchStringChanged { get; set; }
         public RelayCommand GetFromOneDrive { get; set; }
+        public RelayCommand LockAll { get; set; }
+        #endregion
 
         private readonly IDataSource _datasource;
         private readonly IDataTarget _datatarget;
 
-        public MainViewModel(IDataSource datasource, IDataTarget datatarget)
+        public MainViewModel(IDataSource datasource, IDataTarget datatarget, INavigationService navigationService)
         {
             _datasource = datasource;
             _datatarget = datatarget;
+            _navigationService = navigationService;
 
             _loader = new Windows.ApplicationModel.Resources.ResourceLoader();
             
@@ -116,6 +123,11 @@ namespace msdnus.ViewModel
                     {
                         TextToastManager.Instance.ShowToast($"msdnus:Err:{ex.Message}");
                     }
+                });
+
+                LockAll = new RelayCommand(() =>
+                {
+                    _navigationService.NavigateTo("Iejimo", "My data");
                 });
 #endregion
             }

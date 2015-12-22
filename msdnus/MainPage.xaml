@@ -59,8 +59,8 @@
             </ListBox>
         </ScrollViewer>
         <CommandBar Grid.Row="3">
+            <AppBarButton x:Uid="lockbutton"  Icon="Pin" Label="Lock" Command="{x:Bind Vm.LockAll, Mode=OneWay}"/>
             <AppBarButton x:Uid="loadbutton" Icon="Download" Label="Load from file" Command="{x:Bind Vm.GetFromOneDrive, Mode=OneWay}"/>
-            <AppBarButton x:Uid="refreshbutton" Icon="Sync" Label="Refresh"/>
             <AppBarButton x:Uid="settingsbutton"  Icon="Setting" Label="Settings"/>
         </CommandBar>
     </Grid>

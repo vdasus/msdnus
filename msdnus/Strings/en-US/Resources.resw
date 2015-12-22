@@ -132,9 +132,6 @@
   <data name="loadednimported" xml:space="preserve">
     <value>Loaded and imported</value>
   </data>
-  <data name="refreshbutton.Label" xml:space="preserve">
-    <value>Refresh</value>
-  </data>
   <data name="settingsbutton.Label" xml:space="preserve">
     <value>Settings</value>
   </data>

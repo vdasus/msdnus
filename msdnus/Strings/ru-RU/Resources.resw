@@ -132,9 +132,6 @@
   <data name="loadednimported" xml:space="preserve">
     <value>Загружено и импортировано</value>
   </data>
-  <data name="refreshbutton.Label" xml:space="preserve">
-    <value>Обновить</value>
-  </data>
   <data name="settingsbutton.Label" xml:space="preserve">
     <value>Установки</value>
   </data>

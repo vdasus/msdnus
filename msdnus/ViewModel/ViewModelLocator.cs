@@ -13,6 +13,7 @@
 */
 
 using GalaSoft.MvvmLight.Ioc;
+using GalaSoft.MvvmLight.Views;
 using msdnus.Core.Model;
 using Microsoft.Practices.ServiceLocation;
 
@@ -34,12 +35,25 @@ namespace msdnus.ViewModel
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<IejimoViewModel>();
 
             SimpleIoc.Default.Register<IDataSource, FileDataSource>();
             SimpleIoc.Default.Register<IDataTarget, DataTarget>();
+
+            var navigationService = CreateNavigationService();
+            SimpleIoc.Default.Register<INavigationService>(() => navigationService);
         }
 
         public static MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();
+        public static IejimoViewModel Iejimo => ServiceLocator.Current.GetInstance<IejimoViewModel>();
+
+        private INavigationService CreateNavigationService()
+        {
+            var navigationService = new NavigationService();
+            navigationService.Configure("Iejimo", typeof(IejimoPage));
+            // navigationService.Configure("key1", typeof(OtherPage1));
+            return navigationService;
+        }
 
         public static void Cleanup()
         {
