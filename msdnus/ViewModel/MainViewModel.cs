@@ -44,11 +44,12 @@ namespace msdnus.ViewModel
 
         public MainViewModel(IDataSource datasource, IDataTarget datatarget, INavigationService navigationService)
         {
+            _navigationService = navigationService;
+            
             _datasource = datasource;
             _datatarget = datatarget;
-            _navigationService = navigationService;
-
-            _loader = new Windows.ApplicationModel.Resources.ResourceLoader();
+            
+            _loader = new ResourceLoader();
             
             Init();
         }
@@ -57,10 +58,8 @@ namespace msdnus.ViewModel
         {
             try
             {
-                TempList = await _datatarget.GetAllData();
-                RaisePropertyChanged("TempList");
-
-#region commands
+                #region commands
+                //CopyToClipboard
                 CopyToClipboard = new RelayCommand<string>((e) =>
                 {
                     /*MessageDialog msg = new MessageDialog(e);
@@ -71,12 +70,14 @@ namespace msdnus.ViewModel
                     TextToastManager.Instance.ShowToast(_loader.GetString("copyedtext"));
                 });
 
+                //SearchStringChanged
                 SearchStringChanged = new RelayCommand(async () =>
                 {
                     TempList = await _datatarget.GetDataValueByName(TextToSearch ?? string.Empty);
                     RaisePropertyChanged("TempList");
                 });
 
+                //GetFromOneDrive
                 GetFromOneDrive = new RelayCommand(async () =>
                 {
 
@@ -125,11 +126,15 @@ namespace msdnus.ViewModel
                     }
                 });
 
+                //LockAll
                 LockAll = new RelayCommand(() =>
                 {
-                    _navigationService.NavigateTo("Iejimo", "My data");
+                    _navigationService.NavigateTo("Iejimo");
                 });
-#endregion
+                #endregion
+
+                TempList = await _datatarget.GetAllData();
+                RaisePropertyChanged("TempList");
             }
             catch (Exception ex)
             {

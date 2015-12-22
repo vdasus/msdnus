@@ -126,6 +126,9 @@
   <data name="copyedtext" xml:space="preserve">
     <value>Key is copied to clipboard</value>
   </data>
+  <data name="enterpin.Header" xml:space="preserve">
+    <value>Enter PIN</value>
+  </data>
   <data name="loadbutton.Label" xml:space="preserve">
     <value>Import from file</value>
   </data>

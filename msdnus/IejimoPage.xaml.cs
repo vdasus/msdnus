@@ -6,17 +6,17 @@ namespace msdnus
 {
     public sealed partial class IejimoPage
     {
-        public IejimoViewModel Vm => (IejimoViewModel)DataContext;
+        public IejimoViewModel IVm => (IejimoViewModel)DataContext;
 
         public IejimoPage()
         {
             InitializeComponent();
+            passwordBox.Focus(FocusState.Programmatic);
         }
 
         void PasswordChangedHandler(Object sender, RoutedEventArgs args)
         {
-            // Increment a counter each time the event fires.
-            Vm?.CheckPassword?.Execute(passwordBox.Password);
+            IVm?.CheckPassword?.Execute(passwordBox.Password);
         }
     }
 }

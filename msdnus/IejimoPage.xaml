@@ -9,7 +9,19 @@
     DataContext="{Binding Source={StaticResource Locator}, Path=Iejimo}">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <PasswordBox x:Name="passwordBox" HorizontalAlignment="Left" Margin="69,82,0,0" 
-                     VerticalAlignment="Top" Width="222" Password="" PasswordChanged="PasswordChangedHandler"/>
+        <StackPanel Height="Auto" Grid.Row="0" Orientation="Horizontal" Margin="10 0 0 10">
+            <TextBlock x:Uid="appname" Style="{ThemeResource HeaderTextBlockStyle}" />
+        </StackPanel>
+        <PasswordBox x:Uid="enterpin" HorizontalContentAlignment="Center" x:Name="passwordBox" HorizontalAlignment="Left" Margin="69,82,0,0" 
+                     VerticalAlignment="Top" Width="222" Password="" PasswordChanged="PasswordChangedHandler"
+                     PreventKeyboardDisplayOnProgrammaticFocus="False">
+            <PasswordBox.InputScope>
+                <InputScope>
+                    <InputScope.Names>
+                        <InputScopeName NameValue="NumericPin"/>
+                    </InputScope.Names>
+                </InputScope>
+            </PasswordBox.InputScope>
+        </PasswordBox>
     </Grid>
 </Page>

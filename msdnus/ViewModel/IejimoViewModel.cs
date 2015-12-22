@@ -18,7 +18,7 @@ namespace msdnus.ViewModel
 
             CheckPassword = new RelayCommand<string>(e =>
             {
-                if(e == "123") navigationService.GoBack();
+                if(e == "123") navigationService.NavigateTo("Main");
             });
         }
     }

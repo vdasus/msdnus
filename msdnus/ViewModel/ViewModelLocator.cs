@@ -51,7 +51,8 @@ namespace msdnus.ViewModel
         {
             var navigationService = new NavigationService();
             navigationService.Configure("Iejimo", typeof(IejimoPage));
-            // navigationService.Configure("key1", typeof(OtherPage1));
+            navigationService.Configure("Main", typeof(MainPage));
+            
             return navigationService;
         }
 
