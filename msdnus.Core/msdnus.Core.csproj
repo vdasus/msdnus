@@ -107,10 +107,12 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Class1.cs" />
     <Compile Include="Model\DataTarget.cs" />
     <Compile Include="Model\FileDataSource.cs" />
     <Compile Include="Model\IDataSource.cs" />
     <Compile Include="Model\IDataTarget.cs" />
+    <Compile Include="Model\IIejimoProvider.cs" />
     <Compile Include="Model\YourKey.cs" />
     <Compile Include="Model\YourKeyDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -39,6 +39,7 @@ namespace msdnus.ViewModel
 
             SimpleIoc.Default.Register<IDataSource, FileDataSource>();
             SimpleIoc.Default.Register<IDataTarget, DataTarget>();
+            SimpleIoc.Default.Register<IIejimoProvider, IejimoProvider>();
 
             var navigationService = CreateNavigationService();
             SimpleIoc.Default.Register<INavigationService>(() => navigationService);

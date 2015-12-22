@@ -11,12 +11,16 @@ namespace msdnus
         public IejimoPage()
         {
             InitializeComponent();
-            passwordBox.Focus(FocusState.Programmatic);
         }
 
         void PasswordChangedHandler(Object sender, RoutedEventArgs args)
         {
             IVm?.CheckPassword?.Execute(passwordBox.Password);
+        }
+
+        private void IejimoPage_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            passwordBox.Focus(FocusState.Programmatic);
         }
     }
 }
