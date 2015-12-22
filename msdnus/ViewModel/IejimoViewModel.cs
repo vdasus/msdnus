@@ -1,4 +1,6 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using System;
+using System.Threading.Tasks;
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using msdnus.Core.Model;
 using msdnus.Shared;
@@ -9,21 +11,37 @@ namespace msdnus.ViewModel
     public class IejimoViewModel: PropertyChangedBase
     {
         private readonly INavigationService _navigationService;
-        private readonly IIejimoProvider _iejimoProvider;
+        private readonly ISettingsProvider _settingsProvider;
         public RelayCommand<string> CheckPassword { get; set; }
 
+        private string tiejimas = string.Empty;
 
-        public IejimoViewModel(INavigationService navigationService, IIejimoProvider iejimoProvider)
+        public IejimoViewModel(INavigationService navigationService, ISettingsProvider settingsProvider)
         {
-            _navigationService = navigationService;
-            _iejimoProvider = iejimoProvider;
+            _settingsProvider = settingsProvider;
+            Task.Run(() => Init(navigationService));
+        }
 
-            CheckPassword = new RelayCommand<string>(e =>
+        private async Task<bool> Init(INavigationService navigationService)
+        {
+            try
             {
-                var tmp = _iejimoProvider.GetIejimoParametra();
-                if (string.IsNullOrEmpty(tmp) || e == tmp)
-                    navigationService.NavigateTo("Main");
-            });
+                //TODO temporary
+                //tiejimas = await _settingsProvider.GetIejimoParameter();
+                tiejimas = "123";
+                
+                CheckPassword = new RelayCommand<string>(e =>
+                {
+                    if (string.IsNullOrEmpty(tiejimas) || e == tiejimas)
+                        navigationService.NavigateTo("Main");
+                });
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

@@ -1,8 +1,7 @@
 /*
   In App.xaml:
   <Application.Resources>
-      <vm:ViewModelLocator xmlns:vm="clr-namespace:Parkavimas"
-                           x:Key="Locator" />
+      <vm:ViewModelLocator xmlns:vm="clr-namespace:Parkavimas" x:Key="Locator" />
   </Application.Resources>
   
   In the View:
@@ -15,6 +14,7 @@
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Views;
 using msdnus.Core.Model;
+using msdnus.Shared;
 using Microsoft.Practices.ServiceLocation;
 
 namespace msdnus.ViewModel
@@ -39,7 +39,7 @@ namespace msdnus.ViewModel
 
             SimpleIoc.Default.Register<IDataSource, FileDataSource>();
             SimpleIoc.Default.Register<IDataTarget, DataTarget>();
-            SimpleIoc.Default.Register<IIejimoProvider, IejimoProvider>();
+            SimpleIoc.Default.Register<ISettingsProvider, SettingsProvider>();
 
             var navigationService = CreateNavigationService();
             SimpleIoc.Default.Register<INavigationService>(() => navigationService);

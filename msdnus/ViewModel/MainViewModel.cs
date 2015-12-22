@@ -42,6 +42,8 @@ namespace msdnus.ViewModel
         private readonly IDataSource _datasource;
         private readonly IDataTarget _datatarget;
 
+        //public ITaskCompletionNotifier Initialization { get; private set; }
+
         public MainViewModel(IDataSource datasource, IDataTarget datatarget, INavigationService navigationService)
         {
             _navigationService = navigationService;
@@ -50,7 +52,8 @@ namespace msdnus.ViewModel
             _datatarget = datatarget;
             
             _loader = new ResourceLoader();
-            
+
+            //var Initialization = TaskCompletionNotifierFactory.Create(InitializeAsync());
             Init();
         }
 
