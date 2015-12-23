@@ -19,21 +19,22 @@ namespace msdnus.ViewModel
         public IejimoViewModel(INavigationService navigationService, ISettingsProvider settingsProvider)
         {
             _settingsProvider = settingsProvider;
-            Task.Run(() => Init(navigationService));
+            _navigationService = navigationService;
+
+            Task.Run(() => Init(_navigationService));
         }
 
-        private async Task<bool> Init(INavigationService navigationService)
+        private bool Init(INavigationService navigationService)
         {
             try
             {
                 //TODO temporary
                 //tiejimas = await _settingsProvider.GetIejimoParameter();
                 tiejimas = "123";
-                
                 CheckPassword = new RelayCommand<string>(e =>
                 {
                     if (string.IsNullOrEmpty(tiejimas) || e == tiejimas)
-                        navigationService.NavigateTo("Main");
+                        _navigationService.NavigateTo("Main");
                 });
 
                 return true;

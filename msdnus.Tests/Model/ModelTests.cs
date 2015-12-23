@@ -118,7 +118,7 @@ namespace msdnus.Tests.Model
                 lst.Add(dt);
             }
             
-            var isok = _datatarget.SaveData(lst, true);
+            var isok = _datatarget.SaveData(lst, true, true);
             
             Assert.IsTrue(isok);
         }
