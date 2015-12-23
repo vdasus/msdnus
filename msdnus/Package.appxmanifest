@@ -1,6 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="21313vdasus.msdnus" Publisher="CN=3AD31DCA-DE44-4915-9FE1-D59D04FD5311" Version="1.1.0.5" />
+  <Identity Name="21313vdasus.msdnus" Publisher="CN=3AD31DCA-DE44-4915-9FE1-D59D04FD5311" Version="1.1.0.6" />
   <mp:PhoneIdentity PhoneProductId="6ecd9860-2bf4-4d2c-b6fe-22df80708c5c" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>msdnus</DisplayName>
@@ -8,7 +8,7 @@
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Dependencies>
-    <TargetDeviceFamily Name="Windows.Universal" MinVersion="1.1.0.5" MaxVersionTested="1.1.0.5" />
+    <TargetDeviceFamily Name="Windows.Universal" MinVersion="1.1.0.6" MaxVersionTested="1.1.0.6" />
   </Dependencies>
   <Resources>
     <Resource Language="x-generate" />

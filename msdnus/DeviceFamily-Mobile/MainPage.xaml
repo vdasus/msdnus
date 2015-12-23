@@ -1,0 +1,65 @@
+﻿<Page
+    x:Class="msdnus.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:msdnus"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    DataContext="{Binding Source={StaticResource Locator}, Path=Main}">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="50" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock x:Uid="appname" Style="{ThemeResource HeaderTextBlockStyle}"  Height="Auto" Grid.Row="0" Margin="10 0 0 10" />
+        <TextBox x:Uid="srctxt" Grid.Row="1" Text="{Binding TextToSearch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                 TextChanged="TextBox_OnTextChanged" 
+                 HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" MinWidth="250" Width="Auto"/>
+        <!--<TextBlock x:Uid="AppVersion" Text="{x:Bind Vm.AppVersion, Mode=OneTime}" Style="{ThemeResource SubtitleTextBlockStyle}" />-->
+        <!--<TextBox x:Uid="TempFile" Text="{x:Bind Vm.TempFolder, Mode=TwoWay}"  HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340"/>-->
+        <!--<ScrollViewer>
+             <TextBox x:Uid="Log" Text="{x:Bind Vm.TempRezult, Mode=OneTime}" Height="500"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" />
+            </ScrollViewer>-->
+        <ScrollViewer Grid.Row="2">
+            <ListBox x:Uid="Log2" ItemsSource="{x:Bind Vm.TempList, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Top" >
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="{Binding Name, Mode=OneTime}" Grid.Row="0" />
+                            <ItemsControl ItemsSource="{Binding Items, Mode=OneTime}" Grid.Row="1" >
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <AppBarButton Icon="Copy" 
+                                                          IsCompact="True"
+                                                          Command="{Binding Source={StaticResource Locator}, Path=Main.CopyToClipboardCommand, Mode=OneTime}"
+                                                          CommandParameter="{Binding Value, Mode=OneTime}" />
+                                            <TextBlock Text="{Binding Value, Mode=OneTime}" Style="{ThemeResource CaptionTextBlockStyle}" VerticalAlignment="Center" Margin="5 0 0 5" />
+                                            <!--<TextBlock Text="{Binding Type, Mode=OneTime}" Style="{ThemeResource CaptionTextBlockStyle}" VerticalAlignment="Center" Margin="5 0 0 5" />
+                                            <TextBlock Text="{Binding ClaimedDate, Mode=OneTime}" Style="{ThemeResource CaptionTextBlockStyle}" VerticalAlignment="Center" Margin="5 0 0 5" />-->
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </ScrollViewer>
+        <CommandBar Grid.Row="3">
+            <AppBarButton x:Uid="lockbutton" Icon="Permissions" Label="Lock" Command="{x:Bind Vm.LockAllCommand, Mode=OneWay}"/>
+            <AppBarButton x:Uid="fromonedrbutton" Icon="World" Label="Lock" Command="{x:Bind Vm.OnedriveCommand, Mode=OneWay}"/>
+            <AppBarButton x:Uid="loadbutton" Icon="Download" Label="Load from file" Command="{x:Bind Vm.GetFromOneDriveCommand, Mode=OneWay}"/>
+            <AppBarButton x:Uid="settingsbutton" Icon="Setting" Label="Settings"/>
+        </CommandBar>
+    </Grid>
+</Page>

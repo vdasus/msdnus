@@ -130,7 +130,19 @@
     <value>Enter PIN</value>
   </data>
   <data name="fromonedrbutton.Label" xml:space="preserve">
-    <value>Load from OneDrive</value>
+    <value>Import from OneDrive</value>
+  </data>
+  <data name="fromonedrbutton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Import KeysExport.xml file from yours OneDrive root</value>
+  </data>
+  <data name="lbcdt.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Claimed Date</value>
+  </data>
+  <data name="lbtyp.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="lbval.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Key</value>
   </data>
   <data name="loadbutton.Label" xml:space="preserve">
     <value>Import from file</value>
