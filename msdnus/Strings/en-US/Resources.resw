@@ -133,7 +133,10 @@
     <value>Import from OneDrive</value>
   </data>
   <data name="fromonedrbutton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Import KeysExport.xml file from yours OneDrive root</value>
+    <value>Import KeysExport.xml file from the root of yours OneDrive</value>
+  </data>
+  <data name="helpbutton.Label" xml:space="preserve">
+    <value>Help</value>
   </data>
   <data name="lbcdt.ToolTipService.ToolTip" xml:space="preserve">
     <value>Claimed Date</value>
@@ -144,14 +147,32 @@
   <data name="lbval.ToolTipService.ToolTip" xml:space="preserve">
     <value>Key</value>
   </data>
+  <data name="likebutton.Label" xml:space="preserve">
+    <value>Coffee cup</value>
+  </data>
+  <data name="likebutton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Support developer with amount less, than a coffeee cup...</value>
+  </data>
   <data name="loadbutton.Label" xml:space="preserve">
     <value>Import from file</value>
+  </data>
+  <data name="loadbutton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Import from local file</value>
   </data>
   <data name="loadednimported" xml:space="preserve">
     <value>Loaded and imported</value>
   </data>
+  <data name="lockbutton.Label" xml:space="preserve">
+    <value>Lock</value>
+  </data>
+  <data name="lockbutton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Lock to PIN code</value>
+  </data>
   <data name="settingsbutton.Label" xml:space="preserve">
     <value>Settings</value>
+  </data>
+  <data name="settingsbutton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Just customize app...</value>
   </data>
   <data name="srctxt.PlaceholderText" xml:space="preserve">
     <value>Enter text to filter</value>

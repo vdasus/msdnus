@@ -135,6 +135,9 @@
   <data name="fromonedrbutton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Загрузка файла KeysExport.xml из корня вашего OneDrive</value>
   </data>
+  <data name="helpbutton.Label" xml:space="preserve">
+    <value>Помощь</value>
+  </data>
   <data name="lbcdt.ToolTipService.ToolTip" xml:space="preserve">
     <value>Дата получения</value>
   </data>
@@ -144,14 +147,32 @@
   <data name="lbval.ToolTipService.ToolTip" xml:space="preserve">
     <value>Ключ</value>
   </data>
+  <data name="likebutton.Label" xml:space="preserve">
+    <value>Чашка кофе</value>
+  </data>
+  <data name="likebutton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Поддержать бедного разработчика суммой меньше чашки кофе...</value>
+  </data>
   <data name="loadbutton.Label" xml:space="preserve">
     <value>Импортировать из файла</value>
+  </data>
+  <data name="loadbutton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Импортировать из локального файла</value>
   </data>
   <data name="loadednimported" xml:space="preserve">
     <value>Загружено и импортировано</value>
   </data>
+  <data name="lockbutton.Label" xml:space="preserve">
+    <value>Заблокировать</value>
+  </data>
+  <data name="lockbutton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Заблокировать приложение PIN кодом</value>
+  </data>
   <data name="settingsbutton.Label" xml:space="preserve">
     <value>Установки</value>
+  </data>
+  <data name="settingsbutton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Вызвать различные опции</value>
   </data>
   <data name="srctxt.PlaceholderText" xml:space="preserve">
     <value>Фильтр</value>

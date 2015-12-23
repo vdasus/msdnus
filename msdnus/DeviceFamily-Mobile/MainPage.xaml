@@ -56,10 +56,12 @@
             </ListBox>
         </ScrollViewer>
         <CommandBar Grid.Row="3">
-            <AppBarButton x:Uid="lockbutton" Icon="Permissions" Label="Lock" Command="{x:Bind Vm.LockAllCommand, Mode=OneWay}"/>
-            <AppBarButton x:Uid="fromonedrbutton" Icon="World" Label="Lock" Command="{x:Bind Vm.OnedriveCommand, Mode=OneWay}"/>
-            <AppBarButton x:Uid="loadbutton" Icon="Download" Label="Load from file" Command="{x:Bind Vm.GetFromOneDriveCommand, Mode=OneWay}"/>
-            <AppBarButton x:Uid="settingsbutton" Icon="Setting" Label="Settings"/>
+            <AppBarButton x:Uid="lockbutton" Icon="Permissions" Command="{x:Bind Vm.LockAllCommand, Mode=OneWay}"/>
+            <AppBarButton x:Uid="fromonedrbutton" Icon="Globe" Command="{x:Bind Vm.OnedriveCommand, Mode=OneWay}"/>
+            <AppBarButton x:Uid="loadbutton" Icon="Download" Command="{x:Bind Vm.GetFromOneDriveCommand, Mode=OneWay}"/>
+            <AppBarButton x:Uid="helpbutton" Icon="Help" />
+            <AppBarButton x:Uid="likebutton" Icon="Like" />
+            <AppBarButton x:Uid="settingsbutton" Icon="Setting" />
         </CommandBar>
     </Grid>
 </Page>
