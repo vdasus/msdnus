@@ -12,9 +12,10 @@ namespace msdnus.ViewModel
     {
         private readonly INavigationService _navigationService;
         private readonly ISettingsProvider _settingsProvider;
+
         public RelayCommand<string> CheckPassword { get; set; }
 
-        private string tiejimas = string.Empty;
+        private string _tiejimas = string.Empty;
 
         public IejimoViewModel(INavigationService navigationService, ISettingsProvider settingsProvider)
         {
@@ -26,14 +27,15 @@ namespace msdnus.ViewModel
 
         private bool Init(INavigationService navigationService)
         {
+            if (navigationService == null) throw new ArgumentNullException(nameof(navigationService));
             try
             {
                 //TODO temporary
                 //tiejimas = await _settingsProvider.GetIejimoParameter();
-                tiejimas = "123";
+                _tiejimas = "123";
                 CheckPassword = new RelayCommand<string>(e =>
                 {
-                    if (string.IsNullOrEmpty(tiejimas) || e == tiejimas)
+                    if (string.IsNullOrEmpty(_tiejimas) || e == _tiejimas)
                         _navigationService.NavigateTo("Main");
                 });
 
