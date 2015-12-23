@@ -129,6 +129,9 @@
   <data name="enterpin.Header" xml:space="preserve">
     <value>Введите PIN</value>
   </data>
+  <data name="fromonedrbutton.Label" xml:space="preserve">
+    <value>Загрузить из OneDrive</value>
+  </data>
   <data name="loadbutton.Label" xml:space="preserve">
     <value>Импортировать из файла</value>
   </data>
