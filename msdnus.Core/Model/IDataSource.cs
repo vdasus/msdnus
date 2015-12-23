@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 using Windows.Storage;
 
 namespace msdnus.Core.Model
@@ -8,6 +9,7 @@ namespace msdnus.Core.Model
     public interface IDataSource
     {
         Task<YourKey> GetData(StorageFile source);
+        YourKey GetData(Stream stream);
         Task<bool> SaveData<T>(T objectToSave, string source);
     }
 }

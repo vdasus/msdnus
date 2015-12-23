@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
 using msdnus.Core.Shared;
@@ -15,6 +16,11 @@ namespace msdnus.Core.Model
             //if (!file.IsAvailable) file = await StorageFile.GetFileFromApplicationUriAsync(new Uri($"ms-appx:///{filename}"));
 
             return await Utils.ReadObjectFromXmlFileAsync<YourKey>(source);
+        }
+
+        public YourKey GetData(Stream stream)
+        {
+            return Utils.ReadObjectFromXmlStreamAsync<YourKey>(stream);
         }
 
         public async Task<bool> SaveData<T>(T objectToSave, string source)

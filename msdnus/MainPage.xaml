@@ -44,7 +44,7 @@
                                         <StackPanel Orientation="Horizontal">
                                             <AppBarButton Icon="Copy" 
                                                           Margin="0"
-                                                          Command="{Binding Source={StaticResource Locator}, Path=Main.CopyToClipboard, Mode=OneTime}"
+                                                          Command="{Binding Source={StaticResource Locator}, Path=Main.CopyToClipboardCommand, Mode=OneTime}"
                                                           CommandParameter="{Binding Value, Mode=OneTime}" />
                                             <TextBlock Text="{Binding Value, Mode=OneTime}" VerticalAlignment="Center" Margin="5 0 0 5" />
                                             <TextBlock Text="{Binding Type, Mode=OneTime}" VerticalAlignment="Center" Margin="5 0 0 5" />
@@ -59,8 +59,9 @@
             </ListBox>
         </ScrollViewer>
         <CommandBar Grid.Row="3">
-            <AppBarButton x:Uid="lockbutton"  Icon="Pin" Label="Lock" Command="{x:Bind Vm.LockAll, Mode=OneWay}"/>
-            <AppBarButton x:Uid="loadbutton" Icon="Download" Label="Load from file" Command="{x:Bind Vm.GetFromOneDrive, Mode=OneWay}"/>
+            <AppBarButton x:Uid="lockbutton"  Icon="Permissions" Label="Lock" Command="{x:Bind Vm.LockAllCommand, Mode=OneWay}"/>
+            <AppBarButton x:Uid="lockbutton"  Icon="World" Label="Lock" Command="{x:Bind Vm.OnedriveCommand, Mode=OneWay}"/>
+            <AppBarButton x:Uid="loadbutton" Icon="Download" Label="Load from file" Command="{x:Bind Vm.GetFromOneDriveCommand, Mode=OneWay}"/>
             <AppBarButton x:Uid="settingsbutton"  Icon="Setting" Label="Settings"/>
         </CommandBar>
     </Grid>

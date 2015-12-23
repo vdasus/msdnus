@@ -2,6 +2,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.DataTransfer;
@@ -13,6 +15,7 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using msdnus.Core.Model;
 using msdnus.Shared;
+using Microsoft.OneDrive.Sdk;
 
 namespace msdnus.ViewModel
 {
@@ -33,10 +36,11 @@ namespace msdnus.ViewModel
         public List<YourKeyDTO> TempList { get; set; }
 
         #region commands
-        public RelayCommand<string> CopyToClipboard { get; set; }
-        public RelayCommand SearchStringChanged { get; set; }
-        public RelayCommand GetFromOneDrive { get; set; }
-        public RelayCommand LockAll { get; set; }
+        public RelayCommand<string> CopyToClipboardCommand { get; set; }
+        public RelayCommand SearchStringChangedCommand { get; set; }
+        public RelayCommand GetFromOneDriveCommand { get; set; }
+        public RelayCommand LockAllCommand { get; set; }
+        public RelayCommand OnedriveCommand { get; set; }
         #endregion
 
         private readonly IDataSource _datasource;
@@ -63,7 +67,7 @@ namespace msdnus.ViewModel
             {
                 #region commands
                 //CopyToClipboard
-                CopyToClipboard = new RelayCommand<string>((e) =>
+                CopyToClipboardCommand = new RelayCommand<string>((e) =>
                 {
                     /*MessageDialog msg = new MessageDialog(e);
                     await msg.ShowAsync();*/
@@ -74,36 +78,17 @@ namespace msdnus.ViewModel
                 });
 
                 //SearchStringChanged
-                SearchStringChanged = new RelayCommand(async () =>
+                SearchStringChangedCommand = new RelayCommand(async () =>
                 {
                     TempList = await _datatarget.GetDataValueByName(TextToSearch ?? string.Empty);
                     RaisePropertyChanged("TempList");
                 });
 
                 //GetFromOneDrive
-                GetFromOneDrive = new RelayCommand(async () =>
+                GetFromOneDriveCommand = new RelayCommand(async () =>
                 {
-
-                    //ClID: 000000004017CE14
-                    //ClSc: 3Iq0D38qYplvEhpoLGpVpidVXpiEdf1X
-                    /*FileOpenPicker fp = new FileOpenPicker();
-                    await fp.PickSingleFileAsync();*/
-
                     try
                     {
-                        /*var oneDriveClient = OneDriveClientExtensions.GetClientUsingOnlineIdAuthenticator(new[] { "wl.signin", "onedrive.readonly" });
-
-                        /*var oneDriveClient = OneDriveClient.GetMicrosoftAccountClient("000000004017CE14",
-                            "http://vdasus.com", new[] {"wl.signin", "onedrive.readonly"},
-                            "3Iq0D38qYplvEhpoLGpVpidVXpiEdf1X");#1#
-
-                        await oneDriveClient.AuthenticateAsync();
-                        var drive = await oneDriveClient
-                            .Drive
-                            .Request()
-                            .GetAsync();
-                        var zzz = drive.Items;*/
-
                         if (EnsureUnsnapped())
                         {
                             FileOpenPicker openPicker = new FileOpenPicker
@@ -130,9 +115,50 @@ namespace msdnus.ViewModel
                 });
 
                 //LockAll
-                LockAll = new RelayCommand(() =>
+                LockAllCommand = new RelayCommand(() =>
                 {
                     _navigationService.NavigateTo("Iejimo");
+                });
+
+                //OnedriveCommand
+                OnedriveCommand = new RelayCommand(async () =>
+                {
+                    //ClID: 000000004017CE14
+                    //ClSc: 3Iq0D38qYplvEhpoLGpVpidVXpiEdf1X
+                    /*FileOpenPicker fp = new FileOpenPicker();
+                    await fp.PickSingleFileAsync();*/
+
+                    /*var oneDriveClient = OneDriveClient.GetMicrosoftAccountClient("000000004017CE14",
+                            "http://vdasus.com", new[] {"wl.signin", "onedrive.readonly"},
+                            "3Iq0D38qYplvEhpoLGpVpidVXpiEdf1X");*/
+
+                    var oneDriveClient = OneDriveClientExtensions.GetClientUsingOnlineIdAuthenticator(new[] { "wl.signin", "onedrive.readonly" });
+
+                    await oneDriveClient.AuthenticateAsync();
+
+                    /*FileOpenPicker openPicker = new FileOpenPicker
+                    {
+                        ViewMode = PickerViewMode.List,
+                        SuggestedStartLocation = PickerLocationId.DocumentsLibrary
+                    };
+                    openPicker.FileTypeFilter.Add(".xml");
+
+                    StorageFile file = await openPicker.PickSingleFileAsync();
+
+                    if (file == null) return;*/
+
+                    Item item = await oneDriveClient
+                     .Drive
+                     .Root
+                     .ItemWithPath("KeysExport.xml")
+                     .Request()
+                     .GetAsync();
+
+                    if (!ImportData(item.Content, true)) return;
+
+                    TempList = await _datatarget.GetAllData();
+                    RaisePropertyChanged("TempList");
+
                 });
                 #endregion
 
@@ -148,6 +174,19 @@ namespace msdnus.ViewModel
         private async Task<bool> ImportData(StorageFile apath, bool iscleanupbefore)
         {
             YourKey zz = await _datasource.GetData(apath);
+            List<YourKeyDTO> lst = new List<YourKeyDTO>();
+            foreach (var ff in zz.Items)
+            {
+                YourKeyDTO dt = new YourKeyDTO();
+                dt.MapFromYourKeyProduct_Key(ff);
+                lst.Add(dt);
+            }
+            return _datatarget.SaveData(lst, iscleanupbefore);
+        }
+
+        private bool ImportData(Stream stream, bool iscleanupbefore)
+        {
+            YourKey zz = _datasource.GetData(stream);
             List<YourKeyDTO> lst = new List<YourKeyDTO>();
             foreach (var ff in zz.Items)
             {

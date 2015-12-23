@@ -13,11 +13,18 @@ namespace msdnus.Core.Shared
     {
         public static async Task<T> ReadObjectFromXmlFileAsync<T>(StorageFile file)
         {
-            var serializer = new XmlSerializer(typeof (T));
+            using (Stream stream = await file.OpenStreamForReadAsync())
+            {
+                var rez = ReadObjectFromXmlStreamAsync<T>(stream);
+                return rez;
+            }
+               
+        }
 
-            Stream stream = await file.OpenStreamForReadAsync();
+        public static T ReadObjectFromXmlStreamAsync<T>(Stream stream)
+        {
+            var serializer = new XmlSerializer(typeof (T));
             var objectFromXml = (T) serializer.Deserialize(stream);
-            stream.Dispose();
             return objectFromXml;
         }
         

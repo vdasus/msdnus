@@ -17,7 +17,7 @@ namespace msdnus
 
         private void TextBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            if(Vm.SearchStringChanged.CanExecute(null)) Vm.SearchStringChanged.Execute(null);
+            if(Vm.SearchStringChangedCommand.CanExecute(null)) Vm.SearchStringChangedCommand.Execute(null);
         }
     }
 }
