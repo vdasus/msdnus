@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using msdnus.Core.Shared;
 using DataReader = Lex.Db.Serialization.DataReader;
@@ -31,6 +32,21 @@ namespace msdnus.Core.Model
         }
     }
 
+    public class YourKeyDTOComparer : IEqualityComparer<YourKeyDTO>
+    {
+        public bool Equals(YourKeyDTO g1, YourKeyDTO g2)
+        {
+            int cnt = (from zz in g1.Items from yy in g2.Items where zz.Value == yy.Value select zz).Count();
+            return ((g1.Name == g2.Name) && (cnt == g1.Items.Count));
+        }
+
+        public int GetHashCode(YourKeyDTO obj)
+        {
+            int sum = obj.Items.Aggregate(0, (current, zz) => current ^ zz.Value.GetHashCode());
+            return obj.Name.GetHashCode() ^ sum;
+        }
+    }
+
     public class YourKeyKeyDTO
     {
         public int Id { get; set; }
@@ -48,7 +64,7 @@ namespace msdnus.Core.Model
             ID = ykk.ID;
             Type = ykk.Type;
             ClaimedDate = ykk.ClaimedDate;
-            Value = ykk.Value;
+            Value = ykk.ValueFormatted;
         }
     }
 

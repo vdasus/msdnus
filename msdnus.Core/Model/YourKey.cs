@@ -35,5 +35,8 @@ namespace msdnus.Core.Model
 
         [XmlText]
         public string Value { get; set; }
+
+        [XmlIgnore]
+        public string ValueFormatted => Value.Length < 50 ? Value : "-";
     }
 }

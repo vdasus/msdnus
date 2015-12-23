@@ -39,9 +39,10 @@ namespace msdnus.Core.Shared
             }
         }
 
-        public static async Task<string> ProtectToBase64Async(string strMsg, string strDescriptor = "LOCAL=user")
+        public static async Task<string> ProtectToBase64Async(string astrMsg, string strDescriptor = "LOCAL=user")
         {
-            if (string.IsNullOrEmpty(strMsg)) return null;
+            var strMsg = string.IsNullOrEmpty(astrMsg) ? "-" : astrMsg;
+            
             const BinaryStringEncoding ENCODING = BinaryStringEncoding.Utf8;
             DataProtectionProvider provider = new DataProtectionProvider(strDescriptor);
 
@@ -50,9 +51,11 @@ namespace msdnus.Core.Shared
             return CryptographicBuffer.EncodeToBase64String(buffProtected);
         }
 
-        public static async Task<string> UnprotectFromBase64Data(string strBase64Protected)
+        public static async Task<string> UnprotectFromBase64Data(string astrBase64Protected)
         {
-            if (string.IsNullOrEmpty(strBase64Protected)) return null;
+            var strBase64Protected = string.IsNullOrEmpty(astrBase64Protected) ? "-" : astrBase64Protected;
+
+            if (string.IsNullOrEmpty(strBase64Protected)) return string.Empty;
 
             const BinaryStringEncoding ENCODING = BinaryStringEncoding.Utf8;
             DataProtectionProvider provider = new DataProtectionProvider();

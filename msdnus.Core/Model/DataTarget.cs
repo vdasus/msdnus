@@ -17,16 +17,15 @@ namespace msdnus.Core.Model
 
         private void Init()
         {
+            //, StringComparer.OrdinalIgnoreCase
             _db = new DbInstance("msdnusdb");
             _db.Map<YourKeyDTO>()
                 .Automap(i => i.Id, true)
-                .WithIndex("Name", i => i.Name, StringComparer.OrdinalIgnoreCase);
-
+                .WithIndex("Name", i => i.Name);
             _db.Initialize();
         }
 
-
-        public bool SaveData(List<YourKeyDTO> ykl, bool iscleanbefore)
+        public bool SaveData(List<YourKeyDTO> ykl, bool iscleanbefore, bool isdistinct)
         {
             try
             {
@@ -35,7 +34,8 @@ namespace msdnus.Core.Model
                     _db.Purge();
                     _db.Compact();
                 }
-                _db.Save(ykl.ToArray());
+                var rez = isdistinct ? ykl.Distinct(new YourKeyDTOComparer()).ToArray() : ykl.ToArray();
+                _db.Save(rez);
             }
             catch (Exception)
             {
@@ -55,7 +55,8 @@ namespace msdnus.Core.Model
             if (string.IsNullOrEmpty(name)) return await GetAllData();
 
             var keys = _db.Table<YourKeyDTO>();
-            var index = keys.IndexQuery<string>("Name").Where(x => (x ?? "").ToUpper().Contains(name.ToUpper()));
+            var index =
+                keys.IndexQuery<string>("Name").Where(x => (x ?? string.Empty).ToUpper().Contains(name.ToUpper()));
             return await index.ToListAsync();
         }
     }

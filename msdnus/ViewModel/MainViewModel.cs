@@ -1,8 +1,5 @@
-﻿#define zLOADDATA
-
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
@@ -16,6 +13,8 @@ using GalaSoft.MvvmLight.Views;
 using msdnus.Core.Model;
 using msdnus.Shared;
 using Microsoft.OneDrive.Sdk;
+
+// ReSharper disable ExplicitCallerInfoArgument
 
 namespace msdnus.ViewModel
 {
@@ -67,7 +66,7 @@ namespace msdnus.ViewModel
             {
                 #region commands
                 //CopyToClipboard
-                CopyToClipboardCommand = new RelayCommand<string>((e) =>
+                CopyToClipboardCommand = new RelayCommand<string>(e =>
                 {
                     /*MessageDialog msg = new MessageDialog(e);
                     await msg.ShowAsync();*/
@@ -101,7 +100,7 @@ namespace msdnus.ViewModel
                             StorageFile file = await openPicker.PickSingleFileAsync();
 
                             if (file == null) return;
-                            if (!await ImportData(file, true)) return;
+                            if (!await ImportData(file, true, true)) return;
 
                             TempList = await _datatarget.GetAllData();
                             RaisePropertyChanged("TempList");
@@ -139,7 +138,7 @@ namespace msdnus.ViewModel
                                 {
                                     await responseStream.CopyToAsync(memoryStream);
                                     memoryStream.Position = 0;
-                                    if (!ImportData(memoryStream, true)) return;
+                                    if (!ImportData(memoryStream, true, true)) return;
                                 }
                             }
 
@@ -164,30 +163,28 @@ namespace msdnus.ViewModel
             }
         }
 
-        private async Task<bool> ImportData(StorageFile apath, bool iscleanupbefore)
+        private async Task<bool> ImportData(StorageFile apath, bool iscleanupbefore, bool isdistinct)
         {
             YourKey zz = await _datasource.GetData(apath);
-            List<YourKeyDTO> lst = new List<YourKeyDTO>();
-            foreach (var ff in zz.Items)
-            {
-                YourKeyDTO dt = new YourKeyDTO();
-                dt.MapFromYourKeyProduct_Key(ff);
-                lst.Add(dt);
-            }
-            return _datatarget.SaveData(lst, iscleanupbefore);
+            return SaveData(zz, iscleanupbefore, isdistinct);
         }
 
-        private bool ImportData(Stream stream, bool iscleanupbefore)
+        private bool ImportData(Stream stream, bool iscleanupbefore, bool isdistinct)
         {
             YourKey zz = _datasource.GetData(stream);
+            return SaveData(zz, iscleanupbefore, isdistinct);
+        }
+
+        private bool SaveData(YourKey zz, bool iscleanupbefore, bool isdistinct)
+        {
             List<YourKeyDTO> lst = new List<YourKeyDTO>();
-            foreach (var ff in zz.Items)
+            foreach (YourKeyProduct_Key ff in zz.Items)
             {
                 YourKeyDTO dt = new YourKeyDTO();
                 dt.MapFromYourKeyProduct_Key(ff);
                 lst.Add(dt);
             }
-            return _datatarget.SaveData(lst, iscleanupbefore);
+            return _datatarget.SaveData(lst, iscleanupbefore, isdistinct);
         }
 
         internal bool EnsureUnsnapped()
