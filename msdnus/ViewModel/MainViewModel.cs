@@ -125,40 +125,33 @@ namespace msdnus.ViewModel
                 {
                     //ClID: 000000004017CE14
                     //ClSc: 3Iq0D38qYplvEhpoLGpVpidVXpiEdf1X
-                    /*FileOpenPicker fp = new FileOpenPicker();
-                    await fp.PickSingleFileAsync();*/
-
-                    /*var oneDriveClient = OneDriveClient.GetMicrosoftAccountClient("000000004017CE14",
-                            "http://vdasus.com", new[] {"wl.signin", "onedrive.readonly"},
-                            "3Iq0D38qYplvEhpoLGpVpidVXpiEdf1X");*/
-
-                    var oneDriveClient = OneDriveClientExtensions.GetClientUsingOnlineIdAuthenticator(new[] { "wl.signin", "onedrive.readonly" });
-
-                    await oneDriveClient.AuthenticateAsync();
-
-                    /*FileOpenPicker openPicker = new FileOpenPicker
+                    try
                     {
-                        ViewMode = PickerViewMode.List,
-                        SuggestedStartLocation = PickerLocationId.DocumentsLibrary
-                    };
-                    openPicker.FileTypeFilter.Add(".xml");
+                        if (EnsureUnsnapped())
+                        {
+                            var oneDriveClient = OneDriveClientExtensions.GetClientUsingOnlineIdAuthenticator(new[] { "wl.signin", "onedrive.readonly" });
 
-                    StorageFile file = await openPicker.PickSingleFileAsync();
+                            await oneDriveClient.AuthenticateAsync();
 
-                    if (file == null) return;*/
+                            using (var responseStream = await oneDriveClient.Drive.Root.ItemWithPath("KeysExport.xml").Content.Request().GetAsync())
+                            {
+                                using (MemoryStream memoryStream = new MemoryStream())
+                                {
+                                    await responseStream.CopyToAsync(memoryStream);
+                                    memoryStream.Position = 0;
+                                    if (!ImportData(memoryStream, true)) return;
+                                }
+                            }
 
-                    Item item = await oneDriveClient
-                     .Drive
-                     .Root
-                     .ItemWithPath("KeysExport.xml")
-                     .Request()
-                     .GetAsync();
-
-                    if (!ImportData(item.Content, true)) return;
-
-                    TempList = await _datatarget.GetAllData();
-                    RaisePropertyChanged("TempList");
-
+                            TempList = await _datatarget.GetAllData();
+                            RaisePropertyChanged("TempList");
+                            TextToastManager.Instance.ShowToast(_loader.GetString("loadednimported"));
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        TextToastManager.Instance.ShowToast($"msdnus:Err:{ex.Message}");
+                    }
                 });
                 #endregion
 
