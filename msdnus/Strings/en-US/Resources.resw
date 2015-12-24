@@ -177,4 +177,7 @@
   <data name="srctxt.PlaceholderText" xml:space="preserve">
     <value>Enter text to filter</value>
   </data>
+  <data name="statusloading" xml:space="preserve">
+    <value>Loading ...</value>
+  </data>
 </root>

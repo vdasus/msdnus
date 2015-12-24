@@ -26,7 +26,7 @@
              <TextBox x:Uid="Log" Text="{x:Bind Vm.TempRezult, Mode=OneTime}" Height="500"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" />
             </ScrollViewer>-->
         <ScrollViewer Grid.Row="2">
-            <ListBox x:Uid="Log2" ItemsSource="{x:Bind Vm.TempList, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Top" >
+            <ListBox x:Uid="Log2" ItemsSource="{x:Bind Vm.DataItems, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Top" >
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid>
@@ -58,10 +58,15 @@
         <CommandBar Grid.Row="3">
             <AppBarButton x:Uid="lockbutton" Icon="Permissions" Command="{x:Bind Vm.LockAllCommand, Mode=OneWay}"/>
             <AppBarButton x:Uid="fromonedrbutton" Icon="Globe" Command="{x:Bind Vm.OnedriveCommand, Mode=OneWay}"/>
-            <AppBarButton x:Uid="loadbutton" Icon="Download" Command="{x:Bind Vm.GetFromOneDriveCommand, Mode=OneWay}"/>
+            <AppBarButton x:Uid="loadbutton" Icon="Download" Command="{x:Bind Vm.GetFromFilePickerCommand, Mode=OneWay}"/>
             <AppBarButton x:Uid="helpbutton" Icon="Help" />
-            <AppBarButton x:Uid="likebutton" Icon="Like" />
-            <AppBarButton x:Uid="settingsbutton" Icon="Setting" />
+            <CommandBar.SecondaryCommands>
+                <AppBarButton x:Uid="likebutton" Icon="Like" />
+                <AppBarButton x:Uid="settingsbutton" Icon="Setting" />
+            </CommandBar.SecondaryCommands>
+            <CommandBar.Content>
+                <TextBlock Text="Loading ..." Margin="12,14"/>
+            </CommandBar.Content>
         </CommandBar>
     </Grid>
 </Page>

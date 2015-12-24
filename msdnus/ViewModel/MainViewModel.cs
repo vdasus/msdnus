@@ -28,16 +28,15 @@ namespace msdnus.ViewModel
 
         private readonly INavigationService _navigationService;
 
-        public string TempRezult { get; set; }
-        
+        public List<YourKeyDTO> DataItems { get; set; }
+
         public string TextToSearch { get; set; }
-
-        public List<YourKeyDTO> TempList { get; set; }
-
+        public string StatusText { get; set; }
+        
         #region commands
         public RelayCommand<string> CopyToClipboardCommand { get; set; }
         public RelayCommand SearchStringChangedCommand { get; set; }
-        public RelayCommand GetFromOneDriveCommand { get; set; }
+        public RelayCommand GetFromFilePickerCommand { get; set; }
         public RelayCommand LockAllCommand { get; set; }
         public RelayCommand OnedriveCommand { get; set; }
         #endregion
@@ -62,9 +61,12 @@ namespace msdnus.ViewModel
 
         private async void Init()
         {
+            StatusText = _loader.GetString("statusloading");
+            
             try
             {
                 #region commands
+
                 //CopyToClipboard
                 CopyToClipboardCommand = new RelayCommand<string>(e =>
                 {
@@ -79,37 +81,43 @@ namespace msdnus.ViewModel
                 //SearchStringChanged
                 SearchStringChangedCommand = new RelayCommand(async () =>
                 {
-                    TempList = await _datatarget.GetDataValueByName(TextToSearch ?? string.Empty);
-                    RaisePropertyChanged("TempList");
+                    DataItems = await _datatarget.GetDataValueByName(TextToSearch ?? string.Empty);
+                    RaisePropertyChanged("DataItems");
                 });
 
-                //GetFromOneDrive
-                GetFromOneDriveCommand = new RelayCommand(async () =>
+                //GetFromFilePickerCommand
+                GetFromFilePickerCommand = new RelayCommand(async () =>
                 {
                     try
                     {
-                        if (EnsureUnsnapped())
+                        if (!EnsureUnsnapped()) return;
+
+                        FileOpenPicker openPicker = new FileOpenPicker
                         {
-                            FileOpenPicker openPicker = new FileOpenPicker
-                            {
-                                ViewMode = PickerViewMode.Thumbnail,
-                                SuggestedStartLocation = PickerLocationId.DocumentsLibrary
-                            };
-                            openPicker.FileTypeFilter.Add(".xml");
-                            
-                            StorageFile file = await openPicker.PickSingleFileAsync();
+                            ViewMode = PickerViewMode.Thumbnail,
+                            SuggestedStartLocation = PickerLocationId.DocumentsLibrary
+                        };
+                        openPicker.FileTypeFilter.Add(".xml");
 
-                            if (file == null) return;
-                            if (!await ImportData(file, true, true)) return;
+                        StorageFile file = await openPicker.PickSingleFileAsync();
 
-                            TempList = await _datatarget.GetAllData();
-                            RaisePropertyChanged("TempList");
-                            TextToastManager.Instance.ShowToast(_loader.GetString("loadednimported"));
-                        }
+                        if (file == null) return;
+
+                        StatusText = _loader.GetString("statusloading");
+
+                        if (!await ImportData(file, true, true)) return;
+
+                        DataItems = await _datatarget.GetAllData();
+                        RaisePropertyChanged("DataItems");
+                        TextToastManager.Instance.ShowToast(_loader.GetString("loadednimported"));
                     }
                     catch (Exception ex)
                     {
                         TextToastManager.Instance.ShowToast($"msdnus:Err:{ex.Message}");
+                    }
+                    finally
+                    {
+                        StatusText = string.Empty;
                     }
                 });
 
@@ -126,40 +134,57 @@ namespace msdnus.ViewModel
                     //ClSc: 3Iq0D38qYplvEhpoLGpVpidVXpiEdf1X
                     try
                     {
-                        if (EnsureUnsnapped())
+                        StatusText = _loader.GetString("statusloading");
+                        
+                        if (!EnsureUnsnapped()) return;
+
+                        var oneDriveClient =
+                            OneDriveClientExtensions.GetClientUsingOnlineIdAuthenticator(new[]
+                            {"wl.signin", "onedrive.readonly"});
+
+                        await oneDriveClient.AuthenticateAsync();
+
+                        using (
+                            var responseStream =
+                                await
+                                    oneDriveClient.Drive.Root.ItemWithPath("KeysExport.xml")
+                                        .Content.Request()
+                                        .GetAsync())
                         {
-                            var oneDriveClient = OneDriveClientExtensions.GetClientUsingOnlineIdAuthenticator(new[] { "wl.signin", "onedrive.readonly" });
-
-                            await oneDriveClient.AuthenticateAsync();
-
-                            using (var responseStream = await oneDriveClient.Drive.Root.ItemWithPath("KeysExport.xml").Content.Request().GetAsync())
+                            using (MemoryStream memoryStream = new MemoryStream())
                             {
-                                using (MemoryStream memoryStream = new MemoryStream())
-                                {
-                                    await responseStream.CopyToAsync(memoryStream);
-                                    memoryStream.Position = 0;
-                                    if (!ImportData(memoryStream, true, true)) return;
-                                }
+                                await responseStream.CopyToAsync(memoryStream);
+                                memoryStream.Position = 0;
+                                if (!ImportData(memoryStream, true, true)) return;
                             }
-
-                            TempList = await _datatarget.GetAllData();
-                            RaisePropertyChanged("TempList");
-                            TextToastManager.Instance.ShowToast(_loader.GetString("loadednimported"));
                         }
+
+                        DataItems = await _datatarget.GetAllData();
+                        RaisePropertyChanged("DataItems");
+                        TextToastManager.Instance.ShowToast(_loader.GetString("loadednimported"));
                     }
                     catch (Exception ex)
                     {
                         TextToastManager.Instance.ShowToast($"msdnus:Err:{ex.Message}");
                     }
+                    finally
+                    {
+                        StatusText = string.Empty;
+                    }
                 });
+
                 #endregion
 
-                TempList = await _datatarget.GetAllData();
-                RaisePropertyChanged("TempList");
+                DataItems = await _datatarget.GetAllData();
+                RaisePropertyChanged("DataItems");
             }
             catch (Exception ex)
             {
                 TextToastManager.Instance.ShowToast($"msdnus:Err:{ex.Message}");
+            }
+            finally
+            {
+                StatusText = string.Empty;
             }
         }
 
