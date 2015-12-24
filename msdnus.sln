@@ -16,6 +16,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "external", "external", "{35
 		external\vbinc2.exe = external\vbinc2.exe
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{B66B6314-539C-478F-9E2D-7964EC6E6DD8}"
+	ProjectSection(SolutionItems) = preProject
+		external\Images\Key-Access-01.png = external\Images\Key-Access-01.png
+		external\Images\Square150x150Logo.psd = external\Images\Square150x150Logo.psd
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -77,5 +83,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B66B6314-539C-478F-9E2D-7964EC6E6DD8} = {35611737-4B05-49E0-B028-16ACA9F922B2}
 	EndGlobalSection
 EndGlobal
