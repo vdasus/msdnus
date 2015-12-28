@@ -120,6 +120,9 @@
   <data name="appname.Text" xml:space="preserve">
     <value>msdnus</value>
   </data>
+  <data name="butcopy.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Copy key to clipboard</value>
+  </data>
   <data name="cantunsnap" xml:space="preserve">
     <value>Can't unsnap app</value>
   </data>

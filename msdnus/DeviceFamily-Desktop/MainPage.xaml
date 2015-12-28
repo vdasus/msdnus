@@ -20,7 +20,7 @@
         <TextBlock x:Uid="appname" Style="{ThemeResource HeaderTextBlockStyle}"  Height="Auto" Grid.Row="0" Margin="10 0 0 10" />
         <TextBox x:Uid="srctxt" Grid.Row="1" Text="{Binding TextToSearch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                  TextChanged="TextBox_OnTextChanged" 
-                 HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" MinWidth="250" Width="Auto"/>
+                 HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" MinWidth="250" />
         <!--<TextBlock x:Uid="AppVersion" Text="{x:Bind Vm.AppVersion, Mode=OneTime}" Style="{ThemeResource SubtitleTextBlockStyle}" />-->
         <!--<TextBox x:Uid="TempFile" Text="{x:Bind Vm.TempFolder, Mode=TwoWay}"  HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340"/>-->
         <!--<ScrollViewer>
@@ -35,18 +35,23 @@
                                 <RowDefinition Height="Auto"></RowDefinition>
                                 <RowDefinition Height="Auto"></RowDefinition>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="{Binding Name, Mode=OneTime}" Grid.Row="0" />
+                            <TextBlock Text="{Binding Name, Mode=OneTime}" Style="{ThemeResource BodyTextBlockStyle}" Grid.Row="0" />
                             <ItemsControl ItemsSource="{Binding Items, Mode=OneTime}" Grid.Row="1" >
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <AppBarButton Icon="Copy" 
-                                                          IsCompact="True"
-                                                          Command="{Binding Source={StaticResource Locator}, Path=Main.CopyToClipboardCommand, Mode=OneTime}"
-                                                          CommandParameter="{Binding Value, Mode=OneTime}" />
-                                            <TextBlock x:Uid="lbval" Text="{Binding Value, Mode=OneTime}" Style="{ThemeResource CaptionTextBlockStyle}" VerticalAlignment="Center" Margin="5 0 0 5" />
-                                            <TextBlock x:Uid="lbtyp" ToolTipService.ToolTip="" Text="{Binding Type, Mode=OneTime}" Style="{ThemeResource CaptionTextBlockStyle}" VerticalAlignment="Center" Margin="5 0 0 5" />
-                                            <TextBlock x:Uid="lbcdt" ToolTipService.ToolTip="" Text="{Binding ClaimedDate, Mode=OneTime}" Style="{ThemeResource CaptionTextBlockStyle}" VerticalAlignment="Center" Margin="5 0 0 5" />
+                                            <AppBarButton 
+                                                x:Uid="butcopy"
+                                                Icon="Copy" 
+                                                IsCompact="True"
+                                                Command="{Binding Source={StaticResource Locator}, Path=Main.CopyToClipboardCommand, Mode=OneTime}"
+                                                CommandParameter="{Binding Value, Mode=OneTime}" />
+                                            <TextBlock x:Uid="lbval" Text="{Binding Value, Mode=OneTime}" 
+                                                       Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" Margin="5 0 0 5" />
+                                            <TextBlock x:Uid="lbtyp" ToolTipService.ToolTip="" Text="{Binding Type, Mode=OneTime}" 
+                                                       Style="{ThemeResource BodyTextBlockStyle}" VerticalAlignment="Center" Margin="5 0 0 5" />
+                                            <TextBlock x:Uid="lbcdt" ToolTipService.ToolTip="" Text="{Binding ClaimedDate, Mode=OneTime}" 
+                                                       Style="{ThemeResource BodyTextBlockStyle}" VerticalAlignment="Center" Margin="5 0 0 5" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
