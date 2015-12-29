@@ -175,8 +175,6 @@ namespace msdnus.ViewModel
                     }
                 });
 
-
-
                 //AboutPageCommand
                 AboutPageCommand = new RelayCommand(() =>
                 {
