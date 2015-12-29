@@ -5,9 +5,18 @@
     xmlns:local="using:msdnus"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    DataContext="{Binding Source={StaticResource Locator}, Path=About}">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="50" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock x:Uid="appname" Grid.Row="0" Style="{ThemeResource HeaderTextBlockStyle}"  Height="Auto" Margin="10 0 0 10" />
+        <TextBlock Grid.Row="1" Text="{x:Bind Vm.AppVersion}" Margin="10 0 0 10" />
     </Grid>
 </Page>
+

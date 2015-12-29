@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Windows.ApplicationModel;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.ApplicationModel.Resources;
 using Windows.Storage;
@@ -22,9 +21,6 @@ namespace msdnus.ViewModel
     [Magic]
     public class MainViewModel: PropertyChangedBase
     {
-        public string AppVersion { get; } =
-    $"v.{Package.Current.Id.Version.Major}.{Package.Current.Id.Version.Minor}.{Package.Current.Id.Version.Build}.{Package.Current.Id.Version.Revision}";
-
         private readonly ResourceLoader _loader;
 
         private readonly INavigationService _navigationService;
