@@ -8,6 +8,7 @@ using Windows.ApplicationModel.Resources;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI.ViewManagement;
+using Windows.UI.Xaml;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using msdnus.Core.Model;
@@ -32,6 +33,7 @@ namespace msdnus.ViewModel
 
         public string TextToSearch { get; set; }
         public string StatusText { get; set; }
+        public Visibility IsProgress { get; set; }
         
         #region commands
         public RelayCommand<string> CopyToClipboardCommand { get; set; }
@@ -39,6 +41,10 @@ namespace msdnus.ViewModel
         public RelayCommand GetFromFilePickerCommand { get; set; }
         public RelayCommand LockAllCommand { get; set; }
         public RelayCommand OnedriveCommand { get; set; }
+        public RelayCommand AboutPageCommand { get; set; }
+        public RelayCommand CoffeeCupCommand { get; set; }
+        public RelayCommand HelpCommand { get; set; }
+        public RelayCommand SettingsCommand { get; set; }
         #endregion
 
         private readonly IDataSource _datasource;
@@ -61,7 +67,7 @@ namespace msdnus.ViewModel
 
         private async void Init()
         {
-            StatusText = _loader.GetString("statusloading");
+            SetProgress(true);
             
             try
             {
@@ -103,7 +109,7 @@ namespace msdnus.ViewModel
 
                         if (file == null) return;
 
-                        StatusText = _loader.GetString("statusloading");
+                        SetProgress(true);
 
                         if (!await ImportData(file, true, true)) return;
 
@@ -117,7 +123,7 @@ namespace msdnus.ViewModel
                     }
                     finally
                     {
-                        StatusText = string.Empty;
+                        SetProgress(false);
                     }
                 });
 
@@ -134,8 +140,8 @@ namespace msdnus.ViewModel
                     //ClSc: 3Iq0D38qYplvEhpoLGpVpidVXpiEdf1X
                     try
                     {
-                        StatusText = _loader.GetString("statusloading");
-                        
+                        SetProgress(true);
+
                         if (!EnsureUnsnapped()) return;
 
                         var oneDriveClient =
@@ -169,8 +175,34 @@ namespace msdnus.ViewModel
                     }
                     finally
                     {
-                        StatusText = string.Empty;
+                        SetProgress(false);
                     }
+                });
+
+
+
+                //AboutPageCommand
+                AboutPageCommand = new RelayCommand(() =>
+                {
+                    _navigationService.NavigateTo("About");
+                });
+
+                //CoffeeCupCommand
+                CoffeeCupCommand = new RelayCommand(() =>
+                {
+                    _navigationService.NavigateTo("CoffeeCup");
+                });
+
+                //HelpCommand
+                HelpCommand = new RelayCommand(() =>
+                {
+                    _navigationService.NavigateTo("Help");
+                });
+
+                //SettingsCommand
+                SettingsCommand = new RelayCommand(() =>
+                {
+                    _navigationService.NavigateTo("Settings");
                 });
 
                 #endregion
@@ -184,7 +216,7 @@ namespace msdnus.ViewModel
             }
             finally
             {
-                StatusText = string.Empty;
+                SetProgress(false);
             }
         }
 
@@ -212,7 +244,7 @@ namespace msdnus.ViewModel
             return _datatarget.SaveData(lst, iscleanupbefore, isdistinct);
         }
 
-        internal bool EnsureUnsnapped()
+        private bool EnsureUnsnapped()
         {
             // FilePicker APIs will not work if the application is in a snapped state.
             // If an app wants to show a FilePicker while snapped, it must attempt to unsnap first
@@ -223,6 +255,20 @@ namespace msdnus.ViewModel
             }
 
             return unsnapped;
+        }
+
+        private void SetProgress(bool isShow)
+        {
+            if (isShow)
+            {
+                StatusText = _loader.GetString("statusloading");
+                IsProgress = Visibility.Visible;
+            }
+            else
+            {
+                StatusText = string.Empty;
+                IsProgress = Visibility.Collapsed;
+            }
         }
     }
 }

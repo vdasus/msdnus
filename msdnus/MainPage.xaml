@@ -57,16 +57,20 @@
             </ListBox>
         </ScrollViewer>
         <CommandBar Grid.Row="3">
-            <AppBarButton x:Uid="lockbutton" Icon="Permissions" Command="{x:Bind Vm.LockAllCommand, Mode=OneWay}"/>
-            <AppBarButton x:Uid="fromonedrbutton" Icon="Globe" Command="{x:Bind Vm.OnedriveCommand, Mode=OneWay}"/>
-            <AppBarButton x:Uid="loadbutton" Icon="Download" Command="{x:Bind Vm.GetFromFilePickerCommand, Mode=OneWay}"/>
-            <AppBarButton x:Uid="helpbutton" Icon="Help" />
+            <AppBarButton x:Uid="lockbutton" Icon="Permissions" Command="{x:Bind Vm.LockAllCommand, Mode=OneTime}"/>
+            <AppBarButton x:Uid="fromonedrbutton" Icon="Globe" Command="{x:Bind Vm.OnedriveCommand, Mode=OneTime}"/>
+            <AppBarButton x:Uid="loadbutton" Icon="Download" Command="{x:Bind Vm.GetFromFilePickerCommand, Mode=OneTime}"/>
+            <AppBarButton x:Uid="helpbutton" Icon="Help" Command="{x:Bind Vm.HelpCommand, Mode=OneTime}" />
             <CommandBar.SecondaryCommands>
-                <AppBarButton x:Uid="likebutton" Icon="Like" />
-                <AppBarButton x:Uid="settingsbutton" Icon="Setting" />
+                <AppBarButton x:Uid="likebutton" Icon="Like" Command="{x:Bind Vm.CoffeeCupCommand, Mode=OneTime}" />
+                <AppBarButton x:Uid="settingsbutton" Icon="Setting" Command="{x:Bind Vm.SettingsCommand, Mode=OneTime}" />
+                <AppBarButton x:Uid="aboutbutton" Icon="Contact" Command="{x:Bind Vm.AboutPageCommand, Mode=OneTime}" />
             </CommandBar.SecondaryCommands>
             <CommandBar.Content>
-                <TextBlock Text="Loading ..." Margin="12,14"/>
+                <StackPanel>
+                    <TextBlock Text="{x:Bind Vm.StatusText, Mode=OneWay}" MinWidth="250" Margin="5"/>
+                    <ProgressBar IsIndeterminate="True" Visibility="{x:Bind Vm.IsProgress, Mode=OneWay}" />
+                </StackPanel>
             </CommandBar.Content>
         </CommandBar>
     </Grid>
