@@ -138,6 +138,9 @@
   <data name="enterpin.Header" xml:space="preserve">
     <value>Enter PIN</value>
   </data>
+  <data name="enterpin.PlaceholderText" xml:space="preserve">
+    <value>Default is "123"</value>
+  </data>
   <data name="fromonedrbutton.Label" xml:space="preserve">
     <value>Import from OneDrive</value>
   </data>

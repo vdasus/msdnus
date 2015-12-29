@@ -23,7 +23,7 @@ namespace msdnus.ViewModel
     {
         private readonly ResourceLoader _loader;
 
-        private readonly INavigationService _navigationService;
+        public readonly INavigationService NavigationService;
 
         public List<YourKeyDTO> DataItems { get; set; }
 
@@ -50,7 +50,7 @@ namespace msdnus.ViewModel
 
         public MainViewModel(IDataSource datasource, IDataTarget datatarget, INavigationService navigationService)
         {
-            _navigationService = navigationService;
+            NavigationService = navigationService;
             
             _datasource = datasource;
             _datatarget = datatarget;
@@ -126,7 +126,7 @@ namespace msdnus.ViewModel
                 //LockAll
                 LockAllCommand = new RelayCommand(() =>
                 {
-                    _navigationService.NavigateTo("Iejimo");
+                    NavigationService.NavigateTo("Iejimo");
                 });
 
                 //OnedriveCommand
@@ -178,25 +178,25 @@ namespace msdnus.ViewModel
                 //AboutPageCommand
                 AboutPageCommand = new RelayCommand(() =>
                 {
-                    _navigationService.NavigateTo("About");
+                    NavigationService.NavigateTo("About");
                 });
 
                 //CoffeeCupCommand
                 CoffeeCupCommand = new RelayCommand(() =>
                 {
-                    _navigationService.NavigateTo("CoffeeCup");
+                    NavigationService.NavigateTo("CoffeeCup");
                 });
 
                 //HelpCommand
                 HelpCommand = new RelayCommand(() =>
                 {
-                    _navigationService.NavigateTo("Help");
+                    NavigationService.NavigateTo("Help");
                 });
 
                 //SettingsCommand
                 SettingsCommand = new RelayCommand(() =>
                 {
-                    _navigationService.NavigateTo("Settings");
+                    NavigationService.NavigateTo("Settings");
                 });
 
                 #endregion

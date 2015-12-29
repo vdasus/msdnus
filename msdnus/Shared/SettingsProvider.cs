@@ -29,7 +29,7 @@ namespace msdnus.Shared
         public async Task<string> GetIejimoParameter()
         {
             var value = Sett.Values["IejiPar"];
-            return value == null ? null : await Core.Shared.Utils.UnprotectFromBase64Data((string) value);
+            return value == null ? "123" : await Core.Shared.Utils.UnprotectFromBase64Data((string) value);
         }
 
         public async Task<bool> SetIejimoParameter(string astr)

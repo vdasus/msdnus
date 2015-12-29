@@ -10,7 +10,7 @@ namespace msdnus.ViewModel
     [Magic]
     public class IejimoViewModel: PropertyChangedBase
     {
-        private readonly INavigationService _navigationService;
+        public readonly INavigationService NavigationService;
         private readonly ISettingsProvider _settingsProvider;
 
         public RelayCommand<string> CheckPassword { get; set; }
@@ -20,23 +20,21 @@ namespace msdnus.ViewModel
         public IejimoViewModel(INavigationService navigationService, ISettingsProvider settingsProvider)
         {
             _settingsProvider = settingsProvider;
-            _navigationService = navigationService;
+            NavigationService = navigationService;
 
-            Task.Run(() => Init(_navigationService));
+            Task.Run(() => Init(NavigationService));
         }
 
-        private bool Init(INavigationService navigationService)
+        private async Task<bool> Init(INavigationService navigationService)
         {
             if (navigationService == null) throw new ArgumentNullException(nameof(navigationService));
             try
             {
-                //TODO temporary
-                //tiejimas = await _settingsProvider.GetIejimoParameter();
-                _tiejimas = "123";
+                _tiejimas = await _settingsProvider.GetIejimoParameter();
                 CheckPassword = new RelayCommand<string>(e =>
                 {
                     if (string.IsNullOrEmpty(_tiejimas) || e == _tiejimas)
-                        _navigationService.NavigateTo("Main");
+                        NavigationService.NavigateTo("Main");
                 });
 
                 return true;

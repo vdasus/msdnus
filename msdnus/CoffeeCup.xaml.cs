@@ -1,4 +1,5 @@
 ﻿using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 using msdnus.ViewModel;
 
 namespace msdnus
@@ -10,6 +11,11 @@ namespace msdnus
         public CoffeeCup()
         {
             InitializeComponent();
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            Vm.NavigationService.GoBack();
         }
     }
 }
