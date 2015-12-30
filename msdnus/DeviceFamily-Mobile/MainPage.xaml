@@ -20,7 +20,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
-        <SplitView x:Name="Splitter" Grid.Row="0" IsPaneOpen="{x:Bind Vm.IsIejimoMode, Mode=OneWay}" >
+        <SplitView x:Name="Splitter" Grid.Row="0" IsPaneOpen="{x:Bind Vm.IsIejimoMode, Mode=OneWay}" PanePlacement="Right" PaneClosing="Splitter_OnPaneClosing" >
             <SplitView.Pane>
                 <RelativePanel Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
                     <PasswordBox Visibility="{x:Bind Vm.IsIejimoMode, Mode=OneWay, Converter={StaticResource BoolToVisConverter}}"

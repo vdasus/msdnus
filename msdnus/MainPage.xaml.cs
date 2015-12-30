@@ -12,11 +12,13 @@ namespace msdnus
         public MainPage()
         {
             InitializeComponent();
+            Splitter.RegisterPropertyChangedCallback(SplitView.IsPaneOpenProperty, IsPaneOpenPropertyChanged);
         }
 
-        private void TextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        private void MainPage_OnLoaded(object sender, RoutedEventArgs e)
         {
-            if(Vm.SearchStringChangedCommand.CanExecute(null)) Vm.SearchStringChangedCommand.Execute(null);
+            /*passwordBox.Password = string.Empty;
+            passwordBox.Focus(FocusState.Programmatic);*/
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -24,12 +26,17 @@ namespace msdnus
             Vm.NavigationService.GoBack();
         }
 
+        private void TextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (Vm.SearchStringChangedCommand.CanExecute(null)) Vm.SearchStringChangedCommand.Execute(null);
+        }
+
         private void PasswordChangedHandler(object sender, RoutedEventArgs e)
         {
             Vm?.CheckPassword?.Execute(passwordBox.Password);
         }
 
-        private void MainPage_OnLoaded(object sender, RoutedEventArgs e)
+        private void IsPaneOpenPropertyChanged(DependencyObject sender, DependencyProperty dp)
         {
             passwordBox.Password = string.Empty;
             passwordBox.Focus(FocusState.Programmatic);
