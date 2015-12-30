@@ -31,7 +31,13 @@ namespace msdnus
 
         private void MainPage_OnLoaded(object sender, RoutedEventArgs e)
         {
+            passwordBox.Password = string.Empty;
             passwordBox.Focus(FocusState.Programmatic);
+        }
+
+        private void Splitter_OnPaneClosing(SplitView sender, SplitViewPaneClosingEventArgs args)
+        {
+            if(Vm.IsIejimoMode) args.Cancel = true;
         }
     }
 }

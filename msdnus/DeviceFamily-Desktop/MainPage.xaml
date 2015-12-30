@@ -20,7 +20,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
-        <SplitView x:Name="Splitter" Grid.Row="0" IsPaneOpen="{x:Bind Vm.IsIejimoMode, Mode=OneWay}" >
+        <SplitView x:Name="Splitter" Grid.Row="0" IsPaneOpen="{x:Bind Vm.IsIejimoMode, Mode=OneWay}" PaneClosing="Splitter_OnPaneClosing" >
             <SplitView.Pane>
                 <RelativePanel Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
                     <PasswordBox Visibility="{x:Bind Vm.IsIejimoMode, Mode=OneWay, Converter={StaticResource BoolToVisConverter}}"
@@ -93,7 +93,7 @@
                 </Grid>
             </RelativePanel>
         </SplitView>
-        <CommandBar Grid.Row="1">
+        <CommandBar Grid.Row="1" Visibility="{x:Bind Vm.IsIejimoMode, Mode=OneWay, Converter={StaticResource InvBoolToVisConverter}}">
             <AppBarButton x:Uid="lockbutton" Icon="Permissions" Command="{x:Bind Vm.LockAllCommand, Mode=OneTime}"/>
             <AppBarButton x:Uid="fromonedrbutton" Icon="Globe" Command="{x:Bind Vm.OnedriveCommand, Mode=OneTime}"/>
             <AppBarButton x:Uid="loadbutton" Icon="Download" Command="{x:Bind Vm.GetFromFilePickerCommand, Mode=OneTime}"/>

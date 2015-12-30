@@ -4,59 +4,92 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:msdnus"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:command="http://www.galasoft.ch/mvvmlight"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:shared="using:msdnus.Shared"
     mc:Ignorable="d"
+    Loaded="MainPage_OnLoaded"
     DataContext="{Binding Source={StaticResource Locator}, Path=Main}">
-
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <shared:BoolToVisibleConverter x:Key="BoolToVisConverter" />
+        <shared:InverseBoolToVisibleConverter x:Key="InvBoolToVisConverter" />
+    </Page.Resources>
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="50" />
-            <RowDefinition />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBlock x:Uid="appname" Style="{ThemeResource HeaderTextBlockStyle}"  Height="Auto" Grid.Row="0" Margin="10 0 0 10" />
-        <ProgressBar IsIndeterminate="True" Visibility="{x:Bind Vm.IsProgress, Mode=OneWay}" />
-        <TextBox x:Uid="srctxt" Grid.Row="1" Text="{Binding TextToSearch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                 TextChanged="TextBox_OnTextChanged" 
-                 HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" MinWidth="250" Width="Auto"/>
-        <!--<TextBlock x:Uid="AppVersion" Text="{x:Bind Vm.AppVersion, Mode=OneTime}" Style="{ThemeResource SubtitleTextBlockStyle}" />-->
-        <!--<TextBox x:Uid="TempFile" Text="{x:Bind Vm.TempFolder, Mode=TwoWay}"  HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340"/>-->
-        <!--<ScrollViewer>
+        <SplitView x:Name="Splitter" Grid.Row="0" IsPaneOpen="{x:Bind Vm.IsIejimoMode, Mode=OneWay}" >
+            <SplitView.Pane>
+                <RelativePanel Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
+                    <PasswordBox Visibility="{x:Bind Vm.IsIejimoMode, Mode=OneWay, Converter={StaticResource BoolToVisConverter}}"
+                        x:Uid="enterpin" HorizontalContentAlignment="Center" x:Name="passwordBox" HorizontalAlignment="Left" Margin="69,82,0,0" 
+                                 VerticalAlignment="Top" Width="222" Password="" PasswordChanged="PasswordChangedHandler"
+                                 PreventKeyboardDisplayOnProgrammaticFocus="False">
+                        <PasswordBox.InputScope>
+                            <InputScope>
+                                <InputScope.Names>
+                                    <InputScopeName NameValue="NumericPin"/>
+                                </InputScope.Names>
+                            </InputScope>
+                        </PasswordBox.InputScope>
+                    </PasswordBox>
+                </RelativePanel>
+            </SplitView.Pane>
+            <RelativePanel Visibility="{x:Bind Vm.IsIejimoMode, Mode=OneWay, Converter={StaticResource InvBoolToVisConverter}}">
+                <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="50" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <TextBlock x:Uid="appname" Grid.Row="0" Style="{ThemeResource HeaderTextBlockStyle}"  Height="Auto"  Margin="10 0 0 10" />
+                    <ProgressBar Grid.Row="0" IsIndeterminate="True" Visibility="{x:Bind Vm.IsProgress, Mode=OneWay}" />
+                    <TextBox x:Uid="srctxt" Grid.Row="1" Text="{Binding TextToSearch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                 TextChanged="TextBox_OnTextChanged" 
+                                 HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" MinWidth="250" />
+                    <!--<TextBlock x:Uid="AppVersion" Text="{x:Bind Vm.AppVersion, Mode=OneTime}" Style="{ThemeResource SubtitleTextBlockStyle}" />-->
+                    <!--<TextBox x:Uid="TempFile" Text="{x:Bind Vm.TempFolder, Mode=TwoWay}"  HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340"/>-->
+                    <!--<ScrollViewer>
              <TextBox x:Uid="Log" Text="{x:Bind Vm.TempRezult, Mode=OneTime}" Height="500"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" />
             </ScrollViewer>-->
-        <ScrollViewer Grid.Row="2">
-            <ListBox x:Uid="Log2" ItemsSource="{x:Bind Vm.DataItems, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Top" >
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"></RowDefinition>
-                                <RowDefinition Height="Auto"></RowDefinition>
-                            </Grid.RowDefinitions>
-                            <TextBlock Text="{Binding Name, Mode=OneTime}" Grid.Row="0" />
-                            <ItemsControl ItemsSource="{Binding Items, Mode=OneTime}" Grid.Row="1" >
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <AppBarButton Icon="Copy" 
-                                                          IsCompact="True"
-                                                          Command="{Binding Source={StaticResource Locator}, Path=Main.CopyToClipboardCommand, Mode=OneTime}"
-                                                          CommandParameter="{Binding Value, Mode=OneTime}" />
-                                            <TextBlock Text="{Binding Value, Mode=OneTime}" Style="{ThemeResource CaptionTextBlockStyle}" VerticalAlignment="Center" Margin="5 0 0 5" />
-                                            <!--<TextBlock Text="{Binding Type, Mode=OneTime}" Style="{ThemeResource CaptionTextBlockStyle}" VerticalAlignment="Center" Margin="5 0 0 5" />
-                                            <TextBlock Text="{Binding ClaimedDate, Mode=OneTime}" Style="{ThemeResource CaptionTextBlockStyle}" VerticalAlignment="Center" Margin="5 0 0 5" />-->
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </ScrollViewer>
-        <CommandBar Grid.Row="3">
+                    <ScrollViewer Grid.Row="2">
+                        <ListBox x:Uid="Log2" ItemsSource="{x:Bind Vm.DataItems, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Top" >
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"></RowDefinition>
+                                            <RowDefinition Height="Auto"></RowDefinition>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="{Binding Name, Mode=OneTime}" Style="{ThemeResource BodyTextBlockStyle}" Grid.Row="0" />
+                                        <ItemsControl ItemsSource="{Binding Items, Mode=OneTime}" Grid.Row="1" >
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <SymbolIcon Symbol="Audio" Margin="0,0,12,0"/>
+                                                        <AppBarButton 
+                                                                x:Uid="butcopy"
+                                                                Icon="Copy" 
+                                                                IsCompact="True"
+                                                                Command="{Binding Source={StaticResource Locator}, Path=Main.CopyToClipboardCommand, Mode=OneTime}"
+                                                                CommandParameter="{Binding Value, Mode=OneTime}" />
+                                                        <TextBlock x:Uid="lbval" Text="{Binding Value, Mode=OneTime}" 
+                                                                       Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" Margin="5 0 0 5" />
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                </Grid>
+            </RelativePanel>
+        </SplitView>
+        <CommandBar Grid.Row="1" Visibility="{x:Bind Vm.IsIejimoMode, Mode=OneWay, Converter={StaticResource InvBoolToVisConverter}}">
             <AppBarButton x:Uid="lockbutton" Icon="Permissions" Command="{x:Bind Vm.LockAllCommand, Mode=OneTime}"/>
             <AppBarButton x:Uid="fromonedrbutton" Icon="Globe" Command="{x:Bind Vm.OnedriveCommand, Mode=OneTime}"/>
             <AppBarButton x:Uid="loadbutton" Icon="Download" Command="{x:Bind Vm.GetFromFilePickerCommand, Mode=OneTime}"/>
@@ -66,6 +99,11 @@
                 <AppBarButton x:Uid="settingsbutton" Icon="Setting" Command="{x:Bind Vm.SettingsCommand, Mode=OneTime}" />
                 <AppBarButton x:Uid="aboutbutton" Icon="Contact" Command="{x:Bind Vm.AboutPageCommand, Mode=OneTime}" />
             </CommandBar.SecondaryCommands>
+            <CommandBar.Content>
+                <StackPanel>
+                    <ProgressBar IsIndeterminate="True" Visibility="{x:Bind Vm.IsProgress, Mode=OneWay}" />
+                </StackPanel>
+            </CommandBar.Content>
         </CommandBar>
     </Grid>
 </Page>
