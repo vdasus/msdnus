@@ -30,6 +30,7 @@ namespace msdnus.ViewModel
         public string TextToSearch { get; set; }
         public string StatusText { get; set; }
         public Visibility IsProgress { get; set; }
+        public bool IsIejimoMode { get; set; }
         
         #region commands
         public RelayCommand<string> CopyToClipboardCommand { get; set; }
@@ -57,7 +58,8 @@ namespace msdnus.ViewModel
             
             _loader = new ResourceLoader();
 
-            //var Initialization = TaskCompletionNotifierFactory.Create(InitializeAsync());
+            IsIejimoMode = true;
+
             Init();
         }
 
