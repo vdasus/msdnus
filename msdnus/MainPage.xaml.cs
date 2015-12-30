@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml.Controls;
+﻿using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using msdnus.ViewModel;
 
@@ -21,6 +22,16 @@ namespace msdnus
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             Vm.NavigationService.GoBack();
+        }
+
+        private void PasswordChangedHandler(object sender, RoutedEventArgs e)
+        {
+            Vm?.CheckPassword?.Execute(passwordBox.Password);
+        }
+
+        private void MainPage_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            passwordBox.Focus(FocusState.Programmatic);
         }
     }
 }

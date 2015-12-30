@@ -34,23 +34,21 @@ namespace msdnus.ViewModel
 
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
+            SimpleIoc.Default.Register<IDataSource, FileDataSource>();
+            SimpleIoc.Default.Register<IDataTarget, DataTarget>();
+            SimpleIoc.Default.Register<ISettingsProvider, SettingsProvider>();
+
             SimpleIoc.Default.Register<MainViewModel>();
-            SimpleIoc.Default.Register<IejimoViewModel>();
             SimpleIoc.Default.Register<AboutViewModel>();
             SimpleIoc.Default.Register<CoffeeCupViewModel>();
             SimpleIoc.Default.Register<HelpViewModel>();
             SimpleIoc.Default.Register<SettingsViewModel>();
 
-            SimpleIoc.Default.Register<IDataSource, FileDataSource>();
-            SimpleIoc.Default.Register<IDataTarget, DataTarget>();
-            SimpleIoc.Default.Register<ISettingsProvider, SettingsProvider>();
-
             var navigationService = CreateNavigationService();
-            SimpleIoc.Default.Register<INavigationService>(() => navigationService);
+            SimpleIoc.Default.Register(() => navigationService);
         }
 
         public static MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();
-        public static IejimoViewModel Iejimo => ServiceLocator.Current.GetInstance<IejimoViewModel>();
         public static AboutViewModel About => ServiceLocator.Current.GetInstance<AboutViewModel>();
         public static CoffeeCupViewModel CoffeeCup => ServiceLocator.Current.GetInstance<CoffeeCupViewModel>();
         public static HelpViewModel Help => ServiceLocator.Current.GetInstance<HelpViewModel>();
@@ -59,7 +57,6 @@ namespace msdnus.ViewModel
         private INavigationService CreateNavigationService()
         {
             var navigationService = new NavigationService();
-            navigationService.Configure("Iejimo", typeof(IejimoPage));
             navigationService.Configure("Main", typeof(MainPage));
             navigationService.Configure("About", typeof(About));
             navigationService.Configure("CoffeeCup", typeof(CoffeeCup));

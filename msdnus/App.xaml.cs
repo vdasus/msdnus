@@ -21,7 +21,7 @@ namespace msdnus
         {
             InitializeComponent();
             Suspending += OnSuspending;
-            Resuming += App_OnResuming;
+            /*Resuming += App_OnResuming;*/
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace msdnus
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                rootFrame.Navigate(typeof (IejimoPage), e.Arguments);
+                rootFrame.Navigate(typeof(MainPage), e.Arguments);
             }
 
             // Ensure the current window is active
@@ -103,11 +103,6 @@ namespace msdnus
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
             deferral.Complete();
-        }
-
-        private void App_OnResuming(object sender, object e)
-        {
-            ((Frame) Window.Current.Content).Navigate(typeof (IejimoPage));
         }
 
         private void OnNavigated(object sender, NavigationEventArgs e)

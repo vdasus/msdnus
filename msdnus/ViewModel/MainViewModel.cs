@@ -24,6 +24,7 @@ namespace msdnus.ViewModel
         private readonly ResourceLoader _loader;
 
         public readonly INavigationService NavigationService;
+        private readonly ISettingsProvider _settingsProvider;
 
         public List<YourKeyDTO> DataItems { get; set; }
 
@@ -31,8 +32,9 @@ namespace msdnus.ViewModel
         public string StatusText { get; set; }
         public Visibility IsProgress { get; set; }
         public bool IsIejimoMode { get; set; }
-        
+
         #region commands
+        public RelayCommand<string> CheckPassword { get; set; }
         public RelayCommand<string> CopyToClipboardCommand { get; set; }
         public RelayCommand SearchStringChangedCommand { get; set; }
         public RelayCommand GetFromFilePickerCommand { get; set; }
@@ -49,10 +51,11 @@ namespace msdnus.ViewModel
 
         //public ITaskCompletionNotifier Initialization { get; private set; }
 
-        public MainViewModel(IDataSource datasource, IDataTarget datatarget, INavigationService navigationService)
+        public MainViewModel(IDataSource datasource, IDataTarget datatarget, INavigationService navigationService, ISettingsProvider settingsProvider)
         {
             NavigationService = navigationService;
-            
+            _settingsProvider = settingsProvider;
+
             _datasource = datasource;
             _datatarget = datatarget;
             
@@ -70,6 +73,15 @@ namespace msdnus.ViewModel
             try
             {
                 #region commands
+
+                //CheckPassword
+                CheckPassword = new RelayCommand<string>(async e =>
+                {
+                    var tiejimas = await _settingsProvider.GetIejimoParameter();
+                    if (string.IsNullOrEmpty(tiejimas) || e == tiejimas)
+                        IsIejimoMode = false;
+                    RaisePropertyChanged("IsIejimoMode");
+                });
 
                 //CopyToClipboard
                 CopyToClipboardCommand = new RelayCommand<string>(e =>
@@ -128,7 +140,7 @@ namespace msdnus.ViewModel
                 //LockAll
                 LockAllCommand = new RelayCommand(() =>
                 {
-                    NavigationService.NavigateTo("Iejimo");
+                    IsIejimoMode = true;
                 });
 
                 //OnedriveCommand

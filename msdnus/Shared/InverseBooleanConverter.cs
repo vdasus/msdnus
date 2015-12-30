@@ -9,8 +9,8 @@ namespace msdnus.Shared
         #region IValueConverter Members
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (targetType != typeof(bool))
-                throw new InvalidOperationException("The target must be a boolean");
+            if (targetType != typeof(Visibility))
+                throw new InvalidOperationException("The target must be a Visibility");
 
             return (bool) value ? Visibility.Collapsed : Visibility.Visible;
         }
