@@ -17,8 +17,8 @@ namespace msdnus
 
         private void MainPage_OnLoaded(object sender, RoutedEventArgs e)
         {
-            /*passwordBox.Password = string.Empty;
-            passwordBox.Focus(FocusState.Programmatic);*/
+            passwordBox.Password = string.Empty;
+            passwordBox.Focus(FocusState.Programmatic);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
