@@ -5,6 +5,7 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace msdnus
 {
@@ -21,7 +22,7 @@ namespace msdnus
         {
             InitializeComponent();
             Suspending += OnSuspending;
-            /*Resuming += App_OnResuming;*/
+            Resuming += App_OnResuming;
         }
 
         /// <summary>
@@ -102,7 +103,13 @@ namespace msdnus
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
+            Messenger.Default.Send(new NotificationMessage("Logout"));
             deferral.Complete();
+        }
+
+        private void App_OnResuming(object sender, object e)
+        {
+            Messenger.Default.Send(new NotificationMessage("Logout"));
         }
 
         private void OnNavigated(object sender, NavigationEventArgs e)

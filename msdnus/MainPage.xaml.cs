@@ -1,6 +1,7 @@
 ﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using GalaSoft.MvvmLight.Messaging;
 using msdnus.ViewModel;
 
 namespace msdnus
@@ -13,6 +14,15 @@ namespace msdnus
         {
             InitializeComponent();
             Splitter.RegisterPropertyChangedCallback(SplitView.IsPaneOpenProperty, IsPaneOpenPropertyChanged);
+            Messenger.Default.Register<NotificationMessage>(this, NotificationMessageReceived);
+        }
+
+        private void NotificationMessageReceived(NotificationMessage obj)
+        {
+            if (obj.Notification == "Logout")
+            {
+                Vm.IsIejimoMode = true;
+            }
         }
 
         private void MainPage_OnLoaded(object sender, RoutedEventArgs e)
