@@ -4,8 +4,8 @@ namespace msdnus.Core.Model
 {
     public interface ISettingsProvider
     {
-        bool FirstRun { get; set; }
-
+        bool IsFirstRun { get; set; }
+        bool IsDarkTheme { get; set; }
         Task<string> GetIejimoParameter();
         Task<bool> SetIejimoParameter(string astr);
     }

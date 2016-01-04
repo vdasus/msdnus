@@ -5,8 +5,6 @@
     xmlns:viewModel="using:msdnus.ViewModel"
     RequestedTheme="Light">
     <Application.Resources>
-        <ResourceDictionary>
-            <viewModel:ViewModelLocator x:Key="Locator"/>
-        </ResourceDictionary>
+        <viewModel:ViewModelLocator x:Key="Locator" />
     </Application.Resources>
 </Application>

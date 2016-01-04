@@ -41,7 +41,9 @@
                 </InputScope>
             </PasswordBox.InputScope>
         </PasswordBox>
-            <Button x:Uid="savepin" Content="Save new PIN" Command="{x:Bind Vm.SaveIejimoParamCommand, Mode=OneTime}" Margin="4 16 0 0" />
+            <Button x:Uid="savepin" Content="Save new PIN" Command="{x:Bind Vm.SaveIejimoParamCommand, Mode=OneTime}" Margin="0 16 0 0" />
+            
+            <ToggleSwitch x:Uid="IsDarkTheme" Margin="0 16 0 0" Header="Dark theme" IsOn="{x:Bind Vm.IsDarkTheme, Mode=TwoWay}" />
         </StackPanel>
     </Grid>
 </Page>

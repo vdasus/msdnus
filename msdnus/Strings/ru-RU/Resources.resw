@@ -156,6 +156,9 @@
   <data name="helpbutton.Label" xml:space="preserve">
     <value>Помощь</value>
   </data>
+  <data name="IsDarkTheme.Header" xml:space="preserve">
+    <value>Тёмная тема</value>
+  </data>
   <data name="lbcdt.ToolTipService.ToolTip" xml:space="preserve">
     <value>Дата получения</value>
   </data>

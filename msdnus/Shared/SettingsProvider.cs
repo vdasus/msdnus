@@ -7,7 +7,8 @@ namespace msdnus.Shared
     public class SettingsProvider: ISettingsProvider
     {
         private static readonly ApplicationDataContainer Sett = ApplicationData.Current.RoamingSettings;
-        public bool FirstRun
+
+        public bool IsFirstRun
         {
             get
             {
@@ -20,6 +21,21 @@ namespace msdnus.Shared
             }
 
             set { Sett.Values["FirstRun"] = value; }
+        }
+
+        public bool IsDarkTheme
+        {
+            get
+            {
+                var value = Sett.Values["IsDarkTheme"];
+                if (value == null)
+                {
+                    Sett.Values["IsDarkTheme"] = false;
+                }
+                return (bool) Sett.Values["IsDarkTheme"];
+            }
+
+            set { Sett.Values["IsDarkTheme"] = value; }
         }
 
         static SettingsProvider()

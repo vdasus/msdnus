@@ -59,9 +59,13 @@ namespace msdnus.ViewModel
             _datasource = datasource;
             _datatarget = datatarget;
             
-            _loader = new ResourceLoader();
+            _loader = ResourceLoader.GetForCurrentView();
 
             IsIejimoMode = true;
+
+            Application.Current.RequestedTheme = !_settingsProvider.IsDarkTheme
+                ? ApplicationTheme.Dark
+                : ApplicationTheme.Light;
 
             Init();
         }
@@ -218,10 +222,10 @@ namespace msdnus.ViewModel
                 DataItems = await _datatarget.GetAllData();
                 RaisePropertyChanged("DataItems");
 
-                if (_settingsProvider.FirstRun)
+                if (_settingsProvider.IsFirstRun)
                 {
                     NavigationService.NavigateTo("Help");
-                    _settingsProvider.FirstRun = false;
+                    _settingsProvider.IsFirstRun = false;
                 }
             }
             catch (Exception ex)

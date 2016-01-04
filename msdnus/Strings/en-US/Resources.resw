@@ -147,12 +147,6 @@
   <data name="enterpin2.PlaceholderText" xml:space="preserve">
     <value>Default is "123"</value>
   </data>
-  <data name="Enterpincomment.Text" xml:space="preserve">
-    <value>New pin-code</value>
-  </data>
-  <data name="Enterpincomment2.Text" xml:space="preserve">
-    <value>Confirm new pin-code</value>
-  </data>
   <data name="fromonedrbutton.Label" xml:space="preserve">
     <value>Import from OneDrive</value>
   </data>
@@ -161,6 +155,9 @@
   </data>
   <data name="helpbutton.Label" xml:space="preserve">
     <value>Help</value>
+  </data>
+  <data name="IsDarkTheme.Header" xml:space="preserve">
+    <value>Dark theme</value>
   </data>
   <data name="lbcdt.ToolTipService.ToolTip" xml:space="preserve">
     <value>Claimed Date</value>
