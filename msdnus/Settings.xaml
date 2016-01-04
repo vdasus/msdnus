@@ -11,12 +11,13 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
         <TextBlock x:Uid="appname" Grid.Row="0" Style="{ThemeResource HeaderTextBlockStyle}"  Height="Auto"  Margin="10 0 0 10" />
 
         <StackPanel Margin="15" Grid.Row="1">
+            <ToggleSwitch x:Uid="IsDarkTheme" x:Name="IsDarkTheme" Margin="0 0 0 16" Header="Dark theme" IsOn="{x:Bind Vm.IsDarkTheme, Mode=TwoWay}" Toggled="ToggleSwitch_Toggled" />
             <PasswordBox x:Uid="enterpin" HorizontalContentAlignment="Center" 
                      HorizontalAlignment="Left" 
                      VerticalAlignment="Top" Width="222" Password="" PasswordChanged="PasswordChangedHandler"
@@ -42,8 +43,6 @@
             </PasswordBox.InputScope>
         </PasswordBox>
             <Button x:Uid="savepin" Content="Save new PIN" Command="{x:Bind Vm.SaveIejimoParamCommand, Mode=OneTime}" Margin="0 16 0 0" />
-
-            <ToggleSwitch x:Uid="IsDarkTheme" x:Name="IsDarkTheme" Margin="0 16 0 0" Header="Dark theme" IsOn="{x:Bind Vm.IsDarkTheme, Mode=TwoWay}" Toggled="ToggleSwitch_Toggled" />
         </StackPanel>
     </Grid>
 </Page>

@@ -32,7 +32,7 @@ namespace msdnus.ViewModel
         public string StatusText { get; set; }
         public Visibility IsProgress { get; set; }
         public bool IsIejimoMode { get; set; }
-
+        
         #region commands
         public RelayCommand<string> CheckPassword { get; set; }
         public RelayCommand<string> CopyToClipboardCommand { get; set; }
@@ -62,6 +62,7 @@ namespace msdnus.ViewModel
             _loader = ResourceLoader.GetForCurrentView();
 
             IsIejimoMode = true;
+            
 
             /*Application.Current.RequestedTheme = !_settingsProvider.IsDarkTheme
                 ? ApplicationTheme.Dark
