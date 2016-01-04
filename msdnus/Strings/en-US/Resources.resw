@@ -204,4 +204,10 @@
   <data name="statusloading.Label" xml:space="preserve">
     <value>Loading ...</value>
   </data>
+  <data name="iejsaved" xml:space="preserve">
+    <value>PIN saved</value>
+  </data>
+  <data name="iejerror" xml:space="preserve">
+    <value>Must be the same and not empty</value>
+  </data>
 </root>

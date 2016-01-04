@@ -15,7 +15,8 @@ namespace msdnus
 
         private void PasswordChangedHandler(object sender, RoutedEventArgs e)
         {
-            //TODO implement
+            Vm.Iejimo1 = Iejimo1.Password;
+            Vm.Iejimo2 = Iejimo2.Password;
         }
 
         private void ToggleSwitch_Toggled(object sender, RoutedEventArgs e)

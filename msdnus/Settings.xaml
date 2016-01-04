@@ -18,7 +18,7 @@
 
         <StackPanel Margin="15" Grid.Row="1">
             <ToggleSwitch x:Uid="IsDarkTheme" x:Name="IsDarkTheme" Margin="0 0 0 16" Header="Dark theme" IsOn="{x:Bind Vm.IsDarkTheme, Mode=TwoWay}" Toggled="ToggleSwitch_Toggled" />
-            <PasswordBox x:Uid="enterpin" HorizontalContentAlignment="Center" 
+            <PasswordBox x:Uid="enterpin" x:Name="Iejimo1" HorizontalContentAlignment="Center" 
                      HorizontalAlignment="Left" 
                      VerticalAlignment="Top" Width="222" Password="" PasswordChanged="PasswordChangedHandler"
                      PreventKeyboardDisplayOnProgrammaticFocus="False">
@@ -30,7 +30,7 @@
                 </InputScope>
             </PasswordBox.InputScope>
         </PasswordBox>
-            <PasswordBox x:Uid="enterpin2" HorizontalContentAlignment="Center" Margin="0 12 0 0" 
+            <PasswordBox x:Uid="enterpin2" x:Name="Iejimo2" HorizontalContentAlignment="Center" Margin="0 12 0 0" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Top" Width="222" Password="" PasswordChanged="PasswordChangedHandler"
                          PreventKeyboardDisplayOnProgrammaticFocus="False">
@@ -42,10 +42,15 @@
                 </InputScope>
             </PasswordBox.InputScope>
         </PasswordBox>
+            <TextBlock Text="{x:Bind Vm.StatusErrText, Mode=OneWay}" Foreground="Red" />
             <Button x:Uid="savepin" Content="Save new PIN" Command="{x:Bind Vm.SaveIejimoParamCommand, Mode=OneTime}" Margin="0 16 0 0" />
         </StackPanel>
     </Grid>
 </Page>
+
+
+
+
 
 
 

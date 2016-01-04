@@ -62,11 +62,6 @@ namespace msdnus.ViewModel
             _loader = ResourceLoader.GetForCurrentView();
 
             IsIejimoMode = true;
-            
-
-            /*Application.Current.RequestedTheme = !_settingsProvider.IsDarkTheme
-                ? ApplicationTheme.Dark
-                : ApplicationTheme.Light;*/
 
             Init();
         }

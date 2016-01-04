@@ -204,4 +204,10 @@
   <data name="statusloading.Label" xml:space="preserve">
     <value>Загружается ...</value>
   </data>
+  <data name="iejsaved" xml:space="preserve">
+    <value>PIN сохранён</value>
+  </data>
+  <data name="iejerror" xml:space="preserve">
+    <value>Должны совпадать и не быть пустыми</value>
+  </data>
 </root>
