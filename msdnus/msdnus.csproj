@@ -119,6 +119,7 @@
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Shared\BoolToVisibleConverter.cs" />
+    <Compile Include="Shared\ThemeAwareFrame.cs" />
     <Compile Include="Shared\InverseBooleanConverter.cs" />
     <Compile Include="Shared\SettingsProvider.cs" />
     <Compile Include="Shared\TextToastManager.cs" />

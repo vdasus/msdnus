@@ -63,9 +63,9 @@ namespace msdnus.ViewModel
 
             IsIejimoMode = true;
 
-            Application.Current.RequestedTheme = !_settingsProvider.IsDarkTheme
+            /*Application.Current.RequestedTheme = !_settingsProvider.IsDarkTheme
                 ? ApplicationTheme.Dark
-                : ApplicationTheme.Light;
+                : ApplicationTheme.Light;*/
 
             Init();
         }
