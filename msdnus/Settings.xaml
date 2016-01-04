@@ -18,7 +18,7 @@
 
         <StackPanel Margin="15" Grid.Row="1">
             <PasswordBox x:Uid="enterpin" HorizontalContentAlignment="Center" 
-                     x:Name="Enterpin" HorizontalAlignment="Left" 
+                     HorizontalAlignment="Left" 
                      VerticalAlignment="Top" Width="222" Password="" PasswordChanged="PasswordChangedHandler"
                      PreventKeyboardDisplayOnProgrammaticFocus="False">
             <PasswordBox.InputScope>
@@ -29,10 +29,10 @@
                 </InputScope>
             </PasswordBox.InputScope>
         </PasswordBox>
-            <PasswordBox x:Uid="enterpin2" HorizontalContentAlignment="Center" 
-                         x:Name="Enterpin2" HorizontalAlignment="Left" 
-                                 VerticalAlignment="Top" Width="222" Password="" PasswordChanged="PasswordChangedHandler"
-                                 PreventKeyboardDisplayOnProgrammaticFocus="False">
+            <PasswordBox x:Uid="enterpin2" HorizontalContentAlignment="Center" Margin="0 12 0 0" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Top" Width="222" Password="" PasswordChanged="PasswordChangedHandler"
+                         PreventKeyboardDisplayOnProgrammaticFocus="False">
             <PasswordBox.InputScope>
                 <InputScope>
                     <InputScope.Names>
@@ -41,7 +41,10 @@
                 </InputScope>
             </PasswordBox.InputScope>
         </PasswordBox>
+            <Button x:Uid="savepin" Content="Save new PIN" Command="{x:Bind Vm.SaveIejimoParamCommand, Mode=OneTime}" Margin="4 16 0 0" />
         </StackPanel>
     </Grid>
 </Page>
+
+
 

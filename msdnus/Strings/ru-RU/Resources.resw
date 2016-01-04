@@ -186,6 +186,9 @@
   <data name="lockbutton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Заблокировать приложение PIN кодом</value>
   </data>
+  <data name="savepin.Content" xml:space="preserve">
+    <value>Сохранить новый PIN</value>
+  </data>
   <data name="settingsbutton.Label" xml:space="preserve">
     <value>Установки</value>
   </data>

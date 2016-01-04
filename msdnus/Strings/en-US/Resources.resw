@@ -192,6 +192,9 @@
   <data name="lockbutton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Lock to PIN code</value>
   </data>
+  <data name="savepin.Content" xml:space="preserve">
+    <value>Save new PIN</value>
+  </data>
   <data name="settingsbutton.Label" xml:space="preserve">
     <value>Settings</value>
   </data>

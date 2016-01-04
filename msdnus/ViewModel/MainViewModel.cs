@@ -226,7 +226,11 @@ namespace msdnus.ViewModel
             }
             catch (Exception ex)
             {
-                TextToastManager.Instance.ShowToast($"msdnus:Err:{ex.Message}");
+#if DEBUG
+                TextToastManager.Instance.ShowToast($"msdnus:Err:Init:{ex.Message}");
+#else
+                TextToastManager.Instance.ShowToast($"msdnus:{ex.Message}");
+#endif
             }
             finally
             {
