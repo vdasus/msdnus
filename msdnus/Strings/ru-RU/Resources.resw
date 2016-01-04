@@ -141,6 +141,12 @@
   <data name="enterpin.PlaceholderText" xml:space="preserve">
     <value>По умолчанию "123"</value>
   </data>
+  <data name="enterpin2.Header" xml:space="preserve">
+    <value>Подтвердите PIN</value>
+  </data>
+  <data name="enterpin2.PlaceholderText" xml:space="preserve">
+    <value>По умолчанию "123"</value>
+  </data>
   <data name="fromonedrbutton.Label" xml:space="preserve">
     <value>Импортировать из OneDrive</value>
   </data>

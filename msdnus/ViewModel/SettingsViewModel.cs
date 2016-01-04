@@ -8,6 +8,8 @@ namespace msdnus.ViewModel
     {
         public readonly INavigationService NavigationService;
 
+        public string IejimoParametras { get; set; }
+        
         public SettingsViewModel(INavigationService navigationService)
         {
             NavigationService = navigationService;

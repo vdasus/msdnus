@@ -141,6 +141,18 @@
   <data name="enterpin.PlaceholderText" xml:space="preserve">
     <value>Default is "123"</value>
   </data>
+  <data name="enterpin2.Header" xml:space="preserve">
+    <value>Confirm PIN</value>
+  </data>
+  <data name="enterpin2.PlaceholderText" xml:space="preserve">
+    <value>Default is "123"</value>
+  </data>
+  <data name="Enterpincomment.Text" xml:space="preserve">
+    <value>New pin-code</value>
+  </data>
+  <data name="Enterpincomment2.Text" xml:space="preserve">
+    <value>Confirm new pin-code</value>
+  </data>
   <data name="fromonedrbutton.Label" xml:space="preserve">
     <value>Import from OneDrive</value>
   </data>

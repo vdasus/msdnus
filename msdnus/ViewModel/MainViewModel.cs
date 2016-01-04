@@ -53,9 +53,9 @@ namespace msdnus.ViewModel
 
         public MainViewModel(IDataSource datasource, IDataTarget datatarget, INavigationService navigationService, ISettingsProvider settingsProvider)
         {
-            NavigationService = navigationService;
             _settingsProvider = settingsProvider;
-
+            NavigationService = navigationService;
+            
             _datasource = datasource;
             _datatarget = datatarget;
             
@@ -217,6 +217,12 @@ namespace msdnus.ViewModel
 
                 DataItems = await _datatarget.GetAllData();
                 RaisePropertyChanged("DataItems");
+
+                if (_settingsProvider.FirstRun)
+                {
+                    NavigationService.NavigateTo("Help");
+                    _settingsProvider.FirstRun = false;
+                }
             }
             catch (Exception ex)
             {

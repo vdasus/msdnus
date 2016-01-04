@@ -9,6 +9,39 @@
     DataContext="{Binding Source={StaticResource Locator}, Path=Settings}">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBlock x:Uid="appname" Grid.Row="0" Style="{ThemeResource HeaderTextBlockStyle}"  Height="Auto"  Margin="10 0 0 10" />
 
+        <StackPanel Margin="15" Grid.Row="1">
+            <PasswordBox x:Uid="enterpin" HorizontalContentAlignment="Center" 
+                     x:Name="Enterpin" HorizontalAlignment="Left" 
+                     VerticalAlignment="Top" Width="222" Password="" PasswordChanged="PasswordChangedHandler"
+                     PreventKeyboardDisplayOnProgrammaticFocus="False">
+            <PasswordBox.InputScope>
+                <InputScope>
+                    <InputScope.Names>
+                        <InputScopeName NameValue="NumericPin"/>
+                    </InputScope.Names>
+                </InputScope>
+            </PasswordBox.InputScope>
+        </PasswordBox>
+            <PasswordBox x:Uid="enterpin2" HorizontalContentAlignment="Center" 
+                         x:Name="Enterpin2" HorizontalAlignment="Left" 
+                                 VerticalAlignment="Top" Width="222" Password="" PasswordChanged="PasswordChangedHandler"
+                                 PreventKeyboardDisplayOnProgrammaticFocus="False">
+            <PasswordBox.InputScope>
+                <InputScope>
+                    <InputScope.Names>
+                        <InputScopeName NameValue="NumericPin"/>
+                    </InputScope.Names>
+                </InputScope>
+            </PasswordBox.InputScope>
+        </PasswordBox>
+        </StackPanel>
     </Grid>
 </Page>
+
