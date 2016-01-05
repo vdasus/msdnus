@@ -9,6 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:shared="using:msdnus.Shared"
     mc:Ignorable="d"
+    RequestedTheme="Default"
     Loaded="MainPage_OnLoaded"
     DataContext="{Binding Source={StaticResource Locator}, Path=Main}">
     <Page.Resources>
@@ -18,9 +19,10 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="50" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <SplitView x:Name="Splitter" Grid.Row="0" IsPaneOpen="{x:Bind Vm.IsIejimoMode, Mode=OneWay}" PanePlacement="Left" PaneClosing="Splitter_OnPaneClosing" >
+        <SplitView x:Name="Splitter" Grid.Row="0" IsPaneOpen="{x:Bind Vm.IsIejimoMode, Mode=OneWay}" 
+                   PanePlacement="Left" PaneClosing="Splitter_OnPaneClosing" >
             <SplitView.Pane>
                 <RelativePanel Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
                     <PasswordBox Visibility="{x:Bind Vm.IsIejimoMode, Mode=OneWay, Converter={StaticResource BoolToVisConverter}}"
