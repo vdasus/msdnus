@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.ApplicationModel.Resources;
+using Windows.Foundation.Diagnostics;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI.ViewManagement;
@@ -77,8 +79,9 @@ namespace msdnus.ViewModel
                 //CheckPassword
                 CheckPassword = new RelayCommand<string>(async e =>
                 {
+                    //await _settingsProvider.SetIejimoParameter("123");
                     var tiejimas = await _settingsProvider.GetIejimoParameter();
-                    if (string.IsNullOrEmpty(tiejimas) || e == tiejimas)
+                    if (!string.IsNullOrEmpty(tiejimas) && e == tiejimas)
                         IsIejimoMode = false;
                     RaisePropertyChanged("IsIejimoMode");
                 });

@@ -4,7 +4,7 @@ using msdnus.Core.Model;
 
 namespace msdnus.Shared
 {
-    public class SettingsProvider: ISettingsProvider
+    public class SettingsProvider : ISettingsProvider
     {
         private static readonly ApplicationDataContainer Sett = ApplicationData.Current.RoamingSettings;
 
@@ -32,7 +32,7 @@ namespace msdnus.Shared
                 {
                     Sett.Values["IsDarkTheme"] = false;
                 }
-                return (bool) Sett.Values["IsDarkTheme"];
+                return (bool)Sett.Values["IsDarkTheme"];
             }
 
             set { Sett.Values["IsDarkTheme"] = value; }
@@ -42,6 +42,10 @@ namespace msdnus.Shared
         {
         }
 
+        /// <summary>
+        /// Get iejimo parameter
+        /// </summary>
+        /// <returns>null if unsuccessful</returns>
         public async Task<string> GetIejimoParameter()
         {
             var value = Sett.Values["IejiPar"];
@@ -52,9 +56,21 @@ namespace msdnus.Shared
                 value = Sett.Values["IejiPar"];
             }
 
-            return await Core.Shared.Utils.UnprotectFromBase64Data((string)value);
+            try
+            {
+                return await Core.Shared.Utils.UnprotectFromBase64Data((string)value);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
+        /// <summary>
+        /// Set Iejimo parameter
+        /// </summary>
+        /// <param name="astr">string to set</param>
+        /// <returns>true if successful</returns>
         public async Task<bool> SetIejimoParameter(string astr)
         {
             try

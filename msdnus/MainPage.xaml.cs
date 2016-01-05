@@ -38,7 +38,8 @@ namespace msdnus
 
         private void TextBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            if (Vm.SearchStringChangedCommand.CanExecute(null)) Vm.SearchStringChangedCommand.Execute(null);
+            if (Vm.SearchStringChangedCommand.CanExecute(null))
+                Vm.SearchStringChangedCommand.Execute(null);
         }
 
         private void PasswordChangedHandler(object sender, RoutedEventArgs e)

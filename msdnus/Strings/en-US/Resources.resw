@@ -211,7 +211,7 @@
     <value>Must be the same and not empty</value>
   </data>
   <data name="helpdsc.Text" xml:space="preserve">
-    <value>Login to your msdn account and make export to XML file. Then put file to your phone or to root folder of OneDrive.
+    <value>Login to your msdn account and make export to the XML file. Then put file to your phone or to the root folder of OneDrive.
 
 If you prefer importing from OneDrive - file must be in root folder (not any subfolders) with name KeysExport.xml
 
