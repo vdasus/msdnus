@@ -9,6 +9,41 @@
     DataContext="{Binding Source={StaticResource Locator}, Path=Help}">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="360"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock x:Uid="appname" Grid.Row="0" Grid.Column="1" Style="{ThemeResource HeaderTextBlockStyle}"  Height="Auto"  Margin="10 0 0 10" />
+        <ScrollViewer Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Auto" Margin="5">
+            <StackPanel Width="340">
+                <HyperlinkButton Content="msdn.microsoft.com/en-us/subscriptions/keys" NavigateUri="https://msdn.microsoft.com/en-us/subscriptions/keys/" />
+                <Image Source="Assets/hlp1.png" Stretch="None" />
+                <TextBlock Margin="5" x:Uid="helpdsc" TextWrapping="WrapWholeWords" />
+                <Image Source="Assets/hlp2.png" Stretch="None" />
+                <TextBlock Margin="5" x:Uid="helpdsc2" TextWrapping="WrapWholeWords"
+                           Text="adkjsnf;kjas df;kjasd;flk jas;ldk fj a;sl dkjf;als djf;al dfj" />
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

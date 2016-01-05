@@ -210,4 +210,14 @@
   <data name="iejerror" xml:space="preserve">
     <value>Должны совпадать и не быть пустыми</value>
   </data>
+  <data name="helpdsc.Text" xml:space="preserve">
+    <value>Зайти в свой аккаунт msdn, сделать экспорт в XML файл и положить его либо на телефон, либо на OneDrive. 
+
+Если будете импортировать из OneDrive - файл должен лежать в корне (на самом верху, а не в какой-то субдиректории) и иметь название KeysExport.xml
+
+Затем импортируйте используя кнопки в аппликации:</value>
+  </data>
+  <data name="helpdsc2.Text" xml:space="preserve">
+    <value>Данные во время импорта шифруются.</value>
+  </data>
 </root>

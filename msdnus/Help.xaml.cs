@@ -2,6 +2,8 @@
 using Windows.UI.Xaml.Navigation;
 using msdnus.ViewModel;
 
+//https://msdn.microsoft.com/en-us/subscriptions/keys/
+
 namespace msdnus
 {
     public sealed partial class Help : Page
