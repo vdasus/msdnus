@@ -26,8 +26,7 @@
                 <Image Source="Assets/hlp1.png" Stretch="None" />
                 <TextBlock Margin="5" x:Uid="helpdsc" TextWrapping="WrapWholeWords" />
                 <Image Source="Assets/hlp2.png" Stretch="None" />
-                <TextBlock Margin="5" x:Uid="helpdsc2" TextWrapping="WrapWholeWords"
-                           Text="adkjsnf;kjas df;kjasd;flk jas;ldk fj a;sl dkjf;als djf;al dfj" />
+                <TextBlock Margin="5" x:Uid="helpdsc2" TextWrapping="WrapWholeWords" />
             </StackPanel>
         </ScrollViewer>
     </Grid>

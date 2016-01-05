@@ -1,6 +1,5 @@
 ﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
 using GalaSoft.MvvmLight.Messaging;
 using msdnus.ViewModel;
 
@@ -35,11 +34,6 @@ namespace msdnus
             passwordBox.Password = string.Empty;
             passwordBox.Focus(FocusState.Programmatic);
 
-        }
-
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            Vm.NavigationService.GoBack();
         }
 
         private void TextBox_OnTextChanged(object sender, TextChangedEventArgs e)
