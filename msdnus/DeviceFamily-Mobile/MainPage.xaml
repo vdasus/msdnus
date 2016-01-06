@@ -28,6 +28,12 @@
                             </InputScope>
                         </PasswordBox.InputScope>
                     </PasswordBox>
+                    <Button Margin="5" Style="{ThemeResource TextBlockButtonStyle}"
+                                     RelativePanel.Below="PasswordBox" 
+                                     RelativePanel.AlignRightWith="PasswordBox" 
+                            Command="{Binding ResetIejimoPwdCommand, Mode=OneTime}">
+                        <TextBlock TextAlignment="Right" x:Uid="resetiej" TextWrapping="WrapWholeWords" />
+                    </Button>
                 </RelativePanel>
             </SplitView.Pane>
             <RelativePanel Visibility="{x:Bind Vm.IsIejimoMode, Mode=OneWay, Converter={StaticResource InvBoolToVisConverter}}">
