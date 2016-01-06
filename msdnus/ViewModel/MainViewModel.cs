@@ -227,10 +227,7 @@ namespace msdnus.ViewModel
             catch (Exception ex)
             {
 #if DEBUG
-                Debug.WriteLine("==============" + ex.Message);
-                if(ex.InnerException!=null) Debug.WriteLine("==============" + ex.InnerException.Message);
-
-                TextToastManager.Instance.ShowToast($"msdnus:FERR:Init:{ex.Message}");
+                TextToastManager.Instance.ShowToast($"msdnus:ERR:Init:{ex.Message}");
 #else
                 TextToastManager.Instance.ShowToast($"msdnus:{ex.Message}");
 #endif
