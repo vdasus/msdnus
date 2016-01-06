@@ -229,4 +229,7 @@
   <data name="rusure" xml:space="preserve">
     <value>Вы уверены, что хотите сбросить пароль? Все данные будут удалены</value>
   </data>
+  <data name="buycoffee.Content" xml:space="preserve">
+    <value>Купить автору чашку кофе</value>
+  </data>
 </root>

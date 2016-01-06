@@ -9,6 +9,12 @@
     DataContext="{Binding Source={StaticResource Locator}, Path=CoffeeCup}">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+        <StackPanel>
+        <Image Source="Assets/coffee300.png" Stretch="None" />
+        <Button x:Uid="buycoffee" HorizontalAlignment="Center" Margin="4" Command="{x:Bind Vm.BuyCoffeeCommand}" />
+        </StackPanel>
     </Grid>
 </Page>
+
+
+

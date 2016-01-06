@@ -5,6 +5,8 @@ rem C:\Users\V.Devgutis\AppData\Local\Packages\1883eea9-971b-4294-8dc0-03e438fab
 rem C:\Users\V.Devgutis\AppData\Local\Packages\1883eea9-971b-4294-8dc0-03e438fab041_er8rbdqtt6q58\LocalState\Lex.Db\msdnus_db
 rem C:\Users\V.Devgutis\AppData\Local\Packages\6ecd9860-2bf4-4d2c-b6fe-22df80708c5c_er8rbdqtt6q58\ 
 
+"C:\Users\V.Devgutis\AppData\Local\Packages\21313vdasus.msdnus_8k9evrm7qaqe4\LocalState\Microsoft\Windows Store\ApiData\" 
+
 set FIL="D:\REPO\VDG\Mobile\msdnus\temp\KeysExport.xml"
 set BIN="C:\Users\V.Devgutis\AppData\Local\Packages\1883eea9-971b-4294-8dc0-03e438fab041_er8rbdqtt6q58\LocalState\"
 

@@ -229,4 +229,7 @@ Then import to application using buttons:</value>
   <data name="rusure" xml:space="preserve">
     <value>Are you sure? All data will be lost</value>
   </data>
+  <data name="buycoffee.Content" xml:space="preserve">
+    <value>Buy cup of coffee to author</value>
+  </data>
 </root>
