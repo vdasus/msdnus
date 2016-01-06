@@ -1,5 +1,6 @@
 ﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 using GalaSoft.MvvmLight.Messaging;
 using msdnus.ViewModel;
 

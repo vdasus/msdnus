@@ -9,6 +9,7 @@ namespace msdnus.Core.Model
     public class DataTarget: IDataTarget
     {
         private DbInstance _db;
+        private bool _disposed;
 
         public DataTarget()
         {
@@ -57,6 +58,43 @@ namespace msdnus.Core.Model
             var index =
                 keys.IndexQuery<string>("Name").Where(x => (x ?? string.Empty).ToUpper().Contains(name.ToUpper()));
             return await index.ToListAsync();
+        }
+
+        public async Task<bool> CleanDb()
+        {
+            try
+            {
+                await _db.PurgeAsync();
+                await _db.CompactAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+            
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+            if (disposing)
+            {
+                _db.Dispose();
+            }
+                
+            _disposed = true;
+        }
+
+        ~DataTarget()
+        {
+            Dispose(false);
         }
     }
 }

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.ApplicationModel.Resources;
 using Windows.Storage;
 using Windows.Storage.Pickers;
+using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using GalaSoft.MvvmLight.Command;
@@ -21,11 +21,11 @@ using Microsoft.OneDrive.Sdk;
 namespace msdnus.ViewModel
 {
     [Magic]
-    public class MainViewModel: PropertyChangedBase
+    public sealed class MainViewModel: PropertyChangedBase
     {
         private readonly ResourceLoader _loader;
 
-        public readonly INavigationService NavigationService;
+        private readonly INavigationService _navigationService;
         private readonly ISettingsProvider _settingsProvider;
 
         public NotifyTaskCompletion<List<YourKeyDTO>> DataItems { get; set; }
@@ -46,6 +46,7 @@ namespace msdnus.ViewModel
         public RelayCommand CoffeeCupCommand { get; set; }
         public RelayCommand HelpCommand { get; set; }
         public RelayCommand SettingsCommand { get; set; }
+        public RelayCommand ResetIejimoPwdCommand { get; set; }
         #endregion
 
         private readonly IDataSource _datasource;
@@ -55,12 +56,11 @@ namespace msdnus.ViewModel
 
         public MainViewModel(IDataSource datasource, IDataTarget datatarget, INavigationService navigationService, ISettingsProvider settingsProvider)
         {
-            _settingsProvider = settingsProvider;
-            NavigationService = navigationService;
-            
             _datasource = datasource;
             _datatarget = datatarget;
-            
+            _navigationService = navigationService;
+            _settingsProvider = settingsProvider;
+
             _loader = ResourceLoader.GetForCurrentView();
 
             IsIejimoMode = true;
@@ -101,10 +101,14 @@ namespace msdnus.ViewModel
                 });
 
                 //SearchStringChanged
-                SearchStringChangedCommand = new RelayCommand(() =>
-                {
-                    DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetDataValueByName(TextToSearch ?? string.Empty));
-                });
+                SearchStringChangedCommand =
+                    new RelayCommand(
+                        () =>
+                        {
+                            DataItems =
+                                new NotifyTaskCompletion<List<YourKeyDTO>>(
+                                    _datatarget.GetDataValueByName(TextToSearch ?? string.Empty));
+                        });
 
                 //GetFromFilePickerCommand
                 GetFromFilePickerCommand = new RelayCommand(async () =>
@@ -142,10 +146,7 @@ namespace msdnus.ViewModel
                 });
 
                 //LockAll
-                LockAllCommand = new RelayCommand(() =>
-                {
-                    IsIejimoMode = true;
-                });
+                LockAllCommand = new RelayCommand(() => { IsIejimoMode = true; });
 
                 //OnedriveCommand
                 OnedriveCommand = new RelayCommand(async () =>
@@ -193,41 +194,48 @@ namespace msdnus.ViewModel
                 });
 
                 //AboutPageCommand
-                AboutPageCommand = new RelayCommand(() =>
-                {
-                    NavigationService.NavigateTo("About");
-                });
+                AboutPageCommand = new RelayCommand(() => { _navigationService.NavigateTo("About"); });
 
                 //CoffeeCupCommand
-                CoffeeCupCommand = new RelayCommand(() =>
-                {
-                    NavigationService.NavigateTo("CoffeeCup");
-                });
+                CoffeeCupCommand = new RelayCommand(() => { _navigationService.NavigateTo("CoffeeCup"); });
 
                 //HelpCommand
-                HelpCommand = new RelayCommand(() =>
-                {
-                    NavigationService.NavigateTo("Help");
-                });
+                HelpCommand = new RelayCommand(() => { _navigationService.NavigateTo("Help"); });
 
                 //SettingsCommand
-                SettingsCommand = new RelayCommand(() =>
+                SettingsCommand = new RelayCommand(() => { _navigationService.NavigateTo("Settings"); });
+
+
+                //ResetIejimoPwdCommand
+                ResetIejimoPwdCommand = new RelayCommand(async () =>
                 {
-                    NavigationService.NavigateTo("Settings");
+                    MessageDialog msg = new MessageDialog(_loader.GetString("rusure"));
+                    msg.Commands.Add(new UICommand {Label = "Ok", Id = 0});
+                    msg.Commands.Add(new UICommand {Label = "Cancel", Id = 1});
+                    var rez = await msg.ShowAsync();
+
+                    if ((int) rez.Id != 0) return;
+
+                    await _datatarget.CleanDb();
+                    await _settingsProvider.SetIejimoParameter("123");
+                    DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetAllData());
+                    TextToastManager.Instance.ShowToast(_loader.GetString("iejreset"));
                 });
 
                 #endregion
 
-                if (_settingsProvider.IsFirstRun)
+                /*if (_settingsProvider.IsFirstRun)
                 {
-                    NavigationService.NavigateTo("Help");
+                    _navigationService.NavigateTo("Help");
                     _settingsProvider.IsFirstRun = false;
-                }
+                }*/
             }
             catch (Exception ex)
             {
 #if DEBUG
-                TextToastManager.Instance.ShowToast($"msdnus:ERR:Init:{ex.Message}");
+                TextToastManager.Instance.ShowToast($"msdnus:ERR:Init:{ex.StackTrace}");
+                MessageDialog msg = new MessageDialog($"msdnus:ERR:Init:{ex.StackTrace}");
+                msg.ShowAsync();
 #else
                 TextToastManager.Instance.ShowToast($"msdnus:{ex.Message}");
 #endif

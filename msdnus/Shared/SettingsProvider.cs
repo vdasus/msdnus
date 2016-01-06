@@ -75,7 +75,9 @@ namespace msdnus.Shared
         {
             try
             {
-                _sett.Values["IejiPar"] = await Core.Shared.Utils.ProtectToBase64Async(astr);
+                var tmp = await Core.Shared.Utils.ProtectToBase64Async(astr);
+                if (tmp == null) return false;
+                _sett.Values["IejiPar"] = tmp;
                 return true;
             }
             catch

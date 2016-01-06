@@ -6,10 +6,10 @@ using msdnus.Shared;
 namespace msdnus.ViewModel
 {
     [Magic]
-    public class SettingsViewModel: PropertyChangedBase
+    public sealed class SettingsViewModel: PropertyChangedBase
     {
         private readonly ISettingsProvider _settingsProvider;
-        private readonly ResourceLoader _loader;
+        private ResourceLoader _loader;
 
         public string Iejimo1 { get; set; }
         public string Iejimo2 { get; set; }
@@ -28,6 +28,12 @@ namespace msdnus.ViewModel
         public SettingsViewModel(ISettingsProvider settingsProvider)
         {
             _settingsProvider = settingsProvider;
+
+            Init();
+        }
+
+        private void Init()
+        {
             _loader = ResourceLoader.GetForCurrentView();
 
             StatusErrText = string.Empty;

@@ -18,19 +18,19 @@ namespace msdnus.Core.Shared
                 var rez = ReadObjectFromXmlStreamAsync<T>(stream);
                 return rez;
             }
-               
+
         }
 
         public static T ReadObjectFromXmlStreamAsync<T>(Stream stream)
         {
-            var serializer = new XmlSerializer(typeof (T));
-            var objectFromXml = (T) serializer.Deserialize(stream);
+            var serializer = new XmlSerializer(typeof(T));
+            var objectFromXml = (T)serializer.Deserialize(stream);
             return objectFromXml;
         }
-        
+
         public static async Task SaveObjectToXmlAsync<T>(T objectToSave, StorageFile file)
         {
-            var serializer = new XmlSerializer(typeof (T));
+            var serializer = new XmlSerializer(typeof(T));
             Stream stream = await file.OpenStreamForWriteAsync();
 
             using (stream)
@@ -39,21 +39,41 @@ namespace msdnus.Core.Shared
             }
         }
 
+        /// <summary>
+        /// ProtectToBase64Async, null if unsuccesful
+        /// </summary>
+        /// <param name="astrMsg">String to encrypt</param>
+        /// <param name="strDescriptor">Descriptor</param>
+        /// <returns>encrypted string or null</returns>
         public static async Task<string> ProtectToBase64Async(string astrMsg, string strDescriptor = "LOCAL=user")
         {
-            var strMsg = string.IsNullOrEmpty(astrMsg) ? "-" : astrMsg;
-            
-            const BinaryStringEncoding ENCODING = BinaryStringEncoding.Utf8;
-            DataProtectionProvider provider = new DataProtectionProvider(strDescriptor);
+            try
+            {
+                var strMsg = string.IsNullOrEmpty(astrMsg) ? "-" : astrMsg;
 
-            IBuffer buffMsg = CryptographicBuffer.ConvertStringToBinary(strMsg, ENCODING);
-            IBuffer buffProtected = await provider.ProtectAsync(buffMsg);
-            return CryptographicBuffer.EncodeToBase64String(buffProtected);
+                const BinaryStringEncoding ENCODING = BinaryStringEncoding.Utf8;
+                DataProtectionProvider provider = new DataProtectionProvider(strDescriptor);
+
+                IBuffer buffMsg = CryptographicBuffer.ConvertStringToBinary(strMsg, ENCODING);
+                IBuffer buffProtected = await provider.ProtectAsync(buffMsg);
+                return CryptographicBuffer.EncodeToBase64String(buffProtected);
+            }
+            catch 
+            {
+                return null;
+            }
         }
 
+        /// <summary>
+        /// UnprotectFromBase64Data. Return null if uncuccessful
+        /// </summary>
+        /// <param name="astrBase64Protected">String to decrypt</param>
+        /// <returns>Decrypted string. null if uncuccessful</returns>
         public static async Task<string> UnprotectFromBase64Data(string astrBase64Protected)
         {
-            var strBase64Protected = string.IsNullOrEmpty(astrBase64Protected) ? "-" : astrBase64Protected;
+            try
+            {
+                var strBase64Protected = string.IsNullOrEmpty(astrBase64Protected) ? "-" : astrBase64Protected;
 
             if (string.IsNullOrEmpty(strBase64Protected)) return string.Empty;
 
@@ -61,9 +81,13 @@ namespace msdnus.Core.Shared
             DataProtectionProvider provider = new DataProtectionProvider();
 
             IBuffer tmpstr = CryptographicBuffer.DecodeFromBase64String(strBase64Protected);
-            IBuffer buffUnprotected = await provider.UnprotectAsync(tmpstr);
-
-            return CryptographicBuffer.ConvertBinaryToString(ENCODING, buffUnprotected);
+                IBuffer buffUnprotected = await provider.UnprotectAsync(tmpstr);
+                return CryptographicBuffer.ConvertBinaryToString(ENCODING, buffUnprotected);
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

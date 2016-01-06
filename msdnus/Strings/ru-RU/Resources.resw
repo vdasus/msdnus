@@ -220,4 +220,13 @@
   <data name="helpdsc2.Text" xml:space="preserve">
     <value>Данные во время импорта шифруются.</value>
   </data>
+  <data name="resetiej.Text" xml:space="preserve">
+    <value>Сбросить пароль на "123" (все данные будут удалены)</value>
+  </data>
+  <data name="iejreset" xml:space="preserve">
+    <value>Пароль восстановлен в "123". Данные удалены.</value>
+  </data>
+  <data name="rusure" xml:space="preserve">
+    <value>Вы уверены, что хотите сбросить пароль? Все данные будут удалены</value>
+  </data>
 </root>
