@@ -234,8 +234,8 @@ namespace msdnus.ViewModel
             {
 #if DEBUG
                 TextToastManager.Instance.ShowToast($"msdnus:ERR:Init:{ex.StackTrace}");
-                MessageDialog msg = new MessageDialog($"msdnus:ERR:Init:{ex.StackTrace}");
-                msg.ShowAsync();
+                /*MessageDialog msg = new MessageDialog($"msdnus:ERR:Init:{ex.StackTrace}");
+                msg.ShowAsync();*/
 #else
                 TextToastManager.Instance.ShowToast($"msdnus:{ex.Message}");
 #endif

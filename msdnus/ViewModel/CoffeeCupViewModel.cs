@@ -16,7 +16,7 @@ namespace msdnus.ViewModel
 #if DEBUG
             _licenseInformation = CurrentAppSimulator.LicenseInformation;
 #else
-            licenseInformation = CurrentApp.LicenseInformation;
+            _licenseInformation = CurrentApp.LicenseInformation;
 #endif
 
             BuyCoffeeCommand = new RelayCommand(BuyFeatureCoffeeCup);
