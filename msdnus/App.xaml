@@ -3,8 +3,12 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vm="using:msdnus.ViewModel"
+    xmlns:shared="using:msdnus.Shared"
     RequestedTheme="Light">
     <Application.Resources>
         <vm:ViewModelLocator x:Key="Locator" />
+
+        <shared:BoolToVisibleConverter x:Key="BoolToVisConverter" />
+        <shared:InverseBoolToVisibleConverter x:Key="InvBoolToVisConverter" />
     </Application.Resources>
 </Application>

@@ -115,6 +115,7 @@
     <Compile Include="Model\YourKey.cs" />
     <Compile Include="Model\YourKeyDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Shared\NotifyTaskCompletion.cs" />
     <Compile Include="Shared\Utils.cs" />
     <EmbeddedResource Include="Properties\msdnus.Core.rd.xml" />
   </ItemGroup>

@@ -7,7 +7,7 @@ namespace msdnus
 {
     public sealed partial class MainPage
     {
-        private readonly bool _isregistered = false;
+        private readonly bool _isregistered;
 
         public MainViewModel Vm => (MainViewModel)DataContext;
 
@@ -18,6 +18,7 @@ namespace msdnus
             if (_isregistered) return;
             Splitter.RegisterPropertyChangedCallback(SplitView.IsPaneOpenProperty, IsPaneOpenPropertyChanged);
             Messenger.Default.Register<NotificationMessage>(this, NotificationMessageReceived);
+
             _isregistered = true;
         }
 
@@ -31,8 +32,8 @@ namespace msdnus
 
         private void MainPage_OnLoaded(object sender, RoutedEventArgs e)
         {
-            passwordBox.Password = string.Empty;
-            passwordBox.Focus(FocusState.Programmatic);
+            PasswordBox.Password = string.Empty;
+            PasswordBox.Focus(FocusState.Programmatic);
 
         }
 
@@ -44,13 +45,13 @@ namespace msdnus
 
         private void PasswordChangedHandler(object sender, RoutedEventArgs e)
         {
-            Vm?.CheckPassword?.Execute(passwordBox.Password);
+            Vm?.CheckPassword?.Execute(PasswordBox.Password);
         }
 
         private void IsPaneOpenPropertyChanged(DependencyObject sender, DependencyProperty dp)
         {
-            passwordBox.Password = string.Empty;
-            passwordBox.Focus(FocusState.Programmatic);
+            PasswordBox.Password = string.Empty;
+            PasswordBox.Focus(FocusState.Programmatic);
         }
 
         private void Splitter_OnPaneClosing(SplitView sender, SplitViewPaneClosingEventArgs args)

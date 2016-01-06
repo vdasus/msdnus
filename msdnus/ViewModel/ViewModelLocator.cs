@@ -1,7 +1,7 @@
 /*
   In App.xaml:
   <Application.Resources>
-      <vm:ViewModelLocator xmlns:vm="clr-namespace:Parkavimas" x:Key="Locator" />
+      <vm:ViewModelLocator xmlns:vm="clr-namespace:msdnus" x:Key="Locator" />
   </Application.Resources>
   
   In the View:
@@ -19,15 +19,8 @@ using Microsoft.Practices.ServiceLocation;
 
 namespace msdnus.ViewModel
 {
-    /// <summary>
-    /// This class contains static references to all the view models in the
-    /// application and provides an entry point for the bindings.
-    /// </summary>
     public class ViewModelLocator
     {
-        /// <summary>
-        /// Initializes a new instance of the ViewModelLocator class.
-        /// </summary>
         static ViewModelLocator()
         {
             Lex.Db.Serialization.Extender.RegisterType<YourKeyKeyDTO, CustomTypesSerializers>(1000);

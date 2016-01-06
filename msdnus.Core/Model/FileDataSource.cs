@@ -10,11 +10,6 @@ namespace msdnus.Core.Model
     {
         public async Task<YourKey> GetData(StorageFile source)
         {
-            //Commented as snippets for reuse
-            //StorageFolder folder = ApplicationData.Current.LocalFolder;
-            //StorageFile file = await folder.GetFileAsync(filename);
-            //if (!file.IsAvailable) file = await StorageFile.GetFileFromApplicationUriAsync(new Uri($"ms-appx:///{filename}"));
-
             return await Utils.ReadObjectFromXmlFileAsync<YourKey>(source);
         }
 

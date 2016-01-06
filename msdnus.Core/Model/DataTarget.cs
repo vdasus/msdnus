@@ -17,11 +17,10 @@ namespace msdnus.Core.Model
 
         private void Init()
         {
-            //, StringComparer.OrdinalIgnoreCase
             _db = new DbInstance("msdnusdb");
             _db.Map<YourKeyDTO>()
                 .Automap(i => i.Id, true)
-                .WithIndex("Name", i => i.Name);
+                .WithIndex("Name", i => i.Name, StringComparer.OrdinalIgnoreCase);
             _db.Initialize();
         }
 

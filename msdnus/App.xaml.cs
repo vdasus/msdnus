@@ -5,16 +5,11 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Messaging;
-using msdnus.Core.Model;
 using msdnus.Shared;
 
 namespace msdnus
 {
-    /// <summary>
-    /// Provides application-specific behavior to supplement the default Application class.
-    /// </summary>
     sealed partial class App
     {
         /// <summary>
@@ -43,7 +38,7 @@ namespace msdnus
             }
 #endif
 
-            Frame rootFrame = Window.Current.Content as Frame;
+            ThemeAwareFrame rootFrame = Window.Current.Content as ThemeAwareFrame;
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
@@ -51,9 +46,6 @@ namespace msdnus
             {
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new ThemeAwareFrame();
-
-                ISettingsProvider isp = SimpleIoc.Default.GetInstance<ISettingsProvider>();
-                ((ThemeAwareFrame) rootFrame).AppTheme = isp.IsDarkTheme ? ElementTheme.Dark : ElementTheme.Light;
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
                 rootFrame.Navigated += OnNavigated;

@@ -6,36 +6,36 @@ namespace msdnus.Shared
 {
     public class SettingsProvider : ISettingsProvider
     {
-        private static readonly ApplicationDataContainer Sett = ApplicationData.Current.RoamingSettings;
+        private static readonly ApplicationDataContainer _sett = ApplicationData.Current.RoamingSettings;
 
         public bool IsFirstRun
         {
             get
             {
-                var value = Sett.Values["FirstRun"];
+                var value = _sett.Values["IsFirstRun"];
                 if (value == null)
                 {
-                    Sett.Values["FirstRun"] = true;
+                    _sett.Values["IsFirstRun"] = true;
                 }
-                return (bool)Sett.Values["FirstRun"];
+                return (bool)_sett.Values["IsFirstRun"];
             }
 
-            set { Sett.Values["FirstRun"] = value; }
+            set { _sett.Values["IsFirstRun"] = value; }
         }
 
         public bool IsDarkTheme
         {
             get
             {
-                var value = Sett.Values["IsDarkTheme"];
+                var value = _sett.Values["IsDarkTheme"];
                 if (value == null)
                 {
-                    Sett.Values["IsDarkTheme"] = false;
+                    _sett.Values["IsDarkTheme"] = false;
                 }
-                return (bool)Sett.Values["IsDarkTheme"];
+                return (bool)_sett.Values["IsDarkTheme"];
             }
 
-            set { Sett.Values["IsDarkTheme"] = value; }
+            set { _sett.Values["IsDarkTheme"] = value; }
         }
 
         static SettingsProvider()
@@ -48,12 +48,12 @@ namespace msdnus.Shared
         /// <returns>null if unsuccessful</returns>
         public async Task<string> GetIejimoParameter()
         {
-            var value = Sett.Values["IejiPar"];
+            var value = _sett.Values["IejiPar"];
 
             if (value == null)
             {
                 await SetIejimoParameter("123");
-                value = Sett.Values["IejiPar"];
+                value = _sett.Values["IejiPar"];
             }
 
             try
@@ -75,7 +75,7 @@ namespace msdnus.Shared
         {
             try
             {
-                Sett.Values["IejiPar"] = await Core.Shared.Utils.ProtectToBase64Async(astr);
+                _sett.Values["IejiPar"] = await Core.Shared.Utils.ProtectToBase64Async(astr);
                 return true;
             }
             catch

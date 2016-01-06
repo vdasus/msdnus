@@ -32,12 +32,12 @@ namespace msdnus.Shared
         }
 
         // Proxy class to be used as singleton
-        sealed class ThemeProxyClass : INotifyPropertyChanged
+        private sealed class ThemeProxyClass : INotifyPropertyChanged
         {
             private ElementTheme _theme;
-
             public ElementTheme Theme
             {
+                // ReSharper disable once UnusedMember.Local
                 get { return _theme; }
                 set
                 {
@@ -47,7 +47,6 @@ namespace msdnus.Shared
             }
 
             public event PropertyChangedEventHandler PropertyChanged;
-
             private void OnPropertyChanged([CallerMemberName] string propertyName = null)
             {
                 PropertyChangedEventHandler handler = PropertyChanged;

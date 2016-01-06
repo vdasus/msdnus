@@ -5,7 +5,6 @@ using System.IO;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.ApplicationModel.Resources;
-using Windows.Foundation.Diagnostics;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI.ViewManagement;
@@ -13,6 +12,7 @@ using Windows.UI.Xaml;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using msdnus.Core.Model;
+using msdnus.Core.Shared;
 using msdnus.Shared;
 using Microsoft.OneDrive.Sdk;
 
@@ -28,7 +28,7 @@ namespace msdnus.ViewModel
         public readonly INavigationService NavigationService;
         private readonly ISettingsProvider _settingsProvider;
 
-        public List<YourKeyDTO> DataItems { get; set; }
+        public NotifyTaskCompletion<List<YourKeyDTO>> DataItems { get; set; }
 
         public string TextToSearch { get; set; }
         public string StatusText { get; set; }
@@ -66,9 +66,14 @@ namespace msdnus.ViewModel
             IsIejimoMode = true;
 
             Init();
+
+            ThemeAwareFrame rootFrame = Window.Current.Content as ThemeAwareFrame;
+            if (rootFrame != null) rootFrame.AppTheme = _settingsProvider.IsDarkTheme ? ElementTheme.Dark : ElementTheme.Light;
+
+            DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetAllData());
         }
 
-        private async void Init()
+        private void Init()
         {
             SetProgress(true);
             
@@ -89,8 +94,6 @@ namespace msdnus.ViewModel
                 //CopyToClipboard
                 CopyToClipboardCommand = new RelayCommand<string>(e =>
                 {
-                    /*MessageDialog msg = new MessageDialog(e);
-                    await msg.ShowAsync();*/
                     DataPackage dp = new DataPackage();
                     dp.SetText(e);
                     Clipboard.SetContent(dp);
@@ -98,10 +101,9 @@ namespace msdnus.ViewModel
                 });
 
                 //SearchStringChanged
-                SearchStringChangedCommand = new RelayCommand(async () =>
+                SearchStringChangedCommand = new RelayCommand(() =>
                 {
-                    DataItems = await _datatarget.GetDataValueByName(TextToSearch ?? string.Empty);
-                    RaisePropertyChanged("DataItems");
+                    DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetDataValueByName(TextToSearch ?? string.Empty));
                 });
 
                 //GetFromFilePickerCommand
@@ -126,8 +128,7 @@ namespace msdnus.ViewModel
 
                         if (!await ImportData(file, true, true)) return;
 
-                        DataItems = await _datatarget.GetAllData();
-                        RaisePropertyChanged("DataItems");
+                        DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetAllData());
                         TextToastManager.Instance.ShowToast(_loader.GetString("loadednimported"));
                     }
                     catch (Exception ex)
@@ -178,8 +179,7 @@ namespace msdnus.ViewModel
                             }
                         }
 
-                        DataItems = await _datatarget.GetAllData();
-                        RaisePropertyChanged("DataItems");
+                        DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetAllData());
                         TextToastManager.Instance.ShowToast(_loader.GetString("loadednimported"));
                     }
                     catch (Exception ex)
@@ -218,9 +218,6 @@ namespace msdnus.ViewModel
 
                 #endregion
 
-                DataItems = await _datatarget.GetAllData();
-                RaisePropertyChanged("DataItems");
-
                 if (_settingsProvider.IsFirstRun)
                 {
                     NavigationService.NavigateTo("Help");
@@ -230,7 +227,10 @@ namespace msdnus.ViewModel
             catch (Exception ex)
             {
 #if DEBUG
-                TextToastManager.Instance.ShowToast($"msdnus:Err:Init:{ex.Message}");
+                Debug.WriteLine("==============" + ex.Message);
+                if(ex.InnerException!=null) Debug.WriteLine("==============" + ex.InnerException.Message);
+
+                TextToastManager.Instance.ShowToast($"msdnus:FERR:Init:{ex.Message}");
 #else
                 TextToastManager.Instance.ShowToast($"msdnus:{ex.Message}");
 #endif
