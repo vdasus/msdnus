@@ -19,7 +19,7 @@ using Microsoft.Practices.ServiceLocation;
 
 namespace msdnus.ViewModel
 {
-    public class ViewModelLocator
+    public sealed class ViewModelLocator
     {
         static ViewModelLocator()
         {

@@ -9,14 +9,14 @@ using msdnus.Shared;
 namespace msdnus.ViewModel
 {
     [Magic]
-    public class CoffeeCupViewModel : PropertyChangedBase
+    public sealed class CoffeeCupViewModel : PropertyChangedBase
     {
         const string COFFE_CUP_IAP_NAME = "1 coffee cup";
 
         private readonly ISettingsProvider _settingsProvider;
         private readonly ResourceLoader _loader;
 
-        private readonly LicenseInformation _licenseInformation;
+        private LicenseInformation _licenseInformation;
 
         public RelayCommand BuyCoffeeCommand { get; set; }
 
@@ -25,6 +25,11 @@ namespace msdnus.ViewModel
             _settingsProvider = settingsProvider;
             _loader = ResourceLoader.GetForCurrentView();
 
+            Init();
+        }
+
+        private void Init()
+        {
             BuyCoffeeCommand = new RelayCommand(BuyFeatureCoffeeCup);
             try
             {

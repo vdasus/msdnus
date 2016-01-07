@@ -3,7 +3,7 @@
 namespace msdnus.ViewModel
 {
     [Magic]
-    public class HelpViewModel : PropertyChangedBase
+    public sealed class HelpViewModel : PropertyChangedBase
     {
     }
 }
