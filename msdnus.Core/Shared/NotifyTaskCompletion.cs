@@ -51,7 +51,7 @@ namespace msdnus.Core.Shared
             }
         }
         public Task<TResult> Task { get; private set; }
-        public TResult Result => (Task.Status == TaskStatus.RanToCompletion) ?
+        public TResult Result => Task.Status == TaskStatus.RanToCompletion ?
             Task.Result : default(TResult);
 
         public TaskStatus Status => Task.Status;

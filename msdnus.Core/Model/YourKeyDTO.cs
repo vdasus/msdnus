@@ -37,7 +37,7 @@ namespace msdnus.Core.Model
         public bool Equals(YourKeyDTO g1, YourKeyDTO g2)
         {
             int cnt = (from zz in g1.Items from yy in g2.Items where zz.Value == yy.Value select zz).Count();
-            return ((g1.Name == g2.Name) && (cnt == g1.Items.Count));
+            return (g1.Name == g2.Name) && (cnt == g1.Items.Count);
         }
 
         public int GetHashCode(YourKeyDTO obj)

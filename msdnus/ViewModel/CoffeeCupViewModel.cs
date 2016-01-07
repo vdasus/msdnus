@@ -1,7 +1,6 @@
 ﻿using System;
 using Windows.ApplicationModel.Resources;
 using Windows.ApplicationModel.Store;
-using Windows.UI.Xaml;
 using GalaSoft.MvvmLight.Command;
 using msdnus.Core.Model;
 using msdnus.Shared;

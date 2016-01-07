@@ -274,7 +274,7 @@ namespace msdnus.ViewModel
         {
             // FilePicker APIs will not work if the application is in a snapped state.
             // If an app wants to show a FilePicker while snapped, it must attempt to unsnap first
-            bool unsnapped = ((ApplicationView.Value != ApplicationViewState.Snapped) || ApplicationView.TryUnsnap());
+            bool unsnapped = (ApplicationView.Value != ApplicationViewState.Snapped) || ApplicationView.TryUnsnap();
             if (!unsnapped)
             {
                 TextToastManager.Instance.ShowToast(_loader.GetString("cantunsnap"));

@@ -55,11 +55,11 @@ namespace msdnus.Tests.Model
         {
             YourKey yk = new YourKey
             {
-                Items = new YourKeyProduct_Key[]
+                Items = new[]
                 {
                     new YourKeyProduct_Key()
                     {
-                        Key = new YourKeyProduct_KeyKey[]
+                        Key = new[]
                         {
                             new YourKeyProduct_KeyKey()
                             {
