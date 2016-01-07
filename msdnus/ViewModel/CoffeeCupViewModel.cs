@@ -1,6 +1,9 @@
 ﻿using System;
+using Windows.ApplicationModel.Resources;
 using Windows.ApplicationModel.Store;
+using Windows.UI.Xaml;
 using GalaSoft.MvvmLight.Command;
+using msdnus.Core.Model;
 using msdnus.Shared;
 
 namespace msdnus.ViewModel
@@ -8,50 +11,57 @@ namespace msdnus.ViewModel
     [Magic]
     public class CoffeeCupViewModel : PropertyChangedBase
     {
+        const string COFFE_CUP_IAP_NAME = "1 coffee cup";
+
+        private readonly ISettingsProvider _settingsProvider;
+        private readonly ResourceLoader _loader;
+
         private readonly LicenseInformation _licenseInformation;
+
         public RelayCommand BuyCoffeeCommand { get; set; }
 
-        public CoffeeCupViewModel()
+        public CoffeeCupViewModel(ISettingsProvider settingsProvider)
         {
+            _settingsProvider = settingsProvider;
+            _loader = ResourceLoader.GetForCurrentView();
+
+            BuyCoffeeCommand = new RelayCommand(BuyFeatureCoffeeCup);
+            try
+            {
 #if DEBUG
-            _licenseInformation = CurrentAppSimulator.LicenseInformation;
+                _licenseInformation = CurrentAppSimulator.LicenseInformation;
 #else
             _licenseInformation = CurrentApp.LicenseInformation;
 #endif
-
-            BuyCoffeeCommand = new RelayCommand(BuyFeatureCoffeeCup);
-
-            if (_licenseInformation.ProductLicenses["1 coffee cup"].IsActive)
-            {
-                // the customer can access this feature
+                _settingsProvider.IsCoffeCuped = _licenseInformation.ProductLicenses[COFFE_CUP_IAP_NAME].IsActive;
             }
-            else
+            catch
             {
-                // the customer can't access this feature
+                //ignorerd
             }
         }
 
         async void BuyFeatureCoffeeCup()
         {
-            if (!_licenseInformation.ProductLicenses["1 coffee cup"].IsActive)
+            if (!_licenseInformation.ProductLicenses[COFFE_CUP_IAP_NAME].IsActive)
             {
                 try
                 {
-                    // The customer doesn't own this feature, so 
-                    // show the purchase dialog.
-
-                    await CurrentAppSimulator.RequestProductPurchaseAsync("1 coffee cup", false);
+                    await CurrentAppSimulator.RequestProductPurchaseAsync(COFFE_CUP_IAP_NAME, false);
                     //Check the license state to determine if the in-app purchase was successful.
+                    _settingsProvider.IsCoffeCuped = _licenseInformation.ProductLicenses[COFFE_CUP_IAP_NAME].IsActive;
+                    TextToastManager.Instance.ShowToast(_loader.GetString("purcok"));
                 }
                 catch (Exception)
                 {
-                    // The in-app purchase was not completed because 
-                    // an error occurred.
+                    _settingsProvider.IsCoffeCuped = false;
+                    TextToastManager.Instance.ShowToast(_loader.GetString("purcerror"));
                 }
             }
             else
             {
                 // The customer already owns this feature.
+                _settingsProvider.IsCoffeCuped = true;
             }
         }
     }

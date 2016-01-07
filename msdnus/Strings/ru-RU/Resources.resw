@@ -232,4 +232,10 @@
   <data name="buycoffee.Content" xml:space="preserve">
     <value>Купить автору чашку кофе</value>
   </data>
+  <data name="purcerror" xml:space="preserve">
+    <value>Что-то пошло не так... Ну... Не судьба ...</value>
+  </data>
+  <data name="purcok" xml:space="preserve">
+    <value>Большое спасибо!</value>
+  </data>
 </root>

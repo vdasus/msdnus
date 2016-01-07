@@ -38,14 +38,25 @@ namespace msdnus.Shared
             set { _sett.Values["IsDarkTheme"] = value; }
         }
 
+        public bool IsCoffeCuped
+        {
+            get
+            {
+                var value = _sett.Values["IsCoffeCuped"];
+                if (value == null)
+                {
+                    _sett.Values["IsCoffeCuped"] = false;
+                }
+                return (bool) _sett.Values["IsCoffeCuped"];
+            }
+
+            set { _sett.Values["IsCoffeCuped"] = value; }
+        }
+
         static SettingsProvider()
         {
         }
 
-        /// <summary>
-        /// Get iejimo parameter
-        /// </summary>
-        /// <returns>null if unsuccessful</returns>
         public async Task<string> GetIejimoParameter()
         {
             var value = _sett.Values["IejiPar"];
@@ -66,11 +77,6 @@ namespace msdnus.Shared
             }
         }
 
-        /// <summary>
-        /// Set Iejimo parameter
-        /// </summary>
-        /// <param name="astr">string to set</param>
-        /// <returns>true if successful</returns>
         public async Task<bool> SetIejimoParameter(string astr)
         {
             try

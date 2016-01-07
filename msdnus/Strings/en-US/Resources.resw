@@ -232,4 +232,10 @@ Then import to application using buttons:</value>
   <data name="buycoffee.Content" xml:space="preserve">
     <value>Buy cup of coffee to author</value>
   </data>
+  <data name="purcerror" xml:space="preserve">
+    <value>Something wrong... Not in the cards ...</value>
+  </data>
+  <data name="purcok" xml:space="preserve">
+    <value>Thank You!</value>
+  </data>
 </root>

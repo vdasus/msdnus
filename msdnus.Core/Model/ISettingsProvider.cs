@@ -6,6 +6,7 @@ namespace msdnus.Core.Model
     {
         bool IsFirstRun { get; set; }
         bool IsDarkTheme { get; set; }
+        bool IsCoffeCuped { get; set; }
 
         /// <summary>
         /// Get iejimo parameter, null if unsuccessful
