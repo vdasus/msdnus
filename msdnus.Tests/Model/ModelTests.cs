@@ -14,6 +14,8 @@ namespace msdnus.Tests.Model
     {
         const string FNAME = @"KeysExport.xml";
 
+        private static StorageFile _file;
+
         private static IDataSource _datasource;
         private static IDataTarget _datatarget;
 
@@ -29,6 +31,12 @@ namespace msdnus.Tests.Model
         public static void ClassInit(TestContext ctx)
         {
             Lex.Db.Serialization.Extender.RegisterType<YourKeyKeyDTO, CustomTypesSerializers>(1000);
+        }
+
+        [ClassCleanup]
+        public static async Task ClassCleanup()
+        {
+            await _file.DeleteAsync(StorageDeleteOption.PermanentDelete);
         }
 
         #region Init
@@ -79,9 +87,9 @@ namespace msdnus.Tests.Model
         {
             var bl = _datasource.SaveData(_dataFromArray, FNAME).Result;
             StorageFolder folder = ApplicationData.Current.LocalFolder;
-            StorageFile file = await folder.GetFileAsync(FNAME);
+            _file = await folder.GetFileAsync(FNAME);
 
-            return await _datasource.GetData(file);
+            return await _datasource.GetData(_file);
         }
         #endregion
 
