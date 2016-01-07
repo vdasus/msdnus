@@ -238,4 +238,55 @@ Then import to application using buttons:</value>
   <data name="purcok" xml:space="preserve">
     <value>Thank You!</value>
   </data>
+  <data name="abAuthor.Text" xml:space="preserve">
+    <value>Author: </value>
+  </data>
+  <data name="abAuthorValue.Text" xml:space="preserve">
+    <value>vdasus</value>
+  </data>
+  <data name="abCopyr.Text" xml:space="preserve">
+    <value>copyright © 2016 vdasus</value>
+  </data>
+  <data name="abDesc.Text" xml:space="preserve">
+    <value>Description: </value>
+  </data>
+  <data name="abDescValue.Text" xml:space="preserve">
+    <value>Your MSDN keys in your pocket</value>
+  </data>
+  <data name="abHInformation.Header" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="abHistory.Header" xml:space="preserve">
+    <value>History</value>
+  </data>
+  <data name="abHThanks.Header" xml:space="preserve">
+    <value>Thanks to: </value>
+  </data>
+  <data name="abPublisher.Text" xml:space="preserve">
+    <value>Publisher: </value>
+  </data>
+  <data name="abPublisherValue.Text" xml:space="preserve">
+    <value>vdasus</value>
+  </data>
+  <data name="abRateme.Content" xml:space="preserve">
+    <value>Rate Me</value>
+  </data>
+  <data name="abSupMail.Content" xml:space="preserve">
+    <value>support@vdasus.com</value>
+  </data>
+  <data name="abSupMail.NavigateUri" xml:space="preserve">
+    <value>mailto:support@vdasus.com?subject=msdnus feedback</value>
+  </data>
+  <data name="abSupPage.Content" xml:space="preserve">
+    <value>support.vdasus.com</value>
+  </data>
+  <data name="abSupPage.NavigateUri" xml:space="preserve">
+    <value>http://support.vdasus.com</value>
+  </data>
+  <data name="abVer1.Text" xml:space="preserve">
+    <value>1.0</value>
+  </data>
+  <data name="abVer1Value.Text" xml:space="preserve">
+    <value>First release</value>
+  </data>
 </root>

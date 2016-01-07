@@ -18,8 +18,8 @@
             <SplitView.Pane>
                 <RelativePanel Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
                     <PasswordBox Visibility="{x:Bind Vm.IsIejimoMode, Mode=OneWay, Converter={StaticResource BoolToVisConverter}}"
-                        x:Uid="enterpin" HorizontalContentAlignment="Center" x:Name="PasswordBox" HorizontalAlignment="Left" Margin="69,82,0,0" 
-                                 VerticalAlignment="Top" Width="222" Password="" PasswordChanged="PasswordChangedHandler"
+                        x:Uid="enterpin" HorizontalContentAlignment="Center" x:Name="PasswordBox" HorizontalAlignment="Left" Margin="68,80,0,0" 
+                                 VerticalAlignment="Top" Width="220" Password="" PasswordChanged="PasswordChangedHandler"
                                  PreventKeyboardDisplayOnProgrammaticFocus="False">
                         <PasswordBox.InputScope>
                             <InputScope>
@@ -29,7 +29,7 @@
                             </InputScope>
                         </PasswordBox.InputScope>
                     </PasswordBox>
-                    <Button Margin="5" Style="{ThemeResource TextBlockButtonStyle}"
+                    <Button Margin="4" Style="{ThemeResource TextBlockButtonStyle}"
                                      RelativePanel.Below="PasswordBox" 
                                      RelativePanel.AlignRightWith="PasswordBox" 
                             Command="{Binding ResetIejimoPwdCommand, Mode=OneTime}">
@@ -41,14 +41,14 @@
                 <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="50" />
+                        <RowDefinition Height="48" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <TextBlock x:Uid="appname" Grid.Row="0" Style="{ThemeResource HeaderTextBlockStyle}"  Height="Auto"  Margin="10 0 0 10" />
+                    <TextBlock x:Uid="appname" Grid.Row="0" Style="{ThemeResource HeaderTextBlockStyle}"  Height="Auto"  Margin="8 0 0 8" />
 
                     <TextBox x:Uid="srctxt" Grid.Row="1" Text="{Binding TextToSearch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                                  TextChanged="TextBox_OnTextChanged" 
-                                 HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" MinWidth="250" />
+                                 HorizontalAlignment="Left" Margin="4" VerticalAlignment="Top" MinWidth="248" />
                     <ScrollViewer Grid.Row="2">
                         <ListBox x:Uid="Log2" ItemsSource="{x:Bind Vm.DataItems.Result, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Top" >
                             <ListBox.ItemTemplate>
@@ -71,11 +71,14 @@
                                                                 Command="{Binding Source={StaticResource Locator}, Path=Main.CopyToClipboardCommand, Mode=OneTime}"
                                                                 CommandParameter="{Binding Value, Mode=OneTime}" />
                                                         <TextBlock x:Uid="lbval" Text="{Binding Value, Mode=OneTime}" 
-                                                                       Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" Margin="5 0 0 5" />
+                                                                       Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" 
+                                                                   Margin="4 0 0 4" />
                                                         <TextBlock x:Uid="lbtyp" ToolTipService.ToolTip="" Text="{Binding Type, Mode=OneTime}" 
-                                                                       Style="{ThemeResource BodyTextBlockStyle}" VerticalAlignment="Center" Margin="5 0 0 5" />
+                                                                       Style="{ThemeResource BodyTextBlockStyle}" VerticalAlignment="Center" 
+                                                                   Margin="4 0 0 4" />
                                                         <TextBlock x:Uid="lbcdt" ToolTipService.ToolTip="" Text="{Binding ClaimedDate, Mode=OneTime}" 
-                                                                       Style="{ThemeResource BodyTextBlockStyle}" VerticalAlignment="Center" Margin="5 0 0 5" />
+                                                                       Style="{ThemeResource BodyTextBlockStyle}" VerticalAlignment="Center" 
+                                                                   Margin="4 0 0 4" />
                                                     </StackPanel>
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
@@ -100,7 +103,7 @@
             </CommandBar.SecondaryCommands>
             <CommandBar.Content>
                 <StackPanel>
-                    <TextBlock Text="{x:Bind Vm.StatusText, Mode=OneWay}" MinWidth="250" Margin="5"/>
+                    <TextBlock Text="{x:Bind Vm.StatusText, Mode=OneWay}" MinWidth="248" Margin="4"/>
                     <ProgressBar IsIndeterminate="True" Visibility="{x:Bind Vm.IsProgress, Mode=OneWay}" />
                 </StackPanel>
             </CommandBar.Content>
