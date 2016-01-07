@@ -17,7 +17,7 @@ using msdnus.Shared;
 using Microsoft.OneDrive.Sdk;
 
 // ReSharper disable ExplicitCallerInfoArgument
-
+//TODO <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.10240.0" MaxVersionTested="10.0.10586.0" />
 namespace msdnus.ViewModel
 {
     [Magic]

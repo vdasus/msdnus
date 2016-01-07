@@ -215,3 +215,9 @@ temp/
 *.DotSettings
 /vbinc2.exe
 *.~v
+/msdnus/BundleArtifacts
+/msdnus/_scale-400.appx
+/msdnus/_scale-150.appx
+/msdnus/_scale-100.appx
+/msdnus/_pkginfo.txt
+/msdnus/_language-ru.appx
