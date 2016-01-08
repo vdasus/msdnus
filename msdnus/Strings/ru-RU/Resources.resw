@@ -1,0 +1,292 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="aboutbutton.Label" xml:space="preserve">
+    <value>О нас ...</value>
+  </data>
+  <data name="aboutbutton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>О нас ...</value>
+  </data>
+  <data name="appname.Text" xml:space="preserve">
+    <value>msdnus</value>
+  </data>
+  <data name="butcopy.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Копировать ключ в clipboard</value>
+  </data>
+  <data name="cantunsnap" xml:space="preserve">
+    <value>Невозможно открепить</value>
+  </data>
+  <data name="copyedtext" xml:space="preserve">
+    <value>Скопировано в буфер обмена</value>
+  </data>
+  <data name="enterpin.Header" xml:space="preserve">
+    <value>Введите PIN</value>
+  </data>
+  <data name="enterpin.PlaceholderText" xml:space="preserve">
+    <value>По умолчанию "123"</value>
+  </data>
+  <data name="enterpin2.Header" xml:space="preserve">
+    <value>Подтвердите PIN</value>
+  </data>
+  <data name="enterpin2.PlaceholderText" xml:space="preserve">
+    <value>По умолчанию "123"</value>
+  </data>
+  <data name="fromonedrbutton.Label" xml:space="preserve">
+    <value>Импортировать из OneDrive</value>
+  </data>
+  <data name="fromonedrbutton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Загрузка файла KeysExport.xml из корня вашего OneDrive</value>
+  </data>
+  <data name="helpbutton.Label" xml:space="preserve">
+    <value>Помощь</value>
+  </data>
+  <data name="IsDarkTheme.Header" xml:space="preserve">
+    <value>Тёмная тема</value>
+  </data>
+  <data name="lbcdt.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Дата получения</value>
+  </data>
+  <data name="lbtyp.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Тип</value>
+  </data>
+  <data name="lbval.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Ключ</value>
+  </data>
+  <data name="likebutton.Label" xml:space="preserve">
+    <value>Чашка кофе</value>
+  </data>
+  <data name="likebutton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Поддержать бедного разработчика суммой меньше чашки кофе...</value>
+  </data>
+  <data name="loadbutton.Label" xml:space="preserve">
+    <value>Импортировать из файла</value>
+  </data>
+  <data name="loadbutton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Импортировать из локального файла</value>
+  </data>
+  <data name="loadednimported" xml:space="preserve">
+    <value>Загружено и импортировано</value>
+  </data>
+  <data name="lockbutton.Label" xml:space="preserve">
+    <value>Заблокировать</value>
+  </data>
+  <data name="lockbutton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Заблокировать приложение PIN кодом</value>
+  </data>
+  <data name="savepin.Content" xml:space="preserve">
+    <value>Сохранить новый PIN</value>
+  </data>
+  <data name="settingsbutton.Label" xml:space="preserve">
+    <value>Установки</value>
+  </data>
+  <data name="settingsbutton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Вызвать различные опции</value>
+  </data>
+  <data name="srctxt.PlaceholderText" xml:space="preserve">
+    <value>Фильтр</value>
+  </data>
+  <data name="statusloading.Label" xml:space="preserve">
+    <value>Загружается ...</value>
+  </data>
+  <data name="iejsaved" xml:space="preserve">
+    <value>PIN сохранён</value>
+  </data>
+  <data name="iejerror" xml:space="preserve">
+    <value>Должны совпадать и не быть пустыми</value>
+  </data>
+  <data name="helpdsc.Text" xml:space="preserve">
+    <value>Зайти в свой аккаунт msdn, сделать экспорт в XML файл и положить его либо на телефон, либо на OneDrive. 
+
+Если будете импортировать из OneDrive - файл должен лежать в корне (на самом верху, а не в какой-то субдиректории) и иметь название KeysExport.xml
+
+Затем импортируйте используя кнопки в аппликации:</value>
+  </data>
+  <data name="helpdsc2.Text" xml:space="preserve">
+    <value>Данные во время импорта шифруются.</value>
+  </data>
+  <data name="resetiej.Text" xml:space="preserve">
+    <value>Сбросить пароль на "123" (все данные будут удалены)</value>
+  </data>
+  <data name="iejreset" xml:space="preserve">
+    <value>Пароль восстановлен в "123". Данные удалены.</value>
+  </data>
+  <data name="rusure" xml:space="preserve">
+    <value>Вы уверены, что хотите сбросить пароль? Все данные будут удалены</value>
+  </data>
+  <data name="buycoffee.Content" xml:space="preserve">
+    <value>Купить автору чашку кофе</value>
+  </data>
+  <data name="purcerror" xml:space="preserve">
+    <value>Что-то пошло не так... Ну... Не судьба ...</value>
+  </data>
+  <data name="purcok" xml:space="preserve">
+    <value>Большое спасибо!</value>
+  </data>
+  <data name="abAuthor.Text" xml:space="preserve">
+    <value>Автор: </value>
+  </data>
+  <data name="abAuthorValue.Text" xml:space="preserve">
+    <value>vdasus</value>
+  </data>
+  <data name="abCopyr.Text" xml:space="preserve">
+    <value>copyright © 2016 vdasus</value>
+  </data>
+  <data name="abDesc.Text" xml:space="preserve">
+    <value>Описание: </value>
+  </data>
+  <data name="abDescValue.Text" xml:space="preserve">
+    <value>Ваши  MSDN ключи в кармане</value>
+  </data>
+  <data name="abHInformation.Header" xml:space="preserve">
+    <value>Информация</value>
+  </data>
+  <data name="abHistory.Header" xml:space="preserve">
+    <value>История</value>
+  </data>
+  <data name="abHThanks.Header" xml:space="preserve">
+    <value>Благодарности</value>
+  </data>
+  <data name="abPublisher.Text" xml:space="preserve">
+    <value>Издатель: </value>
+  </data>
+  <data name="abPublisherValue.Text" xml:space="preserve">
+    <value>vdasus</value>
+  </data>
+  <data name="abRateme.Content" xml:space="preserve">
+    <value>Оценить</value>
+  </data>
+  <data name="abSupMail.Content" xml:space="preserve">
+    <value>support@vdasus.com</value>
+  </data>
+  <data name="abSupMail.NavigateUri" xml:space="preserve">
+    <value>mailto:support@vdasus.com?subject=msdnus feedback</value>
+  </data>
+  <data name="abSupPage.Content" xml:space="preserve">
+    <value>support.vdasus.com</value>
+  </data>
+  <data name="abSupPage.NavigateUri" xml:space="preserve">
+    <value>http://support.vdasus.com</value>
+  </data>
+  <data name="abVer1.Text" xml:space="preserve">
+    <value>1.0</value>
+  </data>
+  <data name="abVer1Value.Text" xml:space="preserve">
+    <value>Первая версия</value>
+  </data>
+</root>

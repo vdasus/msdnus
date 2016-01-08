@@ -1,0 +1,57 @@
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
+
+namespace msdnus.Shared
+{
+    public class ThemeAwareFrame : Frame
+    {
+        private static readonly ThemeProxyClass _themeProxyClass = new ThemeProxyClass();
+
+        public static readonly DependencyProperty AppThemeProperty = DependencyProperty.Register(
+            "AppTheme", typeof(ElementTheme), typeof(ThemeAwareFrame),
+     new PropertyMetadata(default(ElementTheme), (d, e) => _themeProxyClass.Theme = (ElementTheme)e.NewValue));
+
+
+        public ElementTheme AppTheme
+        {
+            get { return (ElementTheme)GetValue(AppThemeProperty); }
+            set { SetValue(AppThemeProperty, value); }
+        }
+
+        public ThemeAwareFrame()
+        {
+            var themeBinding = new Binding
+            {
+                Source = _themeProxyClass,
+                Path = new PropertyPath("Theme")
+            };
+            SetBinding(RequestedThemeProperty, themeBinding);
+        }
+
+        // Proxy class to be used as singleton
+        private sealed class ThemeProxyClass : INotifyPropertyChanged
+        {
+            private ElementTheme _theme;
+            public ElementTheme Theme
+            {
+                // ReSharper disable once UnusedMember.Local
+                get { return _theme; }
+                set
+                {
+                    _theme = value;
+                    OnPropertyChanged();
+                }
+            }
+
+            public event PropertyChangedEventHandler PropertyChanged;
+            private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+            {
+                PropertyChangedEventHandler handler = PropertyChanged;
+                handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+}
