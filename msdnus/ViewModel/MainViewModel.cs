@@ -10,6 +10,7 @@ using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Views;
 using msdnus.Core.Model;
 using msdnus.Core.Shared;
@@ -24,6 +25,8 @@ namespace msdnus.ViewModel
     public sealed class MainViewModel: PropertyChangedBase
     {
         private readonly ResourceLoader _loader;
+
+        private static int cnt = 0;
 
         private readonly INavigationService _navigationService;
         private readonly ISettingsProvider _settingsProvider;
@@ -54,12 +57,12 @@ namespace msdnus.ViewModel
 
         //public ITaskCompletionNotifier Initialization { get; private set; }
 
-        public MainViewModel(IDataSource datasource, IDataTarget datatarget, INavigationService navigationService, ISettingsProvider settingsProvider)
+        public MainViewModel(IDataSource datasource, IDataTarget datatarget)
         {
             _datasource = datasource;
             _datatarget = datatarget;
-            _navigationService = navigationService;
-            _settingsProvider = settingsProvider;
+            _navigationService = SimpleIoc.Default.GetInstance<INavigationService>();
+            _settingsProvider = SimpleIoc.Default.GetInstance<ISettingsProvider>();
 
             _loader = ResourceLoader.GetForCurrentView();
 
@@ -84,11 +87,22 @@ namespace msdnus.ViewModel
                 //CheckPassword
                 CheckPassword = new RelayCommand<string>(async e =>
                 {
-                    //await _settingsProvider.SetIejimoParameter("123");
-                    var tiejimas = await _settingsProvider.GetIejimoParameter();
-                    if (!string.IsNullOrEmpty(tiejimas) && e == tiejimas)
-                        IsIejimoMode = false;
-                    RaisePropertyChanged("IsIejimoMode");
+                    if (cnt++ < 9)
+                    {
+
+                        //await _settingsProvider.SetIejimoParameter("123");
+                        var tiejimas = await _settingsProvider.GetIejimoParameter();
+                        if (!string.IsNullOrEmpty(tiejimas) && e == tiejimas)
+                        {
+                            IsIejimoMode = false;
+                            RaisePropertyChanged("IsIejimoMode");
+                            cnt = 0;
+                        }
+                            
+                    } else if (ResetIejimoPwdCommand.CanExecute(null))
+                    {
+                        ResetIejimoPwdCommand.Execute(null);
+                    }
                 });
 
                 //CopyToClipboard

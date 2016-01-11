@@ -221,7 +221,7 @@ Then import to application using buttons:</value>
     <value>All data imported to application is encrypted.</value>
   </data>
   <data name="resetiej.Text" xml:space="preserve">
-    <value>Reset password to default "123" (All data will be lost)</value>
+    <value>Are you sure to reset password to default "123" (All data will be lost)</value>
   </data>
   <data name="iejreset" xml:space="preserve">
     <value>Password was reset to "123". Data cleaned.</value>
