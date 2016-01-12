@@ -13,13 +13,13 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <SplitView x:Name="Splitter" Grid.Row="0" IsPaneOpen="{x:Bind Vm.IsIejimoMode, Mode=OneWay}" PanePlacement="Right" PaneClosing="Splitter_OnPaneClosing" >
+        <SplitView x:Name="Splitter" Grid.Row="0" IsPaneOpen="{x:Bind Vm.IsIejimoMode, Mode=OneWay}" 
+                   PanePlacement="Right" PaneClosing="Splitter_OnPaneClosing" >
             <SplitView.Pane>
                 <RelativePanel Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
                     <PasswordBox Visibility="{x:Bind Vm.IsIejimoMode, Mode=OneWay, Converter={StaticResource BoolToVisConverter}}"
                         x:Uid="enterpin" HorizontalContentAlignment="Center" x:Name="PasswordBox" HorizontalAlignment="Left" Margin="68,80,0,0" 
-                                 VerticalAlignment="Top" Width="220" Password="" PasswordChanged="PasswordChangedHandler"
-                                 PreventKeyboardDisplayOnProgrammaticFocus="False">
+                                 VerticalAlignment="Top" Width="220" Password="" PasswordChanged="PasswordChangedHandler">
                         <PasswordBox.InputScope>
                             <InputScope>
                                 <InputScope.Names>
@@ -31,7 +31,7 @@
                     <Button Margin="4" Style="{ThemeResource TextBlockButtonStyle}"
                                      RelativePanel.Below="PasswordBox" 
                                      RelativePanel.AlignRightWith="PasswordBox" 
-                            Command="{Binding ResetIejimoPwdCommand, Mode=OneTime}">
+                            Command="{x:Bind Vm.ResetIejimoPwdCommand, Mode=OneTime}">
                         <TextBlock TextAlignment="Right" x:Uid="resetiej" TextWrapping="WrapWholeWords" />
                     </Button>
                 </RelativePanel>

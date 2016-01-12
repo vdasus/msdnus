@@ -23,12 +23,12 @@ namespace msdnus.ViewModel
     {
         static ViewModelLocator()
         {
+            ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
+
             Lex.Db.Serialization.Extender.RegisterType<YourKeyKeyDTO, CustomTypesSerializers>(1000);
 
             var navigationService = CreateNavigationService();
             SimpleIoc.Default.Register(() => navigationService);
-
-            ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
             SimpleIoc.Default.Register<IDataSource, FileDataSource>();
             SimpleIoc.Default.Register<IDataTarget, DataTarget>();

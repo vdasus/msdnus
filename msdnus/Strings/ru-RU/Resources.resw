@@ -289,4 +289,7 @@
   <data name="abVer1Value.Text" xml:space="preserve">
     <value>Первая версия</value>
   </data>
+  <data name="cantstart" xml:space="preserve">
+    <value>Что-то не так. Извините за неудобства</value>
+  </data>
 </root>
