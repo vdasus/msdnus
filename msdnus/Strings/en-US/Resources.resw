@@ -289,4 +289,7 @@ Then import to application using buttons:</value>
   <data name="abVer1Value.Text" xml:space="preserve">
     <value>First release</value>
   </data>
+  <data name="cantstart" xml:space="preserve">
+    <value>Something wrong, sorry...</value>
+  </data>
 </root>
