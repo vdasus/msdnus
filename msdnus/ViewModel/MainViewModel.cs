@@ -18,21 +18,22 @@ using msdnus.Shared;
 using Microsoft.OneDrive.Sdk;
 
 // ReSharper disable ExplicitCallerInfoArgument
-//TODO <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.10240.0" MaxVersionTested="10.0.10586.0" />
 namespace msdnus.ViewModel
 {
     [Magic]
     public sealed class MainViewModel: PropertyChangedBase
     {
-        private readonly ResourceLoader _loader;
+        private const int MAX_ERR_COUNT = 24;
 
-        private static int cnt = 0;
+        private readonly ResourceLoader _loader;
 
         private readonly INavigationService _navigationService;
         private readonly ISettingsProvider _settingsProvider;
 
         public NotifyTaskCompletion<List<YourKeyDTO>> DataItems { get; set; }
 
+        public int IejiTryCnt { get; set; }
+        
         public string TextToSearch { get; set; }
         public string StatusText { get; set; }
         public Visibility IsProgress { get; set; }
@@ -66,14 +67,7 @@ namespace msdnus.ViewModel
 
             _loader = ResourceLoader.GetForCurrentView();
 
-            IsIejimoMode = true;
-
             Init();
-
-            ThemeAwareFrame rootFrame = Window.Current.Content as ThemeAwareFrame;
-            if (rootFrame != null) rootFrame.AppTheme = _settingsProvider.IsDarkTheme ? ElementTheme.Dark : ElementTheme.Light;
-
-            DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetAllData());
         }
 
         private void Init()
@@ -87,19 +81,19 @@ namespace msdnus.ViewModel
                 //CheckPassword
                 CheckPassword = new RelayCommand<string>(async e =>
                 {
-                    if (cnt++ < 9)
+                    if (IejiTryCnt++ < MAX_ERR_COUNT)
                     {
 
                         //await _settingsProvider.SetIejimoParameter("123");
                         var tiejimas = await _settingsProvider.GetIejimoParameter();
-                        if (!string.IsNullOrEmpty(tiejimas) && e == tiejimas)
-                        {
-                            IsIejimoMode = false;
-                            RaisePropertyChanged("IsIejimoMode");
-                            cnt = 0;
-                        }
-                            
-                    } else if (ResetIejimoPwdCommand.CanExecute(null))
+
+                        if (string.IsNullOrEmpty(tiejimas) || e != tiejimas) return;
+
+                        IsIejimoMode = false;
+                        RaisePropertyChanged("IsIejimoMode");
+                        IejiTryCnt = 0;
+                    }
+                    else if (ResetIejimoPwdCommand.CanExecute(null))
                     {
                         ResetIejimoPwdCommand.Execute(null);
                     }
@@ -219,7 +213,6 @@ namespace msdnus.ViewModel
                 //SettingsCommand
                 SettingsCommand = new RelayCommand(() => { _navigationService.NavigateTo("Settings"); });
 
-
                 //ResetIejimoPwdCommand
                 ResetIejimoPwdCommand = new RelayCommand(async () =>
                 {
@@ -230,6 +223,7 @@ namespace msdnus.ViewModel
 
                     if ((int) rez.Id != 0) return;
 
+                    IejiTryCnt = 0;
                     await _datatarget.CleanDb();
                     await _settingsProvider.SetIejimoParameter("123");
                     DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetAllData());
@@ -238,18 +232,33 @@ namespace msdnus.ViewModel
 
                 #endregion
 
-                /*if (_settingsProvider.IsFirstRun)
+                if (_settingsProvider.IsFirstRun)
                 {
-                    _navigationService.NavigateTo("Help");
+                    /*_navigationService.NavigateTo("Help");*/
+                    /*IsIejimoMode = true;*/
+                    if (ResetIejimoPwdCommand.CanExecute(null)) ResetIejimoPwdCommand.Execute(null);
                     _settingsProvider.IsFirstRun = false;
-                }*/
+                }
+
+                try
+                {
+                    ThemeAwareFrame rootFrame = Window.Current.Content as ThemeAwareFrame;
+                    if (rootFrame != null)
+                        rootFrame.AppTheme = _settingsProvider.IsDarkTheme ? ElementTheme.Dark : ElementTheme.Light;
+                }
+                catch
+                {
+                    //ignored
+                }
+
+                if (LockAllCommand.CanExecute(null)) LockAllCommand.Execute(null);
+
+                DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetAllData());
             }
             catch (Exception ex)
             {
 #if DEBUG
                 TextToastManager.Instance.ShowToast($"msdnus:ERR:Init:{ex.StackTrace}");
-                /*MessageDialog msg = new MessageDialog($"msdnus:ERR:Init:{ex.StackTrace}");
-                msg.ShowAsync();*/
 #else
                 TextToastManager.Instance.ShowToast($"msdnus:{ex.Message}");
 #endif

@@ -4,23 +4,25 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:shared="using:msdnus.Shared"
     mc:Ignorable="d"
     RequestedTheme="Default"
     Loaded="MainPage_OnLoaded"
     DataContext="{Binding Source={StaticResource Locator}, Path=Main}">
+    <Page.Resources>
+        <shared:StringFormatConverter x:Key="StringFormatConverter" />
+    </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <SplitView x:Name="Splitter" Grid.Row="0" IsPaneOpen="{x:Bind Vm.IsIejimoMode, Mode=OneWay}" 
-                   PanePlacement="Left" PaneClosing="Splitter_OnPaneClosing" >
+        <SplitView x:Name="Splitter" Grid.Row="0" IsPaneOpen="{Binding IsIejimoMode, Mode=OneWay}" 
+                   DisplayMode="Overlay" PanePlacement="Left" PaneClosing="Splitter_OnPaneClosing" >
             <SplitView.Pane>
                 <RelativePanel Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
-                    <PasswordBox Visibility="{x:Bind Vm.IsIejimoMode, Mode=OneWay, Converter={StaticResource BoolToVisConverter}}"
-                        x:Uid="enterpin" HorizontalContentAlignment="Center" x:Name="PasswordBox" HorizontalAlignment="Left" Margin="68,80,0,0" 
-                                 VerticalAlignment="Top" Width="220" Password="" PasswordChanged="PasswordChangedHandler"
-                                 PreventKeyboardDisplayOnProgrammaticFocus="False">
+                    <PasswordBox x:Uid="enterpin" HorizontalContentAlignment="Center" x:Name="PasswordBox" HorizontalAlignment="Left" Margin="68,80,0,0" 
+                                 VerticalAlignment="Top" Width="220" Password="" PasswordChanged="PasswordChangedHandler">
                         <PasswordBox.InputScope>
                             <InputScope>
                                 <InputScope.Names>
@@ -29,12 +31,14 @@
                             </InputScope>
                         </PasswordBox.InputScope>
                     </PasswordBox>
-                    <Button Margin="4" Style="{ThemeResource TextBlockButtonStyle}"
+                    <Button x:Name="Iejbut" Margin="4" Style="{ThemeResource TextBlockButtonStyle}"
                                      RelativePanel.Below="PasswordBox" 
                                      RelativePanel.AlignRightWith="PasswordBox" 
                             Command="{Binding ResetIejimoPwdCommand, Mode=OneTime}">
                         <TextBlock TextAlignment="Right" x:Uid="resetiej" TextWrapping="WrapWholeWords" />
                     </Button>
+                    <TextBlock RelativePanel.Below="Iejbut" RelativePanel.AlignRightWith="Iejbut" Style="{ThemeResource BodyTextBlockStyle}"
+                               Text="{x:Bind Vm.IejiTryCnt, Mode=OneWay, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0} / 24'}" />
                 </RelativePanel>
             </SplitView.Pane>
             <RelativePanel Visibility="{x:Bind Vm.IsIejimoMode, Mode=OneWay, Converter={StaticResource InvBoolToVisConverter}}">
