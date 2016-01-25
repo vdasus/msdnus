@@ -75,6 +75,10 @@
                                 <Run FontWeight="Light" x:Uid="abVer1" />
                                 <Run FontWeight="SemiBold" x:Uid="abVer1Value" />
                             </TextBlock>
+                            <TextBlock>
+                                <Run FontWeight="Light" x:Uid="abVer133" />
+                                <Run FontWeight="SemiBold" x:Uid="abVer133Value" />
+                            </TextBlock>
                         </StackPanel>
                     </Grid>
                 </DataTemplate>

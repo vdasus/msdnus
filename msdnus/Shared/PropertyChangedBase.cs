@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace msdnus.Shared
@@ -14,7 +13,6 @@ namespace msdnus.Shared
     {
         protected virtual void RaisePropertyChanged([CallerMemberName] string property = "")
         {
-            Contract.Requires(property != null);
             var e = PropertyChanged;
             e?.Invoke(this, new PropertyChangedEventArgs(property));
         }

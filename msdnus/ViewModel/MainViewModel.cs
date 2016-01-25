@@ -10,7 +10,6 @@ using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Views;
 using msdnus.Core.Model;
 using msdnus.Core.Shared;
@@ -84,8 +83,8 @@ namespace msdnus.ViewModel
                     if (IejiTryCnt++ < MAX_ERR_COUNT)
                     {
 
-                        //await _settingsProvider.SetIejimoParameter("123");
-                        var tiejimas = await _settingsProvider.GetIejimoParameter();
+                        //await _settingsProvider.SetIejimoParameterAsync("123");
+                        var tiejimas = await _settingsProvider.GetIejimoParameterAsync();
 
                         if (string.IsNullOrEmpty(tiejimas) || e != tiejimas) return;
 
@@ -115,7 +114,7 @@ namespace msdnus.ViewModel
                         {
                             DataItems =
                                 new NotifyTaskCompletion<List<YourKeyDTO>>(
-                                    _datatarget.GetDataValueByName(TextToSearch ?? string.Empty));
+                                    _datatarget.GetDataValueByNameAsync(TextToSearch ?? string.Empty));
                         });
 
                 //GetFromFilePickerCommand
@@ -140,7 +139,7 @@ namespace msdnus.ViewModel
 
                         if (!await ImportDataAsync(file, true, true)) return;
 
-                        DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetAllData());
+                        DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetAllDataAsync());
                         TextToastManager.Instance.ShowToast(_loader.GetString("loadednimported"));
                     }
                     catch (Exception ex)
@@ -188,7 +187,7 @@ namespace msdnus.ViewModel
                             }
                         }
 
-                        DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetAllData());
+                        DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetAllDataAsync());
                         TextToastManager.Instance.ShowToast(_loader.GetString("loadednimported"));
                     }
                     catch (Exception ex)
@@ -224,9 +223,9 @@ namespace msdnus.ViewModel
                     if ((int) rez.Id != 0) return;
 
                     IejiTryCnt = 0;
-                    await _datatarget.CleanDb();
-                    await _settingsProvider.SetIejimoParameter("123");
-                    DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetAllData());
+                    await _datatarget.CleanDbAsync();
+                    await _settingsProvider.SetIejimoParameterAsync("123");
+                    DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetAllDataAsync());
                     TextToastManager.Instance.ShowToast(_loader.GetString("iejreset"));
                 });
 
@@ -253,7 +252,7 @@ namespace msdnus.ViewModel
 
                 if (LockAllCommand.CanExecute(null)) LockAllCommand.Execute(null);
 
-                DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetAllData());
+                DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetAllDataAsync());
             }
             catch (Exception ex)
             {

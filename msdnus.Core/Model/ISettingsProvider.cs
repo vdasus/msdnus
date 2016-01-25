@@ -12,13 +12,13 @@ namespace msdnus.Core.Model
         /// Get iejimo parameter, null if unsuccessful
         /// </summary>
         /// <returns>null if unsuccessful</returns>
-        Task<string> GetIejimoParameter();
+        Task<string> GetIejimoParameterAsync();
 
         /// <summary>
         /// Set Iejimo parameter, true if successful
         /// </summary>
         /// <param name="astr">string to set</param>
         /// <returns>true if successful</returns>
-        Task<bool> SetIejimoParameter(string astr);
+        Task<bool> SetIejimoParameterAsync(string astr);
     }
 }
