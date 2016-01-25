@@ -7,8 +7,8 @@ namespace msdnus.Core.Model
     public interface IDataTarget: IDisposable
     {
         bool SaveData(List<YourKeyDTO> ykl, bool iscleanbefore, bool isdistinct);
-        Task<List<YourKeyDTO>> GetAllData();
-        Task<List<YourKeyDTO>> GetDataValueByName(string name);
-        Task<bool> CleanDb();
+        Task<List<YourKeyDTO>> GetAllDataAsync();
+        Task<List<YourKeyDTO>> GetDataValueByNameAsync(string name);
+        Task<bool> CleanDbAsync();
     }
 }

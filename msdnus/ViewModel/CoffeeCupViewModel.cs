@@ -51,7 +51,11 @@ namespace msdnus.ViewModel
             {
                 try
                 {
+#if DEBUG
                     await CurrentAppSimulator.RequestProductPurchaseAsync(COFFE_CUP_IAP_NAME, false);
+#else
+                    await CurrentApp.RequestProductPurchaseAsync(COFFE_CUP_IAP_NAME);
+#endif
                     //Check the license state to determine if the in-app purchase was successful.
                     _settingsProvider.IsCoffeCuped = _licenseInformation.ProductLicenses[COFFE_CUP_IAP_NAME].IsActive;
                     TextToastManager.Instance.ShowToast(_loader.GetString("purcok"));
