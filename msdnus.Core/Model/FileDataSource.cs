@@ -10,17 +10,17 @@ namespace msdnus.Core.Model
     {
         private bool _disposed;
 
-        public async Task<YourKey> GetData(StorageFile source)
+        public async Task<YourKey> GetDataAsync(StorageFile source)
         {
             return await Utils.ReadObjectFromXmlFileAsync<YourKey>(source);
         }
 
-        public YourKey GetData(Stream stream)
+        public YourKey GetDataAsync(Stream stream)
         {
             return Utils.ReadObjectFromXmlStreamAsync<YourKey>(stream);
         }
 
-        public async Task<bool> SaveData<T>(T objectToSave, string source)
+        public async Task<bool> SaveDataAsync<T>(T objectToSave, string source)
         {
             StorageFolder folder = ApplicationData.Current.LocalFolder;
             StorageFile file = await folder.CreateFileAsync(source, CreationCollisionOption.ReplaceExisting);
@@ -32,7 +32,6 @@ namespace msdnus.Core.Model
         {
             Dispose(true);
             GC.SuppressFinalize(this);
-
         }
 
         protected virtual void Dispose(bool disposing)

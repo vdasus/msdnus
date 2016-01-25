@@ -58,12 +58,12 @@ namespace msdnus.ViewModel
 
         //public ITaskCompletionNotifier Initialization { get; private set; }
 
-        public MainViewModel(IDataSource datasource, IDataTarget datatarget)
+        public MainViewModel(IDataSource datasource, IDataTarget datatarget, INavigationService navigationService, ISettingsProvider settingsProvider)
         {
             _datasource = datasource;
             _datatarget = datatarget;
-            _navigationService = SimpleIoc.Default.GetInstance<INavigationService>();
-            _settingsProvider = SimpleIoc.Default.GetInstance<ISettingsProvider>();
+            _navigationService = navigationService;
+            _settingsProvider = settingsProvider;
 
             _loader = ResourceLoader.GetForCurrentView();
 
@@ -138,7 +138,7 @@ namespace msdnus.ViewModel
 
                         SetProgress(true);
 
-                        if (!await ImportData(file, true, true)) return;
+                        if (!await ImportDataAsync(file, true, true)) return;
 
                         DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetAllData());
                         TextToastManager.Instance.ShowToast(_loader.GetString("loadednimported"));
@@ -184,7 +184,7 @@ namespace msdnus.ViewModel
                             {
                                 await responseStream.CopyToAsync(memoryStream);
                                 memoryStream.Position = 0;
-                                if (!ImportData(memoryStream, true, true)) return;
+                                if (!ImportDataAsync(memoryStream, true, true)) return;
                             }
                         }
 
@@ -269,15 +269,15 @@ namespace msdnus.ViewModel
             }
         }
 
-        private async Task<bool> ImportData(StorageFile apath, bool iscleanupbefore, bool isdistinct)
+        private async Task<bool> ImportDataAsync(StorageFile apath, bool iscleanupbefore, bool isdistinct)
         {
-            YourKey zz = await _datasource.GetData(apath);
+            YourKey zz = await _datasource.GetDataAsync(apath);
             return SaveData(zz, iscleanupbefore, isdistinct);
         }
 
-        private bool ImportData(Stream stream, bool iscleanupbefore, bool isdistinct)
+        private bool ImportDataAsync(Stream stream, bool iscleanupbefore, bool isdistinct)
         {
-            YourKey zz = _datasource.GetData(stream);
+            YourKey zz = _datasource.GetDataAsync(stream);
             return SaveData(zz, iscleanupbefore, isdistinct);
         }
 

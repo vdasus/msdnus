@@ -85,11 +85,11 @@ namespace msdnus.Tests.Model
 
         private static async Task<YourKey> PrepareFileInLocalFolder()
         {
-            var bl = _datasource.SaveData(_dataFromArray, FNAME).Result;
+            var bl = _datasource.SaveDataAsync(_dataFromArray, FNAME).Result;
             StorageFolder folder = ApplicationData.Current.LocalFolder;
             _file = await folder.GetFileAsync(FNAME);
 
-            return await _datasource.GetData(_file);
+            return await _datasource.GetDataAsync(_file);
         }
         #endregion
 

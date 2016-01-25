@@ -7,7 +7,6 @@
     RequestedTheme="Light">
     <Application.Resources>
         <vm:ViewModelLocator x:Key="Locator" />
-
         <shared:BoolToVisibleConverter x:Key="BoolToVisConverter" />
         <shared:InverseBoolToVisibleConverter x:Key="InvBoolToVisConverter" />
     </Application.Resources>
