@@ -292,4 +292,10 @@
   <data name="cantstart" xml:space="preserve">
     <value>Что-то не так. Извините за неудобства</value>
   </data>
+  <data name="abVer133.Text" xml:space="preserve">
+    <value>1.3.3</value>
+  </data>
+  <data name="abVer133Value.Text" xml:space="preserve">
+    <value>* Исправление ошибок</value>
+  </data>
 </root>

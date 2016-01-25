@@ -44,15 +44,15 @@ namespace msdnus.Core.Model
             return true;
         }
 
-        public async Task<List<YourKeyDTO>> GetAllData()
+        public async Task<List<YourKeyDTO>> GetAllDataAsync()
         {
             var tmp = await _db.Table<YourKeyDTO>().LoadAllAsync();
             return tmp.OrderBy(x => x.Name).ToList();
         }
 
-        public async Task<List<YourKeyDTO>> GetDataValueByName(string name)
+        public async Task<List<YourKeyDTO>> GetDataValueByNameAsync(string name)
         {
-            if (string.IsNullOrEmpty(name)) return await GetAllData();
+            if (string.IsNullOrEmpty(name)) return await GetAllDataAsync();
 
             var keys = _db.Table<YourKeyDTO>();
             var index =
@@ -60,7 +60,7 @@ namespace msdnus.Core.Model
             return await index.ToListAsync();
         }
 
-        public async Task<bool> CleanDb()
+        public async Task<bool> CleanDbAsync()
         {
             try
             {

@@ -57,13 +57,13 @@ namespace msdnus.Shared
         {
         }
 
-        public async Task<string> GetIejimoParameter()
+        public async Task<string> GetIejimoParameterAsync()
         {
             var value = _sett.Values["IejiPar"];
 
             if (value == null)
             {
-                await SetIejimoParameter("123");
+                await SetIejimoParameterAsync("123");
                 value = _sett.Values["IejiPar"];
             }
 
@@ -77,7 +77,7 @@ namespace msdnus.Shared
             }
         }
 
-        public async Task<bool> SetIejimoParameter(string astr)
+        public async Task<bool> SetIejimoParameterAsync(string astr)
         {
             try
             {
