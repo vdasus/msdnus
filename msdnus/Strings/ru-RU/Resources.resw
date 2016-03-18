@@ -227,7 +227,7 @@
     <value>Пароль восстановлен в "123". Данные удалены.</value>
   </data>
   <data name="rusure" xml:space="preserve">
-    <value>Вы уверены, что хотите сбросить пароль? Все данные будут удалены</value>
+    <value>Сбросить пароль? Все данные будут удалены</value>
   </data>
   <data name="buycoffee.Content" xml:space="preserve">
     <value>Купить автору чашку кофе</value>
@@ -297,5 +297,11 @@
   </data>
   <data name="abVer133Value.Text" xml:space="preserve">
     <value>* Исправление ошибок</value>
+  </data>
+  <data name="abVer134.Text" xml:space="preserve">
+    <value>1.3.4</value>
+  </data>
+  <data name="abVer134Value.Text" xml:space="preserve">
+    <value>* Исправление ошибок цохранения пароля</value>
   </data>
 </root>

@@ -65,11 +65,11 @@ namespace msdnus.Core.Shared
         }
 
         /// <summary>
-        /// UnprotectFromBase64Data. Return null if uncuccessful
+        /// UnprotectFromBase64DataAsync. Return null if uncuccessful
         /// </summary>
         /// <param name="astrBase64Protected">String to decrypt</param>
         /// <returns>Decrypted string. null if uncuccessful</returns>
-        public static async Task<string> UnprotectFromBase64Data(string astrBase64Protected)
+        public static async Task<string> UnprotectFromBase64DataAsync(string astrBase64Protected)
         {
             try
             {

@@ -37,8 +37,8 @@
                             Command="{Binding ResetIejimoPwdCommand, Mode=OneTime}">
                         <TextBlock TextAlignment="Right" x:Uid="resetiej" TextWrapping="WrapWholeWords" />
                     </Button>
-                    <TextBlock RelativePanel.Below="Iejbut" RelativePanel.AlignRightWith="Iejbut" Style="{ThemeResource BodyTextBlockStyle}"
-                               Text="{x:Bind Vm.IejiTryCnt, Mode=OneWay, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0} / 24'}" />
+                    <!--<TextBlock RelativePanel.Below="Iejbut" RelativePanel.AlignRightWith="Iejbut" Style="{ThemeResource BodyTextBlockStyle}"
+                               Text="{x:Bind Vm.IejiTryCnt, Mode=OneWay, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0} / 24'}" />-->
                 </RelativePanel>
             </SplitView.Pane>
             <RelativePanel Visibility="{x:Bind Vm.IsIejimoMode, Mode=OneWay, Converter={StaticResource InvBoolToVisConverter}}">

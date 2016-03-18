@@ -22,8 +22,6 @@ namespace msdnus.ViewModel
     [Magic]
     public sealed class MainViewModel: PropertyChangedBase
     {
-        private const int MAX_ERR_COUNT = 24;
-
         private readonly ResourceLoader _loader;
 
         private readonly INavigationService _navigationService;
@@ -31,8 +29,6 @@ namespace msdnus.ViewModel
 
         public NotifyTaskCompletion<List<YourKeyDTO>> DataItems { get; set; }
 
-        public int IejiTryCnt { get; set; }
-        
         public string TextToSearch { get; set; }
         public string StatusText { get; set; }
         public Visibility IsProgress { get; set; }
@@ -80,22 +76,13 @@ namespace msdnus.ViewModel
                 //CheckPassword
                 CheckPassword = new RelayCommand<string>(async e =>
                 {
-                    if (IejiTryCnt++ < MAX_ERR_COUNT)
-                    {
+                    //await _settingsProvider.SetIejimoParameterAsync("123");
+                    var tiejimas = await _settingsProvider.GetIejimoParameterAsync();
 
-                        //await _settingsProvider.SetIejimoParameterAsync("123");
-                        var tiejimas = await _settingsProvider.GetIejimoParameterAsync();
+                    if (string.IsNullOrEmpty(tiejimas) || e != tiejimas) return;
 
-                        if (string.IsNullOrEmpty(tiejimas) || e != tiejimas) return;
-
-                        IsIejimoMode = false;
-                        RaisePropertyChanged("IsIejimoMode");
-                        IejiTryCnt = 0;
-                    }
-                    else if (ResetIejimoPwdCommand.CanExecute(null))
-                    {
-                        ResetIejimoPwdCommand.Execute(null);
-                    }
+                    IsIejimoMode = false;
+                    RaisePropertyChanged("IsIejimoMode");
                 });
 
                 //CopyToClipboard
@@ -222,7 +209,6 @@ namespace msdnus.ViewModel
 
                     if ((int) rez.Id != 0) return;
 
-                    IejiTryCnt = 0;
                     await _datatarget.CleanDbAsync();
                     await _settingsProvider.SetIejimoParameterAsync("123");
                     DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetAllDataAsync());
@@ -233,8 +219,6 @@ namespace msdnus.ViewModel
 
                 if (_settingsProvider.IsFirstRun)
                 {
-                    /*_navigationService.NavigateTo("Help");*/
-                    /*IsIejimoMode = true;*/
                     if (ResetIejimoPwdCommand.CanExecute(null)) ResetIejimoPwdCommand.Execute(null);
                     _settingsProvider.IsFirstRun = false;
                 }

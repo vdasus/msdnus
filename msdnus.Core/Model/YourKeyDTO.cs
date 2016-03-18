@@ -75,10 +75,10 @@ namespace msdnus.Core.Model
             return Task.Run(async () => new YourKeyKeyDTO
             {
                 Id = reader.ReadInt32(),
-                ID = await Utils.UnprotectFromBase64Data(reader.ReadString()),
-                Type = await Utils.UnprotectFromBase64Data(reader.ReadString()),
-                Value = await Utils.UnprotectFromBase64Data(reader.ReadString()),
-                ClaimedDate = await Utils.UnprotectFromBase64Data(reader.ReadString()),
+                ID = await Utils.UnprotectFromBase64DataAsync(reader.ReadString()),
+                Type = await Utils.UnprotectFromBase64DataAsync(reader.ReadString()),
+                Value = await Utils.UnprotectFromBase64DataAsync(reader.ReadString()),
+                ClaimedDate = await Utils.UnprotectFromBase64DataAsync(reader.ReadString()),
             }).Result;
         }
 

@@ -69,7 +69,7 @@ namespace msdnus.Shared
 
             try
             {
-                return await Core.Shared.Utils.UnprotectFromBase64Data((string)value);
+                return await Core.Shared.Utils.UnprotectFromBase64DataAsync((string)value);
             }
             catch
             {
