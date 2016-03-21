@@ -299,9 +299,15 @@ Then import to application using buttons:</value>
     <value>* Small fixes</value>
   </data>
   <data name="abVer134.Text" xml:space="preserve">
-    <value>1.3.4</value>
+    <value>1.3.5</value>
   </data>
   <data name="abVer134Value.Text" xml:space="preserve">
     <value>* Small fixes of password saving</value>
+  </data>
+  <data name="abPrivacy.Content" xml:space="preserve">
+    <value>Privacy Policy</value>
+  </data>
+  <data name="abPrivacy.NavigateUri" xml:space="preserve">
+    <value>http://support.vdasus.com/law/en/pp_no.html</value>
   </data>
 </root>

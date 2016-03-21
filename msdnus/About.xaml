@@ -46,6 +46,7 @@
                             </StackPanel>
                             <HyperlinkButton x:Uid="abSupPage" />
                             <HyperlinkButton x:Uid="abSupMail" />
+                            <HyperlinkButton x:Uid="abPrivacy" />
                             <TextBlock TextWrapping="WrapWholeWords">
                                 <Run x:Uid="abDesc" FontWeight="Light" />
                                 <LineBreak />

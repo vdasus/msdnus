@@ -299,9 +299,15 @@
     <value>* Исправление ошибок</value>
   </data>
   <data name="abVer134.Text" xml:space="preserve">
-    <value>1.3.4</value>
+    <value>1.3.5</value>
   </data>
   <data name="abVer134Value.Text" xml:space="preserve">
     <value>* Исправление ошибок цохранения пароля</value>
+  </data>
+  <data name="abPrivacy.Content" xml:space="preserve">
+    <value>Политика конфиденциальности</value>
+  </data>
+  <data name="abPrivacy.NavigateUri" xml:space="preserve">
+    <value>http://support.vdasus.com/law/ru/pp_no.html</value>
   </data>
 </root>
