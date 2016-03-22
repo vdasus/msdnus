@@ -302,7 +302,7 @@
     <value>1.3.5</value>
   </data>
   <data name="abVer134Value.Text" xml:space="preserve">
-    <value>* Исправление ошибок цохранения пароля</value>
+    <value>* Исправление ошибок сохранения пароля</value>
   </data>
   <data name="abPrivacy.Content" xml:space="preserve">
     <value>Политика конфиденциальности</value>
