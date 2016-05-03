@@ -41,11 +41,11 @@ namespace msdnus.ViewModel
             SimpleIoc.Default.Register<MainViewModel>();
         }
 
-        public static HelpViewModel Help => ServiceLocator.Current.GetInstance<HelpViewModel>();
-        public static SettingsViewModel Settings => ServiceLocator.Current.GetInstance<SettingsViewModel>();
-        public static AboutViewModel About => ServiceLocator.Current.GetInstance<AboutViewModel>();
-        public static CoffeeCupViewModel CoffeeCup => ServiceLocator.Current.GetInstance<CoffeeCupViewModel>();
-        public static MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();
+        public HelpViewModel Help => ServiceLocator.Current.GetInstance<HelpViewModel>();
+        public SettingsViewModel Settings => ServiceLocator.Current.GetInstance<SettingsViewModel>();
+        public AboutViewModel About => ServiceLocator.Current.GetInstance<AboutViewModel>();
+        public CoffeeCupViewModel CoffeeCup => ServiceLocator.Current.GetInstance<CoffeeCupViewModel>();
+        public MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();
         
         private static INavigationService CreateNavigationService()
         {
