@@ -154,7 +154,7 @@ namespace msdnus.ViewModel
                         if (!EnsureUnsnapped()) return;
 
                         var oneDriveClient =
-                            OneDriveClientExtensions.GetClientUsingOnlineIdAuthenticator(new[]
+                        OneDriveClientExtensions.GetClientUsingOnlineIdAuthenticator(new[]
                             {"wl.signin", "onedrive.readonly"});
 
                         await oneDriveClient.AuthenticateAsync();

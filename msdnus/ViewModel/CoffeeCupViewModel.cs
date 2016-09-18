@@ -52,7 +52,7 @@ namespace msdnus.ViewModel
                 try
                 {
 #if DEBUG
-                    await CurrentAppSimulator.RequestProductPurchaseAsync(COFFE_CUP_IAP_NAME, false);
+                    await CurrentAppSimulator.RequestProductPurchaseAsync(COFFE_CUP_IAP_NAME);
 #else
                     await CurrentApp.RequestProductPurchaseAsync(COFFE_CUP_IAP_NAME);
 #endif

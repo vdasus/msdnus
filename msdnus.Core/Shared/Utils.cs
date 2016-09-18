@@ -11,6 +11,8 @@ namespace msdnus.Core.Shared
 {
     public static class Utils
     {
+        private const BinaryStringEncoding BSENCODING = BinaryStringEncoding.Utf8;
+
         public static async Task<T> ReadObjectFromXmlFileAsync<T>(StorageFile file)
         {
             using (Stream stream = await file.OpenStreamForReadAsync())
@@ -51,10 +53,9 @@ namespace msdnus.Core.Shared
             {
                 var strMsg = string.IsNullOrEmpty(astrMsg) ? "-" : astrMsg;
 
-                const BinaryStringEncoding ENCODING = BinaryStringEncoding.Utf8;
                 DataProtectionProvider provider = new DataProtectionProvider(strDescriptor);
 
-                IBuffer buffMsg = CryptographicBuffer.ConvertStringToBinary(strMsg, ENCODING);
+                IBuffer buffMsg = CryptographicBuffer.ConvertStringToBinary(strMsg, BSENCODING);
                 IBuffer buffProtected = await provider.ProtectAsync(buffMsg);
                 return CryptographicBuffer.EncodeToBase64String(buffProtected);
             }
@@ -77,12 +78,11 @@ namespace msdnus.Core.Shared
 
             if (string.IsNullOrEmpty(strBase64Protected)) return string.Empty;
 
-            const BinaryStringEncoding ENCODING = BinaryStringEncoding.Utf8;
             DataProtectionProvider provider = new DataProtectionProvider();
 
             IBuffer tmpstr = CryptographicBuffer.DecodeFromBase64String(strBase64Protected);
                 IBuffer buffUnprotected = await provider.UnprotectAsync(tmpstr);
-                return CryptographicBuffer.ConvertBinaryToString(ENCODING, buffUnprotected);
+                return CryptographicBuffer.ConvertBinaryToString(BSENCODING, buffUnprotected);
             }
             catch
             {

@@ -242,7 +242,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!--<Import Project="C:\Users\V.Devgutis\.nuget\packages\KindOfMagic\1.2.6\build\KindOfMagic.targets" />-->
   <PropertyGroup>
-    <PreBuildEvent>if $(ConfigurationName) == Release "$(SolutionDir)vbinc2" -v0001 -p"$(ProjectDir)Properties\AssemblyInfo.cs"</PreBuildEvent>
+    <PreBuildEvent>if $(ConfigurationName) == Release "$(SolutionDir)external\vbinc2" -v0001 -p"$(ProjectDir)Properties\AssemblyInfo.cs"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

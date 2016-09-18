@@ -22,7 +22,7 @@ namespace msdnus.Tests.Model
         private static YourKey _dataFromArray;
         private static YourKey _yk;
 
-        ModelTests()
+        private ModelTests()
         {
             InitDatasources();
         }
@@ -34,7 +34,7 @@ namespace msdnus.Tests.Model
         }
 
         [ClassCleanup]
-        public static async Task ClassCleanup()
+        public static async Task ClassCleanupAsync()
         {
             await _file.DeleteAsync(StorageDeleteOption.PermanentDelete);
         }
@@ -48,7 +48,7 @@ namespace msdnus.Tests.Model
             _datatarget = SimpleIoc.Default.GetInstance<IDataTarget>();
 
             _dataFromArray = InitYourKey();
-            _yk = PrepareFileInLocalFolder().Result;
+            _yk = PrepareFileInLocalFolderAsync().Result;
         }
 
         private static YourKey InitYourKey()
@@ -83,7 +83,7 @@ namespace msdnus.Tests.Model
             return yk;
         }
 
-        private static async Task<YourKey> PrepareFileInLocalFolder()
+        private static async Task<YourKey> PrepareFileInLocalFolderAsync()
         {
             var bl = _datasource.SaveDataAsync(_dataFromArray, FNAME).Result;
             StorageFolder folder = ApplicationData.Current.LocalFolder;
