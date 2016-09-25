@@ -5,14 +5,13 @@ using System.Threading.Tasks;
 using Windows.Storage;
 using GalaSoft.MvvmLight.Ioc;
 using msdnus.Core.Model;
-using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using Xunit;
 
 namespace msdnus.Tests.Model
 {
-    [TestClass]
     public class ModelTests
     {
-        const string FNAME = @"KeysExport.xml";
+        private const string FNAME = @"KeysExport.xml";
 
         private static StorageFile _file;
 
@@ -22,21 +21,15 @@ namespace msdnus.Tests.Model
         private static YourKey _dataFromArray;
         private static YourKey _yk;
 
-        private ModelTests()
+        public ModelTests()
         {
             InitDatasources();
-        }
-
-        [ClassInitialize]
-        public static void ClassInit(TestContext ctx)
-        {
             Lex.Db.Serialization.Extender.RegisterType<YourKeyKeyDTO, CustomTypesSerializers>(1000);
         }
 
-        [ClassCleanup]
-        public static async Task ClassCleanupAsync()
+        ~ModelTests()
         {
-            await _file.DeleteAsync(StorageDeleteOption.PermanentDelete);
+            var deleteAsync = _file.DeleteAsync(StorageDeleteOption.PermanentDelete);
         }
 
         #region Init
@@ -93,14 +86,14 @@ namespace msdnus.Tests.Model
         }
         #endregion
 
-        [TestMethod]
+        [Fact]
         public void ShouldFileWriteReadYourKey()
         {
-            Assert.IsNotNull(_yk);
-            Assert.AreEqual(_yk.Items.Length, _dataFromArray.Items.Length);
-            Assert.AreEqual(_yk.Items[0].Name, _dataFromArray.Items[0].Name);
+            Assert.NotNull(_yk);
+            Assert.Equal(_yk.Items.Length, _dataFromArray.Items.Length);
+            Assert.Equal(_yk.Items[0].Name, _dataFromArray.Items[0].Name);
 
-            Assert.AreEqual(_yk.Items[0].Key.Length, _dataFromArray.Items[0].Key.Length);
+            Assert.Equal(_yk.Items[0].Key.Length, _dataFromArray.Items[0].Key.Length);
 
             foreach (var zzz in _yk.Items[0].Key)
             {
@@ -109,11 +102,11 @@ namespace msdnus.Tests.Model
                         yyy =>
                             (zzz.ClaimedDate == yyy.ClaimedDate) && (zzz.ID == yyy.ID) &&
                             (zzz.Type == yyy.Type) && (zzz.Value == yyy.Value));
-                Assert.IsTrue(isok, zzz.ToString());
+                Assert.True(isok, zzz.ToString());
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void ShouldSaveYourKeyToDb()
         {
             //StorageFolder folder = ApplicationData.Current.LocalFolder;
@@ -128,16 +121,16 @@ namespace msdnus.Tests.Model
             
             var isok = _datatarget.SaveData(lst, true, true);
             
-            Assert.IsTrue(isok);
+            Assert.True(isok);
         }
 
-        [TestMethod]
+        [Fact]
         public void ShoudLoadAllDataFromDb()
         {
             ShouldSaveYourKeyToDb();
             var zz = _datatarget.GetAllDataAsync().Result;
-            Assert.IsNotNull(zz);
-            Assert.IsTrue(zz.Count>0);
+            Assert.NotNull(zz);
+            Assert.True(zz.Count>0);
         }
     }
 }
