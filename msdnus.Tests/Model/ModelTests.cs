@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Windows.Storage;
 using GalaSoft.MvvmLight.Ioc;
 using msdnus.Core.Model;
+using Microsoft.VisualBasic.CompilerServices;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 
 namespace msdnus.Tests.Model
@@ -138,6 +139,14 @@ namespace msdnus.Tests.Model
             var zz = _datatarget.GetAllDataAsync().Result;
             Assert.IsNotNull(zz);
             Assert.IsTrue(zz.Count>0);
+        }
+
+        public void ShouldDecryptEncryptNew()
+        {
+            var zz = Core.Shared.Utils.AES_Encrypt("aaa", "aaa");
+            var dd = Core.Shared.Utils.AES_Decrypt(zz, "aaa");
+
+            Assert.AreEqual("aaa", dd);
         }
     }
 }
