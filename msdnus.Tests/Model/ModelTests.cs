@@ -141,6 +141,7 @@ namespace msdnus.Tests.Model
             Assert.IsTrue(zz.Count>0);
         }
 
+        [TestMethod]
         public void ShouldDecryptEncryptNew()
         {
             var zz = Core.Shared.Utils.AES_Encrypt("aaa", "aaa");
