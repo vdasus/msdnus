@@ -109,6 +109,7 @@ namespace msdnus.Core.Shared
 
                 var aes = PreparedRaktas;
 
+//TODO IBuffer buffMsg = CryptographicBuffer.ConvertStringToBinary(strMsg,encoding);
                 IBuffer buffer = CryptographicBuffer.CreateFromByteArray(Encoding.UTF8.GetBytes(input));
                 var encrypted = CryptographicBuffer.EncodeToBase64String(CryptographicEngine.Encrypt(aes, buffer, null));
 
@@ -131,7 +132,7 @@ namespace msdnus.Core.Shared
                 if (string.IsNullOrEmpty(input)) return null;
 
                 var aes = PreparedRaktas;
-
+//TODO return CryptographicBuffer.ConvertBinaryToString(encoding, buffEncrypt);
                 IBuffer buffer = CryptographicBuffer.DecodeFromBase64String(input);
                 byte[] bdecrypted;
                 var rezdec = CryptographicEngine.Decrypt(aes, buffer, null);
