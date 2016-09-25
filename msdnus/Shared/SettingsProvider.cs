@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Windows.Storage;
+﻿using Windows.Storage;
 using msdnus.Core.Model;
 
 namespace msdnus.Shared
@@ -13,6 +12,7 @@ namespace msdnus.Shared
             get
             {
                 var value = _sett.Values["IsFirstRun"];
+
                 if (value == null)
                 {
                     _sett.Values["IsFirstRun"] = true;
@@ -47,7 +47,7 @@ namespace msdnus.Shared
                 {
                     _sett.Values["IsCoffeCuped"] = false;
                 }
-                return (bool) _sett.Values["IsCoffeCuped"];
+                return (bool)_sett.Values["IsCoffeCuped"];
             }
 
             set { _sett.Values["IsCoffeCuped"] = value; }
@@ -59,17 +59,17 @@ namespace msdnus.Shared
 
         public string GetIejimoParameterAsync()
         {
-            var value = _sett.Values["IejiPar"];
-
-            if (value == null)
-            {
-                SetIejimoParameter("123");
-                value = _sett.Values["IejiPar"];
-            }
-
             try
             {
-                return Core.Shared.Utils.UnprotectFromBase64DataAsync((string)value);
+                var value = _sett.Values["IejiPar"];
+
+                if (value == null)
+                {
+                    SetIejimoParameter("123");
+                    value = _sett.Values["IejiPar"];
+                }
+
+                return Core.Shared.Utils.UnprotectFromBase64DataAsync((string) value);
             }
             catch
             {

@@ -144,10 +144,12 @@ namespace msdnus.Tests.Model
         [TestMethod]
         public void ShouldDecryptEncryptNew()
         {
-            var zz = Core.Shared.Utils.AES_EncryptToBase64Data("aaa");
-            var dd = Core.Shared.Utils.AES_DecryptFromBase64Data(zz);
+            const string CENCSTRING = "Just a test for encrypting {B5E5BE54-E428-4F24-AC80-83CA5EF8B4C0}";
 
-            Assert.AreEqual("aaa", dd);
+            var zz = Core.Shared.Utils.ProtectToBase64Async(CENCSTRING);
+            var dd = Core.Shared.Utils.UnprotectFromBase64DataAsync(zz);
+
+            Assert.AreEqual(CENCSTRING, dd);
         }
     }
 }

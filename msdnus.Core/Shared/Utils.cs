@@ -16,6 +16,21 @@ namespace msdnus.Core.Shared
     public static class Utils
     {
         private const uint BKEYLENGTH = 32;
+        private const string CDRUSKA = "1908B56935BF";
+
+        private static string _priejEilute = null;
+        private static string PriejEilute
+        {
+            get
+            {
+                return _priejEilute ?? (_priejEilute = (NetworkInformation.GetHostNames()
+                    .FirstOrDefault(name => name.Type == HostNameType.DomainName)?.DisplayName ?? CDRUSKA) + CDRUSKA);
+            }
+        }
+
+        private static CryptographicKey _preparedRaktas = null;
+
+        private static CryptographicKey PreparedRaktas => _preparedRaktas ?? (_preparedRaktas = PrepareKey());
 
         public static async Task<T> ReadObjectFromXmlFileAsync<T>(StorageFile file)
         {
@@ -51,16 +66,10 @@ namespace msdnus.Core.Shared
         /// <param name="astrMsg">String to encrypt</param>
         /// <param name="strDescriptor">Descriptor</param>
         /// <returns>encrypted string or null</returns>
-        public static  string ProtectToBase64Async(string astrMsg)
+        public static string ProtectToBase64Async(string astrMsg)
         {
-            try
-            {
-                return AES_EncryptToBase64Data(astrMsg);
-            }
-            catch
-            {
-                return null;
-            }
+
+            return AES_EncryptToBase64Data(astrMsg);
         }
 
         /// <summary>
@@ -70,84 +79,74 @@ namespace msdnus.Core.Shared
         /// <returns>Decrypted string. null if uncuccessful</returns>
         public static string UnprotectFromBase64DataAsync(string astrBase64Protected)
         {
-            try
-            {
-                return AES_DecryptFromBase64Data(astrBase64Protected);
-            }
-            catch
-            {
-                return null;
-            }
+            return AES_DecryptFromBase64Data(astrBase64Protected);
         }
 
-        public static string AES_EncryptToBase64Data(string input)
+        private static CryptographicKey PrepareKey()
         {
             SymmetricKeyAlgorithmProvider sap =
                 SymmetricKeyAlgorithmProvider.OpenAlgorithm(SymmetricAlgorithmNames.AesEcbPkcs7);
             HashAlgorithmProvider hap = HashAlgorithmProvider.OpenAlgorithm(HashAlgorithmNames.Sha512);
             CryptographicHash hashAes = hap.CreateHash();
 
+            byte[] hash = new byte[BKEYLENGTH];
+            hashAes.Append(CryptographicBuffer.CreateFromByteArray(Encoding.UTF8.GetBytes(PriejEilute)));
+            byte[] temp;
+            CryptographicBuffer.CopyToByteArray(hashAes.GetValueAndReset(), out temp);
+
+            Array.Copy(temp, 0, hash, 0, 16);
+            Array.Copy(temp, 0, hash, 15, 16);
+
+            var aes = sap.CreateSymmetricKey(CryptographicBuffer.CreateFromByteArray(hash));
+            return aes;
+        }
+
+        private static string AES_EncryptToBase64Data(string input)
+        {
             try
             {
-                if (string.IsNullOrEmpty(input)) return "-";
+                if (string.IsNullOrEmpty(input)) return null;
 
-                var hostNames = NetworkInformation.GetHostNames();
-                var pass = hostNames.FirstOrDefault(name => name.Type == HostNameType.DomainName)?.DisplayName ?? "???";
-
-                byte[] hash = new byte[BKEYLENGTH];
-                hashAes.Append(CryptographicBuffer.CreateFromByteArray(Encoding.UTF8.GetBytes(pass)));
-                byte[] temp;
-                CryptographicBuffer.CopyToByteArray(hashAes.GetValueAndReset(), out temp);
-
-                Array.Copy(temp, 0, hash, 0, 16);
-                Array.Copy(temp, 0, hash, 15, 16);
-
-                var aes = sap.CreateSymmetricKey(CryptographicBuffer.CreateFromByteArray(hash));
+                var aes = PreparedRaktas;
 
                 IBuffer buffer = CryptographicBuffer.CreateFromByteArray(Encoding.UTF8.GetBytes(input));
                 var encrypted = CryptographicBuffer.EncodeToBase64String(CryptographicEngine.Encrypt(aes, buffer, null));
 
                 return encrypted;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+#if DEBUG
+                throw new Exception($"Enc: {ex.Message}");
+#else
                 return null;
+#endif
             }
         }
 
-        public static string AES_DecryptFromBase64Data(string input)
+        private static string AES_DecryptFromBase64Data(string input)
         {
-            SymmetricKeyAlgorithmProvider sap = SymmetricKeyAlgorithmProvider.OpenAlgorithm(SymmetricAlgorithmNames.AesEcbPkcs7);
-            HashAlgorithmProvider hap = HashAlgorithmProvider.OpenAlgorithm(HashAlgorithmNames.Sha512);
-            CryptographicHash hashAes = hap.CreateHash();
-
             try
             {
-                if (string.IsNullOrEmpty(input)) return "-";
+                if (string.IsNullOrEmpty(input)) return null;
 
-                var hostNames = NetworkInformation.GetHostNames();
-                var pass = hostNames.FirstOrDefault(name => name.Type == HostNameType.DomainName)?.DisplayName ?? "???";
-
-                byte[] hash = new byte[BKEYLENGTH];
-                hashAes.Append(CryptographicBuffer.CreateFromByteArray(Encoding.UTF8.GetBytes(pass)));
-                byte[] temp;
-                CryptographicBuffer.CopyToByteArray(hashAes.GetValueAndReset(), out temp);
-
-                Array.Copy(temp, 0, hash, 0, 16);
-                Array.Copy(temp, 0, hash, 15, 16);
-
-                var aes = sap.CreateSymmetricKey(CryptographicBuffer.CreateFromByteArray(hash));
+                var aes = PreparedRaktas;
 
                 IBuffer buffer = CryptographicBuffer.DecodeFromBase64String(input);
                 byte[] bdecrypted;
-                CryptographicBuffer.CopyToByteArray(CryptographicEngine.Decrypt(aes, buffer, null), out bdecrypted);
+                var rezdec = CryptographicEngine.Decrypt(aes, buffer, null);
+                CryptographicBuffer.CopyToByteArray(rezdec, out bdecrypted);
                 var decrypted = Encoding.UTF8.GetString(bdecrypted, 0, bdecrypted.Length);
 
                 return decrypted;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+#if DEBUG
+                throw new Exception($"Dec: {ex.Message}");
+#else
                 return null;
+#endif
             }
         }
     }

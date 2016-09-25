@@ -75,10 +75,10 @@ namespace msdnus.Core.Model
             return Task.Run(() => new YourKeyKeyDTO
             {
                 Id = reader.ReadInt32(),
-                ID = Utils.UnprotectFromBase64DataAsync(reader.ReadString()),
-                Type = Utils.UnprotectFromBase64DataAsync(reader.ReadString()),
-                Value = Utils.UnprotectFromBase64DataAsync(reader.ReadString()),
-                ClaimedDate = Utils.UnprotectFromBase64DataAsync(reader.ReadString()),
+                ID = Utils.UnprotectFromBase64DataAsync(reader.ReadString()) ?? string.Empty,
+                Type = Utils.UnprotectFromBase64DataAsync(reader.ReadString()) ?? string.Empty,
+                Value = Utils.UnprotectFromBase64DataAsync(reader.ReadString()) ?? string.Empty,
+                ClaimedDate = Utils.UnprotectFromBase64DataAsync(reader.ReadString()) ?? string.Empty
             }).Result;
         }
 
@@ -87,10 +87,10 @@ namespace msdnus.Core.Model
             Task.Run(() =>
            {
                writer.Write(value.Id);
-               writer.Write(Utils.ProtectToBase64Async(value.ID));
-               writer.Write(Utils.ProtectToBase64Async(value.Type));
-               writer.Write(Utils.ProtectToBase64Async(value.Value));
-               writer.Write(Utils.ProtectToBase64Async(value.ClaimedDate));
+               writer.Write(Utils.ProtectToBase64Async(value.ID) ?? string.Empty);
+               writer.Write(Utils.ProtectToBase64Async(value.Type) ?? string.Empty);
+               writer.Write(Utils.ProtectToBase64Async(value.Value) ?? string.Empty);
+               writer.Write(Utils.ProtectToBase64Async(value.ClaimedDate) ?? string.Empty);
            }).Wait();
         }
     }
