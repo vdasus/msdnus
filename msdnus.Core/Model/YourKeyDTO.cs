@@ -12,7 +12,7 @@ namespace msdnus.Core.Model
         public int Id { get; set; }
 
         public string Name { get; set; }
-        
+
         public List<YourKeyKeyDTO> Items { get; set; }
 
         public YourKeyDTO()
@@ -72,26 +72,26 @@ namespace msdnus.Core.Model
     {
         public static YourKeyKeyDTO ReadYourKeyKeyDTO(DataReader reader)
         {
-            return Task.Run(async () => new YourKeyKeyDTO
+            return Task.Run(() => new YourKeyKeyDTO
             {
                 Id = reader.ReadInt32(),
-                ID = await Utils.UnprotectFromBase64DataAsync(reader.ReadString()),
-                Type = await Utils.UnprotectFromBase64DataAsync(reader.ReadString()),
-                Value = await Utils.UnprotectFromBase64DataAsync(reader.ReadString()),
-                ClaimedDate = await Utils.UnprotectFromBase64DataAsync(reader.ReadString()),
+                ID = Utils.UnprotectFromBase64DataAsync(reader.ReadString()),
+                Type = Utils.UnprotectFromBase64DataAsync(reader.ReadString()),
+                Value = Utils.UnprotectFromBase64DataAsync(reader.ReadString()),
+                ClaimedDate = Utils.UnprotectFromBase64DataAsync(reader.ReadString()),
             }).Result;
         }
 
         public static void WriteYourKeyKeyDTO(DataWriter writer, YourKeyKeyDTO value)
         {
-            Task.Run(async () =>
-            {
-                writer.Write(value.Id);
-                writer.Write(await Utils.ProtectToBase64Async(value.ID));
-                writer.Write(await Utils.ProtectToBase64Async(value.Type));
-                writer.Write(await Utils.ProtectToBase64Async(value.Value));
-                writer.Write(await Utils.ProtectToBase64Async(value.ClaimedDate));
-            }).Wait();
+            Task.Run(() =>
+           {
+               writer.Write(value.Id);
+               writer.Write(Utils.ProtectToBase64Async(value.ID));
+               writer.Write(Utils.ProtectToBase64Async(value.Type));
+               writer.Write(Utils.ProtectToBase64Async(value.Value));
+               writer.Write(Utils.ProtectToBase64Async(value.ClaimedDate));
+           }).Wait();
         }
     }
 }

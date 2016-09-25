@@ -74,10 +74,10 @@ namespace msdnus.ViewModel
                 #region commands
 
                 //CheckPassword
-                CheckPassword = new RelayCommand<string>(async e =>
+                CheckPassword = new RelayCommand<string>(e =>
                 {
                     //await _settingsProvider.SetIejimoParameterAsync("123");
-                    var tiejimas = await _settingsProvider.GetIejimoParameterAsync();
+                    var tiejimas = _settingsProvider.GetIejimoParameterAsync();
 
                     if (string.IsNullOrEmpty(tiejimas) || e != tiejimas) return;
 
@@ -210,7 +210,7 @@ namespace msdnus.ViewModel
                     if ((int) rez.Id != 0) return;
 
                     await _datatarget.CleanDbAsync();
-                    await _settingsProvider.SetIejimoParameterAsync("123");
+                    _settingsProvider.SetIejimoParameter("123");
                     DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetAllDataAsync());
                     TextToastManager.Instance.ShowToast(_loader.GetString("iejreset"));
                 });

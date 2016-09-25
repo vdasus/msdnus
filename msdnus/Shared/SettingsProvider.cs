@@ -57,19 +57,19 @@ namespace msdnus.Shared
         {
         }
 
-        public async Task<string> GetIejimoParameterAsync()
+        public string GetIejimoParameterAsync()
         {
             var value = _sett.Values["IejiPar"];
 
             if (value == null)
             {
-                await SetIejimoParameterAsync("123");
+                SetIejimoParameter("123");
                 value = _sett.Values["IejiPar"];
             }
 
             try
             {
-                return await Core.Shared.Utils.UnprotectFromBase64DataAsync((string)value);
+                return Core.Shared.Utils.UnprotectFromBase64DataAsync((string)value);
             }
             catch
             {
@@ -77,11 +77,11 @@ namespace msdnus.Shared
             }
         }
 
-        public async Task<bool> SetIejimoParameterAsync(string astr)
+        public bool SetIejimoParameter(string astr)
         {
             try
             {
-                var tmp = await Core.Shared.Utils.ProtectToBase64Async(astr);
+                var tmp = Core.Shared.Utils.ProtectToBase64Async(astr);
                 if (tmp == null) return false;
                 _sett.Values["IejiPar"] = tmp;
                 return true;

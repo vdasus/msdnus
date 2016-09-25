@@ -144,8 +144,8 @@ namespace msdnus.Tests.Model
         [TestMethod]
         public void ShouldDecryptEncryptNew()
         {
-            var zz = Core.Shared.Utils.AES_Encrypt("aaa", "aaa");
-            var dd = Core.Shared.Utils.AES_Decrypt(zz, "aaa");
+            var zz = Core.Shared.Utils.AES_EncryptToBase64Data("aaa");
+            var dd = Core.Shared.Utils.AES_DecryptFromBase64Data(zz);
 
             Assert.AreEqual("aaa", dd);
         }

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Windows.Networking;
+using Windows.Networking.Connectivity;
 using Windows.Security.Cryptography;
 using Windows.Security.Cryptography.Core;
-using Windows.Security.Cryptography.DataProtection;
 using Windows.Storage;
 using Windows.Storage.Streams;
 
@@ -13,7 +15,6 @@ namespace msdnus.Core.Shared
 {
     public static class Utils
     {
-        private const BinaryStringEncoding BSENCODING = BinaryStringEncoding.Utf8;
         private const uint BKEYLENGTH = 32;
 
         public static async Task<T> ReadObjectFromXmlFileAsync<T>(StorageFile file)
@@ -50,17 +51,11 @@ namespace msdnus.Core.Shared
         /// <param name="astrMsg">String to encrypt</param>
         /// <param name="strDescriptor">Descriptor</param>
         /// <returns>encrypted string or null</returns>
-        public static async Task<string> ProtectToBase64Async(string astrMsg, string strDescriptor = "LOCAL=machine")
+        public static  string ProtectToBase64Async(string astrMsg)
         {
             try
             {
-                var strMsg = string.IsNullOrEmpty(astrMsg) ? "-" : astrMsg;
-
-                DataProtectionProvider provider = new DataProtectionProvider(strDescriptor);
-
-                IBuffer buffMsg = CryptographicBuffer.ConvertStringToBinary(strMsg, BSENCODING);
-                IBuffer buffProtected = await provider.ProtectAsync(buffMsg);
-                return CryptographicBuffer.EncodeToBase64String(buffProtected);
+                return AES_EncryptToBase64Data(astrMsg);
             }
             catch
             {
@@ -73,19 +68,11 @@ namespace msdnus.Core.Shared
         /// </summary>
         /// <param name="astrBase64Protected">String to decrypt</param>
         /// <returns>Decrypted string. null if uncuccessful</returns>
-        public static async Task<string> UnprotectFromBase64DataAsync(string astrBase64Protected)
+        public static string UnprotectFromBase64DataAsync(string astrBase64Protected)
         {
             try
             {
-                var strBase64Protected = string.IsNullOrEmpty(astrBase64Protected) ? "-" : astrBase64Protected;
-
-                if (string.IsNullOrEmpty(strBase64Protected)) return string.Empty;
-
-                DataProtectionProvider provider = new DataProtectionProvider();
-
-                IBuffer tmpstr = CryptographicBuffer.DecodeFromBase64String(strBase64Protected);
-                IBuffer buffUnprotected = await provider.UnprotectAsync(tmpstr);
-                return CryptographicBuffer.ConvertBinaryToString(BSENCODING, buffUnprotected);
+                return AES_DecryptFromBase64Data(astrBase64Protected);
             }
             catch
             {
@@ -93,7 +80,7 @@ namespace msdnus.Core.Shared
             }
         }
 
-        public static string AES_Encrypt(string input, string pass)
+        public static string AES_EncryptToBase64Data(string input)
         {
             SymmetricKeyAlgorithmProvider sap =
                 SymmetricKeyAlgorithmProvider.OpenAlgorithm(SymmetricAlgorithmNames.AesEcbPkcs7);
@@ -102,7 +89,10 @@ namespace msdnus.Core.Shared
 
             try
             {
-                byte[] hash = new byte[32];
+                var hostNames = NetworkInformation.GetHostNames();
+                var pass = hostNames.FirstOrDefault(name => name.Type == HostNameType.DomainName)?.DisplayName ?? "???";
+
+                byte[] hash = new byte[BKEYLENGTH];
                 hashAes.Append(CryptographicBuffer.CreateFromByteArray(Encoding.UTF8.GetBytes(pass)));
                 byte[] temp;
                 CryptographicBuffer.CopyToByteArray(hashAes.GetValueAndReset(), out temp);
@@ -123,8 +113,7 @@ namespace msdnus.Core.Shared
             }
         }
 
-
-        public static string AES_Decrypt(string input, string pass)
+        public static string AES_DecryptFromBase64Data(string input)
         {
             SymmetricKeyAlgorithmProvider sap = SymmetricKeyAlgorithmProvider.OpenAlgorithm(SymmetricAlgorithmNames.AesEcbPkcs7);
             HashAlgorithmProvider hap = HashAlgorithmProvider.OpenAlgorithm(HashAlgorithmNames.Sha512);
@@ -132,7 +121,10 @@ namespace msdnus.Core.Shared
 
             try
             {
-                byte[] hash = new byte[32];
+                var hostNames = NetworkInformation.GetHostNames();
+                var pass = hostNames.FirstOrDefault(name => name.Type == HostNameType.DomainName)?.DisplayName ?? "???";
+
+                byte[] hash = new byte[BKEYLENGTH];
                 hashAes.Append(CryptographicBuffer.CreateFromByteArray(Encoding.UTF8.GetBytes(pass)));
                 byte[] temp;
                 CryptographicBuffer.CopyToByteArray(hashAes.GetValueAndReset(), out temp);

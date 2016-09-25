@@ -42,7 +42,7 @@ namespace msdnus.ViewModel
             {
                 if (!string.IsNullOrEmpty(Iejimo1) && !string.IsNullOrEmpty(Iejimo2) && (Iejimo1 == Iejimo2))
                 {
-                    _settingsProvider.SetIejimoParameterAsync(Iejimo1);
+                    _settingsProvider.SetIejimoParameter(Iejimo1);
                     TextToastManager.Instance.ShowToast(_loader.GetString("iejsaved"));
                 }
                 else StatusErrText = _loader.GetString("iejerror");
