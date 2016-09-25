@@ -316,4 +316,10 @@ Then import to application using buttons:</value>
   <data name="abVer136Value.Text" xml:space="preserve">
     <value>* Bug fixes</value>
   </data>
+  <data name="abVer141.Text" xml:space="preserve">
+    <value>1.4.1</value>
+  </data>
+  <data name="abVer141Value.Text" xml:space="preserve">
+    <value>* Changed encryption</value>
+  </data>
 </root>

@@ -316,4 +316,10 @@
   <data name="abVer136Value.Text" xml:space="preserve">
     <value>* Исправление ошибок</value>
   </data>
+  <data name="abVer141.Text" xml:space="preserve">
+    <value>1.4.1</value>
+  </data>
+  <data name="abVer141Value.Text" xml:space="preserve">
+    <value>* Изменено шифрование</value>
+  </data>
 </root>

@@ -89,6 +89,8 @@ namespace msdnus.Core.Shared
 
             try
             {
+                if (string.IsNullOrEmpty(input)) return "-";
+
                 var hostNames = NetworkInformation.GetHostNames();
                 var pass = hostNames.FirstOrDefault(name => name.Type == HostNameType.DomainName)?.DisplayName ?? "???";
 
@@ -121,6 +123,8 @@ namespace msdnus.Core.Shared
 
             try
             {
+                if (string.IsNullOrEmpty(input)) return "-";
+
                 var hostNames = NetworkInformation.GetHostNames();
                 var pass = hostNames.FirstOrDefault(name => name.Type == HostNameType.DomainName)?.DisplayName ?? "???";
 
