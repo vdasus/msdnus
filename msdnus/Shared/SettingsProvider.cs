@@ -6,6 +6,7 @@ namespace msdnus.Shared
     public class SettingsProvider : ISettingsProvider
     {
         private static readonly ApplicationDataContainer _sett = ApplicationData.Current.RoamingSettings;
+        private static readonly ApplicationDataContainer _settL = ApplicationData.Current.LocalSettings;
 
         public bool IsFirstRun
         {
@@ -61,12 +62,12 @@ namespace msdnus.Shared
         {
             try
             {
-                var value = _sett.Values["IejiPar"];
+                var value = _settL.Values["IejiPar"];
 
                 if (value == null)
                 {
                     SetIejimoParameter("123");
-                    value = _sett.Values["IejiPar"];
+                    value = _settL.Values["IejiPar"];
                 }
 
                 return Core.Shared.Utils.UnprotectFromBase64DataAsync((string) value);
@@ -83,7 +84,7 @@ namespace msdnus.Shared
             {
                 var tmp = Core.Shared.Utils.ProtectToBase64Async(astr);
                 if (tmp == null) return false;
-                _sett.Values["IejiPar"] = tmp;
+                _settL.Values["IejiPar"] = tmp;
                 return true;
             }
             catch
