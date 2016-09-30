@@ -8,7 +8,7 @@
     RequestedTheme="Default"
     Loaded="MainPage_OnLoaded"
     DataContext="{Binding Source={StaticResource Locator}, Path=Main}">
-    <Grid>
+    <Grid Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />

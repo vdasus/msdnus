@@ -326,6 +326,12 @@
     <value>1.5</value>
   </data>
   <data name="abVer15Value.Text" xml:space="preserve">
-    <value>* Finally fixed password reset bug</value>
+    <value>* Исправлена ошибка сброса пароля</value>
+  </data>
+  <data name="abVer151.Text" xml:space="preserve">
+    <value>1.5.1</value>
+  </data>
+  <data name="abVer151Value.Text" xml:space="preserve">
+    <value>* Исправлена ошибка локализации</value>
   </data>
 </root>

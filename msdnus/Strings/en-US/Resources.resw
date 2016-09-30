@@ -326,6 +326,12 @@ Then import to application using buttons:</value>
     <value>1.5</value>
   </data>
   <data name="abVer15Value.Text" xml:space="preserve">
-    <value>* Исправлена ошибка сброса пароля</value>
+    <value>* Finally fixed password reset bug</value>
+  </data>
+  <data name="abVer151.Text" xml:space="preserve">
+    <value>1.5.1</value>
+  </data>
+  <data name="abVer151Value.Text" xml:space="preserve">
+    <value>* Fixed localization error</value>
   </data>
 </root>
