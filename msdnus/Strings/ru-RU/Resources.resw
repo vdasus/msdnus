@@ -334,4 +334,10 @@
   <data name="abVer151Value.Text" xml:space="preserve">
     <value>* Исправлена ошибка локализации</value>
   </data>
+  <data name="abVer16.Text" xml:space="preserve">
+    <value>1.6</value>
+  </data>
+  <data name="abVer16Value.Text" xml:space="preserve">
+    <value>Обновлено подключение OneDrive</value>
+  </data>
 </root>

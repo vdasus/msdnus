@@ -265,20 +265,24 @@ namespace msdnus.ViewModel
 
         private async Task<bool> ImportDataAsync(StorageFile apath, bool iscleanupbefore, bool isdistinct)
         {
-            YourKey zz = await _datasource.GetDataAsync(apath);
+            root zz = await _datasource.GetDataAsync(apath);
             return SaveData(zz, iscleanupbefore, isdistinct);
         }
 
         private bool ImportDataAsync(Stream stream, bool iscleanupbefore, bool isdistinct)
         {
-            YourKey zz = _datasource.GetDataAsync(stream);
+            root zz = _datasource.GetDataAsync(stream);
             return SaveData(zz, iscleanupbefore, isdistinct);
         }
 
-        private bool SaveData(YourKey zz, bool iscleanupbefore, bool isdistinct)
+        private bool SaveData(root zz, bool iscleanupbefore, bool isdistinct)
         {
             List<YourKeyDTO> lst = new List<YourKeyDTO>();
-            foreach (YourKeyProduct_Key ff in zz.Items)
+            var rez = zz.Items[1];
+
+            var yy = (zz.Items[1] as rootYourKey)?.Product_Key;
+
+            foreach (rootYourKeyProduct_Key ff in yy)
             {
                 YourKeyDTO dt = new YourKeyDTO();
                 dt.MapFromYourKeyProduct_Key(ff);
@@ -291,7 +295,7 @@ namespace msdnus.ViewModel
         {
             // FilePicker APIs will not work if the application is in a snapped state.
             // If an app wants to show a FilePicker while snapped, it must attempt to unsnap first
-            bool unsnapped = (ApplicationView.Value != ApplicationViewState.Snapped) || ApplicationView.TryUnsnap();
+            bool unsnapped = ApplicationView.Value != ApplicationViewState.Snapped || ApplicationView.TryUnsnap();
             if (!unsnapped)
             {
                 TextToastManager.Instance.ShowToast(_loader.GetString("cantunsnap"));

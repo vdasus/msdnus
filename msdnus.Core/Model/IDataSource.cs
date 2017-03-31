@@ -9,8 +9,8 @@ namespace msdnus.Core.Model
 
     public interface IDataSource: IDisposable
     {
-        Task<YourKey> GetDataAsync(StorageFile source);
-        YourKey GetDataAsync(Stream stream);
+        Task<root> GetDataAsync(StorageFile source);
+        root GetDataAsync(Stream stream);
         Task<bool> SaveDataAsync<T>(T objectToSave, string source);
     }
 }

@@ -334,4 +334,10 @@ Then import to application using buttons:</value>
   <data name="abVer151Value.Text" xml:space="preserve">
     <value>* Fixed localization error</value>
   </data>
+  <data name="abVer16.Text" xml:space="preserve">
+    <value>1.6</value>
+  </data>
+  <data name="abVer16Value.Text" xml:space="preserve">
+    <value>Renewed OneDrive</value>
+  </data>
 </root>

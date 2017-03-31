@@ -20,7 +20,7 @@ namespace msdnus.Core.Model
             Items = new List<YourKeyKeyDTO>();
         }
 
-        public void MapFromYourKeyProduct_Key(YourKeyProduct_Key yk)
+        public void MapFromYourKeyProduct_Key(rootYourKeyProduct_Key yk)
         {
             Name = yk.Name;
             foreach (var gg in yk.Key)
@@ -59,12 +59,12 @@ namespace msdnus.Core.Model
 
         public string Value { get; set; }
 
-        public void MapFromYourKeyProduct_KeyKey(YourKeyProduct_KeyKey ykk)
+        public void MapFromYourKeyProduct_KeyKey(rootYourKeyProduct_KeyKey ykk)
         {
             ID = ykk.ID;
             Type = ykk.Type;
             ClaimedDate = ykk.ClaimedDate;
-            Value = ykk.ValueFormatted;
+            Value = ykk.Value;
         }
     }
 

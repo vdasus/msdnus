@@ -73,6 +73,10 @@
                         <StackPanel Grid.Row="0" Grid.Column="0" >
                             <Border Background="{ThemeResource AppBarBorderThemeBrush}" BorderThickness="0,1,0,0" />
                             <TextBlock>
+                                <Run FontWeight="Light" x:Uid="abVer16" />
+                                <Run FontWeight="SemiBold" x:Uid="abVer16Value" />
+                            </TextBlock>
+                            <TextBlock>
                                 <Run FontWeight="Light" x:Uid="abVer151" />
                                 <Run FontWeight="SemiBold" x:Uid="abVer151Value" />
                             </TextBlock>

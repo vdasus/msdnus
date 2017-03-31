@@ -364,10 +364,9 @@
     </ReservedNames>
   </ProductReservedInfo>
   <AccountPackageIdentityNames>
-    <MainPackageIdentityName>21313vdasus.dontworry.club</MainPackageIdentityName>
-    <MainPackageIdentityName>21313vdasus.NuigdePro</MainPackageIdentityName>
+    <MainPackageIdentityName>21313vdasus.YouComedy.MeUnofficial</MainPackageIdentityName>
     <MainPackageIdentityName>21313vdasus.Park.lt</MainPackageIdentityName>
-    <MainPackageIdentityName>21313vdasus.Parkavimas</MainPackageIdentityName>
+    <MainPackageIdentityName>21313vdasus.qarmaus</MainPackageIdentityName>
   </AccountPackageIdentityNames>
-  <PackageInfoList LandingUrl="https://dev.windows.com/dashboard/Application?appId=9NBLGGH58HRP" />
+  <PackageInfoList LandingUrl="https://developer.microsoft.com/dashboard/Application?appId=9NBLGGH58HRP" />
 </StoreAssociation>

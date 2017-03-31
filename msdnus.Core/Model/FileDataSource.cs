@@ -10,14 +10,14 @@ namespace msdnus.Core.Model
     {
         private bool _disposed;
 
-        public async Task<YourKey> GetDataAsync(StorageFile source)
+        public async Task<root> GetDataAsync(StorageFile source)
         {
-            return await Utils.ReadObjectFromXmlFileAsync<YourKey>(source);
+            return await Utils.ReadObjectFromXmlFileAsync<root>(source);
         }
 
-        public YourKey GetDataAsync(Stream stream)
+        public root GetDataAsync(Stream stream)
         {
-            return Utils.ReadObjectFromXmlStreamAsync<YourKey>(stream);
+            return Utils.ReadObjectFromXmlStreamAsync<root>(stream);
         }
 
         public async Task<bool> SaveDataAsync<T>(T objectToSave, string source)
