@@ -15,6 +15,7 @@ using msdnus.Core.Model;
 using msdnus.Core.Shared;
 using msdnus.Shared;
 using Microsoft.OneDrive.Sdk;
+using Microsoft.OneDrive.Sdk.Authentication;
 
 // ReSharper disable ExplicitCallerInfoArgument
 namespace msdnus.ViewModel
@@ -153,11 +154,21 @@ namespace msdnus.ViewModel
 
                         if (!EnsureUnsnapped()) return;
 
-                        var oneDriveClient =
-                        OneDriveClientExtensions.GetClientUsingOnlineIdAuthenticator(new[]
-                            {"wl.signin", "onedrive.readonly"});
+                        var msaAuthenticationProvider = new MsaAuthenticationProvider(
+                            "000000004017CE14",
+                            "https://login.live.com/oauth20_desktop.srf",
+                            new[]
+                                { "onedrive.readonly"});
 
-                        await oneDriveClient.AuthenticateAsync();
+                        await msaAuthenticationProvider.AuthenticateUserAsync();
+
+                        var oneDriveClient = new OneDriveClient("https://api.onedrive.com/v1.0", msaAuthenticationProvider);
+
+                        /*var oneDriveClient =
+                        OneDriveClientExtensions.GetClientUsingOnlineIdAuthenticator(new[]
+                            {"wl.signin", "onedrive.readonly"});*/
+
+                        //await oneDriveClient.AuthenticationProvider.AuthenticateRequestAsync();
 
                         using (
                             var responseStream =
