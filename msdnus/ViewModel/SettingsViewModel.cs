@@ -1,52 +1,73 @@
-﻿using Windows.ApplicationModel.Resources;
-using GalaSoft.MvvmLight.Command;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using msdnus.Core.Model;
 using msdnus.Shared;
 
 namespace msdnus.ViewModel
 {
     [Magic]
-    public sealed class SettingsViewModel: PropertyChangedBase
+    public sealed partial class SettingsViewModel : ObservableObject
     {
         private readonly ISettingsProvider _settingsProvider;
-        private ResourceLoader _loader;
 
-        public string Iejimo1 { get; set; }
-        public string Iejimo2 { get; set; }
-        
+        [ObservableProperty]
+        private string iejimo1;
+
+        [ObservableProperty]
+        private string iejimo2;
+
+        [ObservableProperty]
+        private string statusErrText = string.Empty;
+
         public bool IsDarkTheme
         {
-            get { return _settingsProvider.IsDarkTheme; }
-            set { _settingsProvider.IsDarkTheme = value; }
+            get => _settingsProvider.IsDarkTheme;
+            set
+            {
+                if (_settingsProvider.IsDarkTheme != value)
+                {
+                    _settingsProvider.IsDarkTheme = value;
+                    OnPropertyChanged();
+                    ApplyTheme();
+                }
+            }
         }
 
-        public string StatusErrText { get; set; }
-        
-        public RelayCommand SaveIejimoParamCommand { get; set; }
-        
-        
         public SettingsViewModel(ISettingsProvider settingsProvider)
         {
             _settingsProvider = settingsProvider;
-
-            Init();
         }
 
-        private void Init()
+        [RelayCommand]
+        private void SaveIejimoParam()
         {
-            _loader = ResourceLoader.GetForCurrentView();
-
-            StatusErrText = string.Empty;
-
-            SaveIejimoParamCommand = new RelayCommand(() =>
+            if (!string.IsNullOrEmpty(Iejimo1) && !string.IsNullOrEmpty(Iejimo2) && Iejimo1 == Iejimo2)
             {
-                if (!string.IsNullOrEmpty(Iejimo1) && !string.IsNullOrEmpty(Iejimo2) && (Iejimo1 == Iejimo2))
-                {
-                    _settingsProvider.SetIejimoParameter(Iejimo1);
-                    TextToastManager.Instance.ShowToast(_loader.GetString("iejsaved"));
-                }
-                else StatusErrText = _loader.GetString("iejerror");
-            });
+                _settingsProvider.SetIejimoParameter(Iejimo1);
+                ShowToast("Password saved successfully");
+                StatusErrText = string.Empty;
+                Iejimo1 = string.Empty;
+                Iejimo2 = string.Empty;
+            }
+            else
+            {
+                StatusErrText = "Passwords do not match or are empty";
+            }
+        }
+
+        private void ApplyTheme()
+        {
+            if (App.MainWindow?.Content is Microsoft.UI.Xaml.FrameworkElement rootElement)
+            {
+                rootElement.RequestedTheme = IsDarkTheme 
+                    ? Microsoft.UI.Xaml.ElementTheme.Dark 
+                    : Microsoft.UI.Xaml.ElementTheme.Light;
+            }
+        }
+
+        private void ShowToast(string message)
+        {
+            TextToastManager.Instance.ShowToast(message);
         }
     }
 }

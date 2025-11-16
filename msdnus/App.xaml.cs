@@ -3,15 +3,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using msdnus.Core.Model;
+using msdnus.Services;
 using msdnus.Shared;
 using msdnus.ViewModel;
 using System;
-using Windows.ApplicationModel;
-using Windows.ApplicationModel.Activation;
-using Windows.UI.Core;
-using Windows.UI.Xaml.Navigation;
-using GalaSoft.MvvmLight.Messaging;
-using msdnus.Shared;
 
 namespace msdnus
 {
@@ -32,6 +27,7 @@ namespace msdnus
                     services.AddSingleton<IDataSource, FileDataSource>();
                     services.AddSingleton<IDataTarget, DataTarget>();
                     services.AddSingleton<ISettingsProvider, SettingsProvider>();
+                    services.AddSingleton<INavigationService, NavigationService>();
 
                     // Register ViewModels
                     services.AddSingleton<MainViewModel>();
@@ -75,6 +71,18 @@ namespace msdnus
 
             var frame = new Frame();
             frame.NavigationFailed += OnNavigationFailed;
+
+            // Configure navigation service
+            var navigationService = Services.GetRequiredService<INavigationService>() as NavigationService;
+            if (navigationService != null)
+            {
+                navigationService.Frame = frame;
+                navigationService.Configure("Main", typeof(MainPage));
+                navigationService.Configure("Settings", typeof(Settings));
+                navigationService.Configure("About", typeof(About));
+                navigationService.Configure("Help", typeof(Help));
+                navigationService.Configure("CoffeeCup", typeof(CoffeeCup));
+            }
 
             // Navigate to main page
             frame.Navigate(typeof(MainPage), e.Arguments);

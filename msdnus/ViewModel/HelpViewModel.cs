@@ -1,9 +1,9 @@
-﻿using msdnus.Shared;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace msdnus.ViewModel
 {
     [Magic]
-    public sealed class HelpViewModel : PropertyChangedBase
+    public sealed partial class HelpViewModel : ObservableObject
     {
     }
 }

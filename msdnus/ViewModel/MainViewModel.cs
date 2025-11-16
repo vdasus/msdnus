@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Windows.ApplicationModel.DataTransfer;
@@ -12,6 +12,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using msdnus.Core.Model;
 using msdnus.Core.Shared;
+using msdnus.Services;
 using msdnus.Shared;
 using Microsoft.Graph;
 using Microsoft.Identity.Client;
@@ -25,6 +26,7 @@ namespace msdnus.ViewModel
         private readonly IDataSource _datasource;
         private readonly IDataTarget _datatarget;
         private readonly ISettingsProvider _settingsProvider;
+        private readonly INavigationService _navigationService;
         private readonly IPublicClientApplication _msalClient;
 
         [ObservableProperty]
@@ -45,11 +47,13 @@ namespace msdnus.ViewModel
         public MainViewModel(
             IDataSource datasource, 
             IDataTarget datatarget, 
-            ISettingsProvider settingsProvider)
+            ISettingsProvider settingsProvider,
+            INavigationService navigationService)
         {
             _datasource = datasource;
             _datatarget = datatarget;
             _settingsProvider = settingsProvider;
+            _navigationService = navigationService;
 
             // Initialize MSAL for Microsoft Graph
             _msalClient = PublicClientApplicationBuilder
@@ -206,6 +210,7 @@ namespace msdnus.ViewModel
                     {
                         requestMessage.Headers.Authorization = 
                             new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", authResult.AccessToken);
+                        await Task.CompletedTask;
                     }));
 
                 // Download file from OneDrive
@@ -238,25 +243,25 @@ namespace msdnus.ViewModel
         [RelayCommand]
         private void NavigateToAbout()
         {
-            NavigateTo(typeof(About));
+            _navigationService.NavigateTo("About");
         }
 
         [RelayCommand]
         private void NavigateToCoffeeCup()
         {
-            NavigateTo(typeof(CoffeeCup));
+            _navigationService.NavigateTo("CoffeeCup");
         }
 
         [RelayCommand]
         private void NavigateToHelp()
         {
-            NavigateTo(typeof(Help));
+            _navigationService.NavigateTo("Help");
         }
 
         [RelayCommand]
         private void NavigateToSettings()
         {
-            NavigateTo(typeof(Settings));
+            _navigationService.NavigateTo("Settings");
         }
 
         [RelayCommand]
@@ -326,14 +331,6 @@ namespace msdnus.ViewModel
             {
                 StatusText = string.Empty;
                 IsProgress = Visibility.Collapsed;
-            }
-        }
-
-        private void NavigateTo(Type pageType)
-        {
-            if (App.MainWindow.Content is Microsoft.UI.Xaml.Controls.Frame frame)
-            {
-                frame.Navigate(pageType);
             }
         }
 

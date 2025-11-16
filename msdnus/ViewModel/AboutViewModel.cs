@@ -1,12 +1,24 @@
-﻿using Windows.ApplicationModel;
-using msdnus.Shared;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Windows.ApplicationModel;
 
 namespace msdnus.ViewModel
 {
     [Magic]
-    public sealed class AboutViewModel: PropertyChangedBase
+    public sealed partial class AboutViewModel : ObservableObject
     {
-        public string AppVersion { get; } =
-    $"v.{Package.Current.Id.Version.Major}.{Package.Current.Id.Version.Minor}.{Package.Current.Id.Version.Build}";
+        public string AppVersion { get; } = GetAppVersion();
+
+        private static string GetAppVersion()
+        {
+            try
+            {
+                var version = Package.Current.Id.Version;
+                return $"v.{version.Major}.{version.Minor}.{version.Build}";
+            }
+            catch
+            {
+                return "v.1.0.0";
+            }
+        }
     }
 }

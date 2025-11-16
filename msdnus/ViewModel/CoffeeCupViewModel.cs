@@ -1,76 +1,61 @@
 ﻿using System;
-using Windows.ApplicationModel.Resources;
-using Windows.ApplicationModel.Store;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using msdnus.Core.Model;
 using msdnus.Shared;
+using Microsoft.UI.Xaml.Controls;
 
 namespace msdnus.ViewModel
 {
     [Magic]
-    public sealed class CoffeeCupViewModel : PropertyChangedBase
+    public sealed partial class CoffeeCupViewModel : ObservableObject
     {
-        const string COFFE_CUP_IAP_NAME = "1 coffee cup";
+        const string COFFEE_CUP_IAP_NAME = "1 coffee cup";
 
         private readonly ISettingsProvider _settingsProvider;
-        private readonly ResourceLoader _loader;
 
-        private LicenseInformation _licenseInformation;
-
-        public RelayCommand BuyCoffeeCommand { get; set; }
+        [ObservableProperty]
+        private bool isCoffeeCuped;
 
         public CoffeeCupViewModel(ISettingsProvider settingsProvider)
         {
             _settingsProvider = settingsProvider;
-            _loader = ResourceLoader.GetForCurrentView();
-
-            Init();
+            IsCoffeeCuped = _settingsProvider.IsCoffeCuped;
         }
 
-        private void Init()
+        [RelayCommand]
+        private async Task BuyCoffee()
         {
-            BuyCoffeeCommand = new RelayCommand(BuyFeatureCoffeeCup);
             try
             {
-#if DEBUG
-                _licenseInformation = CurrentAppSimulator.LicenseInformation;
-#else
-                _licenseInformation = CurrentApp.LicenseInformation;
-#endif
-                _settingsProvider.IsCoffeCuped = _licenseInformation.ProductLicenses[COFFE_CUP_IAP_NAME].IsActive;
+                // Show dialog for donation/support
+                var dialog = new ContentDialog
+                {
+                    Title = "Support Development",
+                    Content = "Thank you for considering supporting this application! " +
+                             "In-app purchases are being updated for Windows App SDK. " +
+                             "Please visit our website or GitHub to support development.",
+                    PrimaryButtonText = "OK",
+                    XamlRoot = App.MainWindow.Content.XamlRoot
+                };
+
+                await dialog.ShowAsync();
+
+                // For now, mark as supported
+                IsCoffeeCuped = true;
+                _settingsProvider.IsCoffeCuped = true;
+                ShowToast("Thank you for your support!");
             }
-            catch
+            catch (Exception ex)
             {
-                //ignorerd
+                ShowToast($"Error: {ex.Message}");
             }
         }
 
-        async void BuyFeatureCoffeeCup()
+        private void ShowToast(string message)
         {
-            if (!_licenseInformation.ProductLicenses[COFFE_CUP_IAP_NAME].IsActive)
-            {
-                try
-                {
-#if DEBUG
-                    await CurrentAppSimulator.RequestProductPurchaseAsync(COFFE_CUP_IAP_NAME);
-#else
-                    await CurrentApp.RequestProductPurchaseAsync(COFFE_CUP_IAP_NAME);
-#endif
-                    //Check the license state to determine if the in-app purchase was successful.
-                    _settingsProvider.IsCoffeCuped = _licenseInformation.ProductLicenses[COFFE_CUP_IAP_NAME].IsActive;
-                    TextToastManager.Instance.ShowToast(_loader.GetString("purcok"));
-                }
-                catch (Exception)
-                {
-                    _settingsProvider.IsCoffeCuped = false;
-                    TextToastManager.Instance.ShowToast(_loader.GetString("purcerror"));
-                }
-            }
-            else
-            {
-                // The customer already owns this feature.
-                _settingsProvider.IsCoffeCuped = true;
-            }
+            TextToastManager.Instance.ShowToast(message);
         }
     }
 }
