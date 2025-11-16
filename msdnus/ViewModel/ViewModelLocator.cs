@@ -6,16 +6,12 @@
   
   In the View:
   DataContext="{Binding Source={StaticResource Locator}, Path=ViewModelName}"
-
-  You can also use Blend to do all this with the tool's support.
-  See http://www.galasoft.ch/mvvm
 */
 
-using GalaSoft.MvvmLight.Ioc;
-using GalaSoft.MvvmLight.Views;
+using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using msdnus.Core.Model;
 using msdnus.Shared;
-using Microsoft.Practices.ServiceLocation;
 
 namespace msdnus.ViewModel
 {
@@ -23,45 +19,31 @@ namespace msdnus.ViewModel
     {
         static ViewModelLocator()
         {
-            ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
-
             Lex.Db.Serialization.Extender.RegisterType<YourKeyKeyDTO, CustomTypesSerializers>(1000);
 
-            var navigationService = CreateNavigationService();
-            SimpleIoc.Default.Register(() => navigationService);
-
-            SimpleIoc.Default.Register<IDataSource, FileDataSource>();
-            SimpleIoc.Default.Register<IDataTarget, DataTarget>();
-            SimpleIoc.Default.Register<ISettingsProvider, SettingsProvider>();
-
-            SimpleIoc.Default.Register<HelpViewModel>();
-            SimpleIoc.Default.Register<SettingsViewModel>();
-            SimpleIoc.Default.Register<AboutViewModel>();
-            SimpleIoc.Default.Register<CoffeeCupViewModel>();
-            SimpleIoc.Default.Register<MainViewModel>();
+            Ioc.Default.ConfigureServices(
+                new ServiceCollection()
+                    .AddSingleton<IDataSource, FileDataSource>()
+                    .AddSingleton<IDataTarget, DataTarget>()
+                    .AddSingleton<ISettingsProvider, SettingsProvider>()
+                    .AddSingleton<HelpViewModel>()
+                    .AddSingleton<SettingsViewModel>()
+                    .AddSingleton<AboutViewModel>()
+                    .AddSingleton<CoffeeCupViewModel>()
+                    .AddSingleton<MainViewModel>()
+                    .BuildServiceProvider()
+            );
         }
 
-        public HelpViewModel Help => ServiceLocator.Current.GetInstance<HelpViewModel>();
-        public SettingsViewModel Settings => ServiceLocator.Current.GetInstance<SettingsViewModel>();
-        public AboutViewModel About => ServiceLocator.Current.GetInstance<AboutViewModel>();
-        public CoffeeCupViewModel CoffeeCup => ServiceLocator.Current.GetInstance<CoffeeCupViewModel>();
-        public MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();
-        
-        private static INavigationService CreateNavigationService()
-        {
-            var navigationService = new NavigationService();
-            navigationService.Configure("Help", typeof(Help));
-            navigationService.Configure("Settings", typeof(Settings));
-            navigationService.Configure("About", typeof(About));
-            navigationService.Configure("CoffeeCup", typeof(CoffeeCup));
-            navigationService.Configure("Main", typeof(MainPage));
-
-            return navigationService;
-        }
+        public HelpViewModel Help => Ioc.Default.GetService<HelpViewModel>();
+        public SettingsViewModel Settings => Ioc.Default.GetService<SettingsViewModel>();
+        public AboutViewModel About => Ioc.Default.GetService<AboutViewModel>();
+        public CoffeeCupViewModel CoffeeCup => Ioc.Default.GetService<CoffeeCupViewModel>();
+        public MainViewModel Main => Ioc.Default.GetService<MainViewModel>();
 
         public void Cleanup()
         {
-            // TODO: Clear the ViewModels
+            // TODO: Clear the ViewModels if needed
         }
     }
 }

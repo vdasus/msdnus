@@ -1,6 +1,7 @@
 ﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using GalaSoft.MvvmLight.Messaging;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 using msdnus.ViewModel;
 
 namespace msdnus

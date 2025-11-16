@@ -16,6 +16,7 @@ using msdnus.Core.Shared;
 using msdnus.Shared;
 using Microsoft.OneDrive.Sdk;
 using Microsoft.OneDrive.Sdk.Authentication;
+using Microsoft.UI.Xaml;
 
 // ReSharper disable ExplicitCallerInfoArgument
 namespace msdnus.ViewModel

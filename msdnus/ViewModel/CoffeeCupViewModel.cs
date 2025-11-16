@@ -1,7 +1,7 @@
 ﻿using System;
 using Windows.ApplicationModel.Resources;
 using Windows.ApplicationModel.Store;
-using GalaSoft.MvvmLight.Command;
+using CommunityToolkit.Mvvm.Input;
 using msdnus.Core.Model;
 using msdnus.Shared;
 
@@ -35,7 +35,7 @@ namespace msdnus.ViewModel
 #if DEBUG
                 _licenseInformation = CurrentAppSimulator.LicenseInformation;
 #else
-            _licenseInformation = CurrentApp.LicenseInformation;
+                _licenseInformation = CurrentApp.LicenseInformation;
 #endif
                 _settingsProvider.IsCoffeCuped = _licenseInformation.ProductLicenses[COFFE_CUP_IAP_NAME].IsActive;
             }
