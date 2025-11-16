@@ -18,13 +18,8 @@
                 <RelativePanel Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
                     <PasswordBox Visibility="{x:Bind Vm.IsIejimoMode, Mode=OneWay, Converter={StaticResource BoolToVisConverter}}"
                         x:Uid="enterpin" HorizontalContentAlignment="Center" x:Name="PasswordBox" HorizontalAlignment="Left" Margin="68,80,0,0" 
-                                 VerticalAlignment="Top" Width="220" Password="" PasswordChanged="PasswordChangedHandler">
-                        <PasswordBox.InputScope>
-                            <InputScope>
-                                <InputScopeName NameValue="NumericPin"/>
-                            </InputScope>
-                        </PasswordBox.InputScope>
-                    </PasswordBox>
+                                 VerticalAlignment="Top" Width="220" Password="" PasswordChanged="PasswordChangedHandler"
+                                 InputScope="NumericPin" />
                     <Button Margin="4" Style="{ThemeResource TextBlockButtonStyle}"
                                      RelativePanel.Below="PasswordBox" 
                                      RelativePanel.AlignRightWith="PasswordBox" 
@@ -49,7 +44,7 @@
                                  HorizontalAlignment="Left" Margin="4" VerticalAlignment="Top" MinWidth="248" />
                                  
                     <ScrollViewer Grid.Row="2">
-                        <ListBox x:Uid="Log2" ItemsSource="{x:Bind Vm.DataItems.Result, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <ListBox x:Uid="Log2" ItemsSource="{x:Bind Vm.DataItems, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Top">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>

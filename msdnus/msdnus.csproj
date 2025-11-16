@@ -10,6 +10,7 @@
     <RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
     <DefaultLanguage>en-US</DefaultLanguage>
     <EnableMsixTooling>true</EnableMsixTooling>
+    <EnableDefaultPriItems>false</EnableDefaultPriItems>
     <PackageCertificateKeyFile>msdnus_StoreKey.pfx</PackageCertificateKeyFile>
     <PackageCertificateThumbprint>D082DDB8F24F09DD4433EE19D481B38176971753</PackageCertificateThumbprint>
     <PublishAot>false</PublishAot>
@@ -23,7 +24,6 @@
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.0.0-experimental3" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.6901" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-    <PackageReference Include="CommunityToolkit.WinUI.Controls.DataGrid" Version="8.2.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
     <PackageReference Include="Microsoft.Graph" Version="5.68.0" />
