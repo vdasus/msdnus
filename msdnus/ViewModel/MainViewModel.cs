@@ -2,67 +2,61 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 using Windows.ApplicationModel.DataTransfer;
-using Windows.ApplicationModel.Resources;
 using Windows.Storage;
 using Windows.Storage.Pickers;
-using Windows.UI.Popups;
-using Windows.UI.ViewManagement;
-using Windows.UI.Xaml;
-using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Views;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using msdnus.Core.Model;
 using msdnus.Core.Shared;
 using msdnus.Shared;
-using Microsoft.OneDrive.Sdk;
-using Microsoft.OneDrive.Sdk.Authentication;
-using Microsoft.UI.Xaml;
+using Microsoft.Graph;
+using Microsoft.Identity.Client;
+using WinRT.Interop;
 
-// ReSharper disable ExplicitCallerInfoArgument
 namespace msdnus.ViewModel
 {
     [Magic]
-    public sealed class MainViewModel: PropertyChangedBase
+    public sealed partial class MainViewModel : ObservableObject
     {
-        private readonly ResourceLoader _loader;
-
-        private readonly INavigationService _navigationService;
-        private readonly ISettingsProvider _settingsProvider;
-
-        public NotifyTaskCompletion<List<YourKeyDTO>> DataItems { get; set; }
-
-        public string TextToSearch { get; set; }
-        public string StatusText { get; set; }
-        public Visibility IsProgress { get; set; }
-        public bool IsIejimoMode { get; set; }
-        
-        #region commands
-        public RelayCommand<string> CheckPassword { get; set; }
-        public RelayCommand<string> CopyToClipboardCommand { get; set; }
-        public RelayCommand SearchStringChangedCommand { get; set; }
-        public RelayCommand GetFromFilePickerCommand { get; set; }
-        public RelayCommand LockAllCommand { get; set; }
-        public RelayCommand OnedriveCommand { get; set; }
-        public RelayCommand AboutPageCommand { get; set; }
-        public RelayCommand CoffeeCupCommand { get; set; }
-        public RelayCommand HelpCommand { get; set; }
-        public RelayCommand SettingsCommand { get; set; }
-        public RelayCommand ResetIejimoPwdCommand { get; set; }
-        #endregion
-
         private readonly IDataSource _datasource;
         private readonly IDataTarget _datatarget;
+        private readonly ISettingsProvider _settingsProvider;
+        private readonly IPublicClientApplication _msalClient;
 
-        //public ITaskCompletionNotifier Initialization { get; private set; }
+        [ObservableProperty]
+        private NotifyTaskCompletion<List<YourKeyDTO>> dataItems;
 
-        public MainViewModel(IDataSource datasource, IDataTarget datatarget, INavigationService navigationService, ISettingsProvider settingsProvider)
+        [ObservableProperty]
+        private string textToSearch;
+
+        [ObservableProperty]
+        private string statusText;
+
+        [ObservableProperty]
+        private Visibility isProgress;
+
+        [ObservableProperty]
+        private bool isIejimoMode;
+
+        public MainViewModel(
+            IDataSource datasource, 
+            IDataTarget datatarget, 
+            ISettingsProvider settingsProvider)
         {
             _datasource = datasource;
             _datatarget = datatarget;
-            _navigationService = navigationService;
             _settingsProvider = settingsProvider;
 
-            _loader = ResourceLoader.GetForCurrentView();
+            // Initialize MSAL for Microsoft Graph
+            _msalClient = PublicClientApplicationBuilder
+                .Create("000000004017CE14")
+                .WithRedirectUri("https://login.microsoftonline.com/common/oauth2/nativeclient")
+                .WithAuthority("https://login.microsoftonline.com/consumers")
+                .Build();
 
             Init();
         }
@@ -70,192 +64,40 @@ namespace msdnus.ViewModel
         private void Init()
         {
             SetProgress(true);
-            
+
             try
             {
-                #region commands
-
-                //CheckPassword
-                CheckPassword = new RelayCommand<string>(e =>
-                {
-                    //await _settingsProvider.SetIejimoParameterAsync("123");
-                    var tiejimas = _settingsProvider.GetIejimoParameterAsync();
-
-                    if (string.IsNullOrEmpty(tiejimas) || e != tiejimas) return;
-
-                    IsIejimoMode = false;
-                    RaisePropertyChanged("IsIejimoMode");
-                });
-
-                //CopyToClipboard
-                CopyToClipboardCommand = new RelayCommand<string>(e =>
-                {
-                    DataPackage dp = new DataPackage();
-                    dp.SetText(e);
-                    Clipboard.SetContent(dp);
-                    TextToastManager.Instance.ShowToast(_loader.GetString("copyedtext"));
-                });
-
-                //SearchStringChanged
-                SearchStringChangedCommand =
-                    new RelayCommand(
-                        () =>
-                        {
-                            DataItems =
-                                new NotifyTaskCompletion<List<YourKeyDTO>>(
-                                    _datatarget.GetDataValueByNameAsync(TextToSearch ?? string.Empty));
-                        });
-
-                //GetFromFilePickerCommand
-                GetFromFilePickerCommand = new RelayCommand(async () =>
-                {
-                    try
-                    {
-                        if (!EnsureUnsnapped()) return;
-
-                        FileOpenPicker openPicker = new FileOpenPicker
-                        {
-                            ViewMode = PickerViewMode.Thumbnail,
-                            SuggestedStartLocation = PickerLocationId.DocumentsLibrary
-                        };
-                        openPicker.FileTypeFilter.Add(".xml");
-
-                        StorageFile file = await openPicker.PickSingleFileAsync();
-
-                        if (file == null) return;
-
-                        SetProgress(true);
-
-                        if (!await ImportDataAsync(file, true, true)) return;
-
-                        DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetAllDataAsync());
-                        TextToastManager.Instance.ShowToast(_loader.GetString("loadednimported"));
-                    }
-                    catch (Exception ex)
-                    {
-                        TextToastManager.Instance.ShowToast($"msdnus:Err:{ex.Message}");
-                    }
-                    finally
-                    {
-                        SetProgress(false);
-                    }
-                });
-
-                //LockAll
-                LockAllCommand = new RelayCommand(() => { IsIejimoMode = true; });
-
-                //OnedriveCommand
-                OnedriveCommand = new RelayCommand(async () =>
-                {
-                    //ClID: 000000004017CE14
-                    //ClSc: 3Iq0D38qYplvEhpoLGpVpidVXpiEdf1X
-                    try
-                    {
-                        SetProgress(true);
-
-                        if (!EnsureUnsnapped()) return;
-
-                        var msaAuthenticationProvider = new MsaAuthenticationProvider(
-                            "000000004017CE14",
-                            "https://login.live.com/oauth20_desktop.srf",
-                            new[]
-                                { "onedrive.readonly"});
-
-                        await msaAuthenticationProvider.AuthenticateUserAsync();
-
-                        var oneDriveClient = new OneDriveClient("https://api.onedrive.com/v1.0", msaAuthenticationProvider);
-
-                        /*var oneDriveClient =
-                        OneDriveClientExtensions.GetClientUsingOnlineIdAuthenticator(new[]
-                            {"wl.signin", "onedrive.readonly"});*/
-
-                        //await oneDriveClient.AuthenticationProvider.AuthenticateRequestAsync();
-
-                        using (
-                            var responseStream =
-                                await
-                                    oneDriveClient.Drive.Root.ItemWithPath("KeysExport.xml")
-                                        .Content.Request()
-                                        .GetAsync())
-                        {
-                            using (MemoryStream memoryStream = new MemoryStream())
-                            {
-                                await responseStream.CopyToAsync(memoryStream);
-                                memoryStream.Position = 0;
-                                if (!ImportDataAsync(memoryStream, true, true)) return;
-                            }
-                        }
-
-                        DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetAllDataAsync());
-                        TextToastManager.Instance.ShowToast(_loader.GetString("loadednimported"));
-                    }
-                    catch (Exception ex)
-                    {
-                        TextToastManager.Instance.ShowToast($"msdnus:Err:{ex.Message}");
-                    }
-                    finally
-                    {
-                        SetProgress(false);
-                    }
-                });
-
-                //AboutPageCommand
-                AboutPageCommand = new RelayCommand(() => { _navigationService.NavigateTo("About"); });
-
-                //CoffeeCupCommand
-                CoffeeCupCommand = new RelayCommand(() => { _navigationService.NavigateTo("CoffeeCup"); });
-
-                //HelpCommand
-                HelpCommand = new RelayCommand(() => { _navigationService.NavigateTo("Help"); });
-
-                //SettingsCommand
-                SettingsCommand = new RelayCommand(() => { _navigationService.NavigateTo("Settings"); });
-
-                //ResetIejimoPwdCommand
-                ResetIejimoPwdCommand = new RelayCommand(async () =>
-                {
-                    MessageDialog msg = new MessageDialog(_loader.GetString("rusure"));
-                    msg.Commands.Add(new UICommand {Label = "Ok", Id = 0});
-                    msg.Commands.Add(new UICommand {Label = "Cancel", Id = 1});
-                    var rez = await msg.ShowAsync();
-
-                    if ((int) rez.Id != 0) return;
-
-                    await _datatarget.CleanDbAsync();
-                    _settingsProvider.SetIejimoParameter("123");
-                    DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetAllDataAsync());
-                    TextToastManager.Instance.ShowToast(_loader.GetString("iejreset"));
-                });
-
-                #endregion
-
                 if (_settingsProvider.IsFirstRun)
                 {
-                    if (ResetIejimoPwdCommand.CanExecute(null)) ResetIejimoPwdCommand.Execute(null);
+                    ResetIejimoPwd();
                     _settingsProvider.IsFirstRun = false;
                 }
 
+                // Set theme
                 try
                 {
-                    ThemeAwareFrame rootFrame = Window.Current.Content as ThemeAwareFrame;
-                    if (rootFrame != null)
-                        rootFrame.AppTheme = _settingsProvider.IsDarkTheme ? ElementTheme.Dark : ElementTheme.Light;
+                    var window = App.MainWindow;
+                    if (window?.Content is FrameworkElement rootElement)
+                    {
+                        rootElement.RequestedTheme = _settingsProvider.IsDarkTheme 
+                            ? ElementTheme.Dark 
+                            : ElementTheme.Light;
+                    }
                 }
                 catch
                 {
-                    //ignored
+                    // ignored
                 }
 
-                if (LockAllCommand.CanExecute(null)) LockAllCommand.Execute(null);
-
+                LockAll();
                 DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetAllDataAsync());
             }
             catch (Exception ex)
             {
 #if DEBUG
-                TextToastManager.Instance.ShowToast($"msdnus:ERR:Init:{ex.StackTrace}");
+                ShowToast($"msdnus:ERR:Init:{ex.StackTrace}");
 #else
-                TextToastManager.Instance.ShowToast($"msdnus:{ex.Message}");
+                ShowToast($"msdnus:{ex.Message}");
 #endif
             }
             finally
@@ -264,52 +106,220 @@ namespace msdnus.ViewModel
             }
         }
 
-        private async Task<bool> ImportDataAsync(StorageFile apath, bool iscleanupbefore, bool isdistinct)
+        [RelayCommand]
+        private void CheckPassword(string password)
         {
-            root zz = await _datasource.GetDataAsync(apath);
-            return SaveData(zz, iscleanupbefore, isdistinct);
+            var storedPassword = _settingsProvider.GetIejimoParameterAsync();
+
+            if (string.IsNullOrEmpty(storedPassword) || password != storedPassword) 
+                return;
+
+            IsIejimoMode = false;
         }
 
-        private bool ImportDataAsync(Stream stream, bool iscleanupbefore, bool isdistinct)
+        [RelayCommand]
+        private void CopyToClipboard(string text)
         {
-            root zz = _datasource.GetDataAsync(stream);
-            return SaveData(zz, iscleanupbefore, isdistinct);
+            var dataPackage = new DataPackage();
+            dataPackage.SetText(text);
+            Clipboard.SetContent(dataPackage);
+            ShowToast("Text copied to clipboard");
         }
 
-        private bool SaveData(root zz, bool iscleanupbefore, bool isdistinct)
+        [RelayCommand]
+        private void SearchStringChanged()
         {
-            List<YourKeyDTO> lst = new List<YourKeyDTO>();
-            var rez = zz.Items[1];
+            DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(
+                _datatarget.GetDataValueByNameAsync(TextToSearch ?? string.Empty));
+        }
 
-            var yy = (zz.Items[1] as rootYourKey)?.Product_Key;
-
-            foreach (rootYourKeyProduct_Key ff in yy)
+        [RelayCommand]
+        private async Task GetFromFilePicker()
+        {
+            try
             {
-                YourKeyDTO dt = new YourKeyDTO();
-                dt.MapFromYourKeyProduct_Key(ff);
-                lst.Add(dt);
+                var openPicker = new FileOpenPicker
+                {
+                    ViewMode = PickerViewMode.Thumbnail,
+                    SuggestedStartLocation = PickerLocationId.DocumentsLibrary
+                };
+                openPicker.FileTypeFilter.Add(".xml");
+
+                // Initialize the file picker with the window handle (WinUI 3)
+                var hwnd = WindowNative.GetWindowHandle(App.MainWindow);
+                InitializeWithWindow.Initialize(openPicker, hwnd);
+
+                StorageFile file = await openPicker.PickSingleFileAsync();
+
+                if (file == null) return;
+
+                SetProgress(true);
+
+                if (!await ImportDataAsync(file, true, true)) return;
+
+                DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetAllDataAsync());
+                ShowToast("Data loaded and imported successfully");
             }
-            return _datatarget.SaveData(lst, iscleanupbefore, isdistinct);
+            catch (Exception ex)
+            {
+                ShowToast($"msdnus:Err:{ex.Message}");
+            }
+            finally
+            {
+                SetProgress(false);
+            }
         }
 
-        private bool EnsureUnsnapped()
+        [RelayCommand]
+        private void LockAll()
         {
-            // FilePicker APIs will not work if the application is in a snapped state.
-            // If an app wants to show a FilePicker while snapped, it must attempt to unsnap first
-            bool unsnapped = ApplicationView.Value != ApplicationViewState.Snapped || ApplicationView.TryUnsnap();
-            if (!unsnapped)
+            IsIejimoMode = true;
+        }
+
+        [RelayCommand]
+        private async Task LoadFromOneDrive()
+        {
+            try
             {
-                TextToastManager.Instance.ShowToast(_loader.GetString("cantunsnap"));
+                SetProgress(true);
+
+                // Authenticate with Microsoft Graph
+                var scopes = new[] { "Files.Read", "User.Read" };
+                AuthenticationResult authResult;
+
+                try
+                {
+                    var accounts = await _msalClient.GetAccountsAsync();
+                    authResult = await _msalClient.AcquireTokenSilent(scopes, accounts.FirstOrDefault())
+                        .ExecuteAsync();
+                }
+                catch (MsalUiRequiredException)
+                {
+                    authResult = await _msalClient.AcquireTokenInteractive(scopes)
+                        .WithParentActivityOrWindow(WindowNative.GetWindowHandle(App.MainWindow))
+                        .ExecuteAsync();
+                }
+
+                // Create Graph client
+                var graphClient = new GraphServiceClient(
+                    new DelegateAuthenticationProvider(async (requestMessage) =>
+                    {
+                        requestMessage.Headers.Authorization = 
+                            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", authResult.AccessToken);
+                    }));
+
+                // Download file from OneDrive
+                var stream = await graphClient.Me.Drive.Root
+                    .ItemWithPath("KeysExport.xml")
+                    .Content
+                    .Request()
+                    .GetAsync();
+
+                using (var memoryStream = new MemoryStream())
+                {
+                    await stream.CopyToAsync(memoryStream);
+                    memoryStream.Position = 0;
+                    if (!ImportDataAsync(memoryStream, true, true)) return;
+                }
+
+                DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetAllDataAsync());
+                ShowToast("Data loaded from OneDrive successfully");
+            }
+            catch (Exception ex)
+            {
+                ShowToast($"msdnus:Err:{ex.Message}");
+            }
+            finally
+            {
+                SetProgress(false);
+            }
+        }
+
+        [RelayCommand]
+        private void NavigateToAbout()
+        {
+            NavigateTo(typeof(About));
+        }
+
+        [RelayCommand]
+        private void NavigateToCoffeeCup()
+        {
+            NavigateTo(typeof(CoffeeCup));
+        }
+
+        [RelayCommand]
+        private void NavigateToHelp()
+        {
+            NavigateTo(typeof(Help));
+        }
+
+        [RelayCommand]
+        private void NavigateToSettings()
+        {
+            NavigateTo(typeof(Settings));
+        }
+
+        [RelayCommand]
+        private async Task ResetIejimoPwd()
+        {
+            var dialog = new ContentDialog
+            {
+                Title = "Reset Password",
+                Content = "Are you sure you want to reset the password?",
+                PrimaryButtonText = "Ok",
+                CloseButtonText = "Cancel",
+                XamlRoot = App.MainWindow.Content.XamlRoot
+            };
+
+            var result = await dialog.ShowAsync();
+
+            if (result != ContentDialogResult.Primary) return;
+
+            await _datatarget.CleanDbAsync();
+            _settingsProvider.SetIejimoParameter("123");
+            DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetAllDataAsync());
+            ShowToast("Password reset successfully");
+        }
+
+        partial void OnTextToSearchChanged(string value)
+        {
+            SearchStringChanged();
+        }
+
+        private async Task<bool> ImportDataAsync(StorageFile file, bool isCleanupBefore, bool isDistinct)
+        {
+            root data = await _datasource.GetDataAsync(file);
+            return SaveData(data, isCleanupBefore, isDistinct);
+        }
+
+        private bool ImportDataAsync(Stream stream, bool isCleanupBefore, bool isDistinct)
+        {
+            root data = _datasource.GetDataAsync(stream);
+            return SaveData(data, isCleanupBefore, isDistinct);
+        }
+
+        private bool SaveData(root data, bool isCleanupBefore, bool isDistinct)
+        {
+            List<YourKeyDTO> list = new List<YourKeyDTO>();
+            var yourKey = data.Items[1] as rootYourKey;
+
+            if (yourKey?.Product_Key == null) return false;
+
+            foreach (rootYourKeyProduct_Key productKey in yourKey.Product_Key)
+            {
+                YourKeyDTO dto = new YourKeyDTO();
+                dto.MapFromYourKeyProduct_Key(productKey);
+                list.Add(dto);
             }
 
-            return unsnapped;
+            return _datatarget.SaveData(list, isCleanupBefore, isDistinct);
         }
 
         private void SetProgress(bool isShow)
         {
             if (isShow)
             {
-                StatusText = _loader.GetString("statusloading");
+                StatusText = "Loading...";
                 IsProgress = Visibility.Visible;
             }
             else
@@ -317,6 +327,19 @@ namespace msdnus.ViewModel
                 StatusText = string.Empty;
                 IsProgress = Visibility.Collapsed;
             }
+        }
+
+        private void NavigateTo(Type pageType)
+        {
+            if (App.MainWindow.Content is Microsoft.UI.Xaml.Controls.Frame frame)
+            {
+                frame.Navigate(pageType);
+            }
+        }
+
+        private void ShowToast(string message)
+        {
+            TextToastManager.Instance.ShowToast(message);
         }
     }
 }

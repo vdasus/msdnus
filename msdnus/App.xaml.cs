@@ -1,26 +1,56 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using msdnus.Core.Model;
+using msdnus.Shared;
+using msdnus.ViewModel;
+using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Core;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using GalaSoft.MvvmLight.Messaging;
 using msdnus.Shared;
 
 namespace msdnus
 {
-    sealed partial class App
+    public partial class App : Application
     {
-        /// <summary>
-        /// Initializes the singleton application object.  This is the first line of authored code
-        /// executed, and as such is the logical equivalent of main() or WinMain().
-        /// </summary>
+        private IHost _host;
+        public static Window MainWindow { get; private set; }
+        public static IServiceProvider Services => ((App)Current)._host.Services;
+
         public App()
         {
             InitializeComponent();
-            Suspending += OnSuspending;
-            Resuming += App_OnResuming;
+
+            _host = Host.CreateDefaultBuilder()
+                .ConfigureServices((context, services) =>
+                {
+                    // Register Services
+                    services.AddSingleton<IDataSource, FileDataSource>();
+                    services.AddSingleton<IDataTarget, DataTarget>();
+                    services.AddSingleton<ISettingsProvider, SettingsProvider>();
+
+                    // Register ViewModels
+                    services.AddSingleton<MainViewModel>();
+                    services.AddSingleton<SettingsViewModel>();
+                    services.AddSingleton<AboutViewModel>();
+                    services.AddSingleton<HelpViewModel>();
+                    services.AddSingleton<CoffeeCupViewModel>();
+
+                    // Register Pages
+                    services.AddTransient<MainPage>();
+                    services.AddTransient<Settings>();
+                    services.AddTransient<About>();
+                    services.AddTransient<Help>();
+                    services.AddTransient<CoffeeCup>();
+                })
+                .Build();
+
+            // Initialize Lex.Db serialization
+            Lex.Db.Serialization.Extender.RegisterType<YourKeyKeyDTO, CustomTypesSerializers>(1000);
         }
 
         /// <summary>
@@ -38,94 +68,24 @@ namespace msdnus
             }
 #endif
 
-            ThemeAwareFrame rootFrame = Window.Current.Content as ThemeAwareFrame;
-
-            // Do not repeat app initialization when the Window already has content,
-            // just ensure that the window is active
-            if (rootFrame == null)
+            MainWindow = new Window
             {
-                // Create a Frame to act as the navigation context and navigate to the first page
-                rootFrame = new ThemeAwareFrame();
+                Title = "msdnus - Password Manager"
+            };
 
-                rootFrame.NavigationFailed += OnNavigationFailed;
-                rootFrame.Navigated += OnNavigated;
+            var frame = new Frame();
+            frame.NavigationFailed += OnNavigationFailed;
 
-                if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
-                {
-                    //TODO: Load state from previously suspended application
-                }
+            // Navigate to main page
+            frame.Navigate(typeof(MainPage), e.Arguments);
 
-                // Place the frame in the current Window
-                Window.Current.Content = rootFrame;
-
-                // Register a handler for BackRequested events and set the
-                // visibility of the Back button
-                SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
-
-                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
-                    rootFrame.CanGoBack ?
-                    AppViewBackButtonVisibility.Visible :
-                    AppViewBackButtonVisibility.Collapsed;
-            }
-
-            if (rootFrame.Content == null)
-            {
-                // When the navigation stack isn't restored navigate to the first page,
-                // configuring the new page by passing required information as a navigation
-                // parameter
-                rootFrame.Navigate(typeof(MainPage), e.Arguments);
-            }
-            
-            // Ensure the current window is active
-            Window.Current.Activate();
+            MainWindow.Content = frame;
+            MainWindow.Activate();
         }
 
-        /// <summary>
-        /// Invoked when Navigation to a certain page fails
-        /// </summary>
-        /// <param name="sender">The Frame which failed navigation</param>
-        /// <param name="e">Details about the navigation failure</param>
-        private void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+        private void OnNavigationFailed(object sender, Microsoft.UI.Xaml.Navigation.NavigationFailedEventArgs e)
         {
-            throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
-        }
-
-        /// <summary>
-        /// Invoked when application execution is being suspended.  Application state is saved
-        /// without knowing whether the application will be terminated or resumed with the contents
-        /// of memory still intact.
-        /// </summary>
-        /// <param name="sender">The source of the suspend request.</param>
-        /// <param name="e">Details about the suspend request.</param>
-        private void OnSuspending(object sender, SuspendingEventArgs e)
-        {
-            var deferral = e.SuspendingOperation.GetDeferral();
-            //TODO: Save application state and stop any background activity
-            Messenger.Default.Send(new NotificationMessage("Logout"));
-            deferral.Complete();
-        }
-
-        private void App_OnResuming(object sender, object e)
-        {
-            Messenger.Default.Send(new NotificationMessage("Logout"));
-        }
-
-        private void OnNavigated(object sender, NavigationEventArgs e)
-        {
-            // Each time a navigation event occurs, update the Back button's visibility
-            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
-                ((Frame)sender).CanGoBack ?
-                AppViewBackButtonVisibility.Visible :
-                AppViewBackButtonVisibility.Collapsed;
-        }
-
-        private void OnBackRequested(object sender, BackRequestedEventArgs e)
-        {
-            Frame rootFrame = Window.Current.Content as Frame;
-
-            if (!rootFrame?.CanGoBack ?? false) return;
-            e.Handled = true;
-            rootFrame?.GoBack();
+            throw new Exception($"Failed to load page {e.SourcePageType.FullName}: {e.Exception}");
         }
     }
 }
