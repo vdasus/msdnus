@@ -1,6 +1,5 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace msdnus.Shared
 {
@@ -8,15 +7,11 @@ namespace msdnus.Shared
 
     public class NoMagicAttribute : Attribute { }
 
+    // Legacy alias for compatibility - inherits from modern ObservableObject
     [Magic]
-    public class PropertyChangedBase : INotifyPropertyChanged
+    public class PropertyChangedBase : ObservableObject
     {
-        protected virtual void RaisePropertyChanged([CallerMemberName] string property = "")
-        {
-            var e = PropertyChanged;
-            e?.Invoke(this, new PropertyChangedEventArgs(property));
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
+        // ObservableObject already provides INotifyPropertyChanged implementation
+        // This class now serves as a compatibility wrapper
     }
 }

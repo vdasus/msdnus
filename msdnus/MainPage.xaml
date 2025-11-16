@@ -4,17 +4,16 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    RequestedTheme="Default"
-    Loaded="MainPage_OnLoaded"
-    DataContext="{Binding Source={StaticResource Locator}, Path=Main}">
+    mc:Ignorable="d">
+    
     <Grid Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        
         <SplitView x:Name="Splitter" Grid.Row="0" IsPaneOpen="{x:Bind Vm.IsIejimoMode, Mode=OneWay}" 
-                   PanePlacement="Left" PaneClosing="Splitter_OnPaneClosing" >
+                   PanePlacement="Left" PaneClosing="Splitter_OnPaneClosing">
             <SplitView.Pane>
                 <RelativePanel Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
                     <PasswordBox Visibility="{x:Bind Vm.IsIejimoMode, Mode=OneWay, Converter={StaticResource BoolToVisConverter}}"
@@ -22,9 +21,7 @@
                                  VerticalAlignment="Top" Width="220" Password="" PasswordChanged="PasswordChangedHandler">
                         <PasswordBox.InputScope>
                             <InputScope>
-                                <InputScope.Names>
-                                    <InputScopeName NameValue="NumericPin"/>
-                                </InputScope.Names>
+                                <InputScopeName NameValue="NumericPin"/>
                             </InputScope>
                         </PasswordBox.InputScope>
                     </PasswordBox>
@@ -36,6 +33,7 @@
                     </Button>
                 </RelativePanel>
             </SplitView.Pane>
+            
             <RelativePanel Visibility="{x:Bind Vm.IsIejimoMode, Mode=OneWay, Converter={StaticResource InvBoolToVisConverter}}">
                 <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                     <Grid.RowDefinitions>
@@ -43,13 +41,15 @@
                         <RowDefinition Height="48" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <TextBlock x:Uid="appname" Grid.Row="0" Style="{ThemeResource HeaderTextBlockStyle}"  Height="Auto"  Margin="8 0 0 8" />
+                    
+                    <TextBlock x:Uid="appname" Grid.Row="0" Style="{ThemeResource HeaderTextBlockStyle}" Height="Auto" Margin="8 0 0 8" />
 
-                    <TextBox x:Uid="srctxt" Grid.Row="1" Text="{Binding TextToSearch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                    <TextBox x:Uid="srctxt" Grid.Row="1" Text="{x:Bind Vm.TextToSearch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                                  TextChanged="TextBox_OnTextChanged" 
                                  HorizontalAlignment="Left" Margin="4" VerticalAlignment="Top" MinWidth="248" />
+                                 
                     <ScrollViewer Grid.Row="2">
-                        <ListBox x:Uid="Log2" ItemsSource="{x:Bind Vm.DataItems.Result, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Top" >
+                        <ListBox x:Uid="Log2" ItemsSource="{x:Bind Vm.DataItems.Result, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Top">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
@@ -58,16 +58,15 @@
                                             <RowDefinition Height="Auto"></RowDefinition>
                                         </Grid.RowDefinitions>
                                         <TextBlock Text="{Binding Name, Mode=OneTime}" Style="{ThemeResource BodyTextBlockStyle}" Grid.Row="0" />
-                                        <ItemsControl ItemsSource="{Binding Items, Mode=OneTime}" Grid.Row="1" >
+                                        <ItemsControl ItemsSource="{Binding Items, Mode=OneTime}" Grid.Row="1">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal">
-                                                        <!--<SymbolIcon Symbol="Audio" Margin="0,0,12,0"/>-->
                                                         <AppBarButton 
                                                                 x:Uid="butcopy"
                                                                 Icon="Copy" 
                                                                 IsCompact="True"
-                                                                Command="{Binding Source={StaticResource Locator}, Path=Main.CopyToClipboardCommand, Mode=OneTime}"
+                                                                Command="{Binding DataContext.CopyToClipboardCommand, ElementName=Splitter, Mode=OneTime}"
                                                                 CommandParameter="{Binding Value, Mode=OneTime}" />
                                                         <TextBlock x:Uid="lbval" Text="{Binding Value, Mode=OneTime}" 
                                                                        Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" 
@@ -90,15 +89,16 @@
                 </Grid>
             </RelativePanel>
         </SplitView>
+        
         <CommandBar Grid.Row="1" Visibility="{x:Bind Vm.IsIejimoMode, Mode=OneWay, Converter={StaticResource InvBoolToVisConverter}}">
             <AppBarButton x:Uid="lockbutton" Icon="Permissions" Command="{x:Bind Vm.LockAllCommand, Mode=OneTime}"/>
-            <AppBarButton x:Uid="fromonedrbutton" Icon="Globe" Command="{x:Bind Vm.OnedriveCommand, Mode=OneTime}"/>
+            <AppBarButton x:Uid="fromonedrbutton" Icon="Globe" Command="{x:Bind Vm.LoadFromOneDriveCommand, Mode=OneTime}"/>
             <AppBarButton x:Uid="loadbutton" Icon="Download" Command="{x:Bind Vm.GetFromFilePickerCommand, Mode=OneTime}"/>
-            <AppBarButton x:Uid="helpbutton" Icon="Help" Command="{x:Bind Vm.HelpCommand, Mode=OneTime}" />
+            <AppBarButton x:Uid="helpbutton" Icon="Help" Command="{x:Bind Vm.NavigateToHelpCommand, Mode=OneTime}" />
             <CommandBar.SecondaryCommands>
-                <AppBarButton x:Uid="likebutton" Icon="Like" Command="{x:Bind Vm.CoffeeCupCommand, Mode=OneTime}" />
-                <AppBarButton x:Uid="settingsbutton" Icon="Setting" Command="{x:Bind Vm.SettingsCommand, Mode=OneTime}" />
-                <AppBarButton x:Uid="aboutbutton" Icon="Contact" Command="{x:Bind Vm.AboutPageCommand, Mode=OneTime}" />
+                <AppBarButton x:Uid="likebutton" Icon="Like" Command="{x:Bind Vm.NavigateToCoffeeCupCommand, Mode=OneTime}" />
+                <AppBarButton x:Uid="settingsbutton" Icon="Setting" Command="{x:Bind Vm.NavigateToSettingsCommand, Mode=OneTime}" />
+                <AppBarButton x:Uid="aboutbutton" Icon="Contact" Command="{x:Bind Vm.NavigateToAboutCommand, Mode=OneTime}" />
             </CommandBar.SecondaryCommands>
             <CommandBar.Content>
                 <StackPanel>

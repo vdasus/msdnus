@@ -1,16 +1,19 @@
-﻿using Windows.UI.Xaml;
-using msdnus.Shared;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 using msdnus.ViewModel;
 
 namespace msdnus
 {
-    public sealed partial class Settings
+    public sealed partial class Settings : Page
     {
-        public SettingsViewModel Vm => (SettingsViewModel)DataContext;
+        public SettingsViewModel Vm { get; }
 
         public Settings()
         {
             InitializeComponent();
+            Vm = App.Services.GetRequiredService<SettingsViewModel>();
+            DataContext = Vm;
         }
 
         private void PasswordChangedHandler(object sender, RoutedEventArgs e)
@@ -21,19 +24,8 @@ namespace msdnus
 
         private void ToggleSwitch_Toggled(object sender, RoutedEventArgs e)
         {
-            var themeAwareFrame = Frame as ThemeAwareFrame;
-            if (themeAwareFrame == null) return;
-
-            if (IsDarkTheme.IsOn)
-            {
-                themeAwareFrame.AppTheme = ElementTheme.Dark;
-                Vm.IsDarkTheme = true;
-            }
-            else
-            {
-                themeAwareFrame.AppTheme = ElementTheme.Light;
-                Vm.IsDarkTheme = false;
-            }
+            // ViewModel handles theme switching directly
+            Vm.IsDarkTheme = IsDarkTheme.IsOn;
         }
     }
 }

@@ -1,52 +1,40 @@
-﻿using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using msdnus.ViewModel;
 
 namespace msdnus
 {
-    public sealed partial class MainPage
+    public sealed partial class MainPage : Page
     {
-        private readonly bool _isregistered;
-
-        public MainViewModel Vm => (MainViewModel)DataContext;
+        public MainViewModel Vm { get; }
 
         public MainPage()
         {
             InitializeComponent();
-
-            if (_isregistered) return;
+            
+            // Get ViewModel from DI
+            Vm = App.Services.GetRequiredService<MainViewModel>();
+            DataContext = Vm;
+            
+            Loaded += MainPage_OnLoaded;
             Splitter.RegisterPropertyChangedCallback(SplitView.IsPaneOpenProperty, IsPaneOpenPropertyChanged);
-            Messenger.Default.Register<NotificationMessage>(this, NotificationMessageReceived);
-
-            _isregistered = true;
-        }
-
-        private void NotificationMessageReceived(NotificationMessage obj)
-        {
-            if (obj.Notification == "Logout")
-            {
-                Vm.IsIejimoMode = true;
-            }
         }
 
         private void MainPage_OnLoaded(object sender, RoutedEventArgs e)
         {
             PasswordBox.Password = string.Empty;
             PasswordBox.Focus(FocusState.Programmatic);
-
         }
 
         private void TextBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            if (Vm.SearchStringChangedCommand.CanExecute(null))
-                Vm.SearchStringChangedCommand.Execute(null);
+            Vm?.SearchStringChangedCommand?.Execute(null);
         }
 
         private void PasswordChangedHandler(object sender, RoutedEventArgs e)
         {
-            Vm?.CheckPassword?.Execute(PasswordBox.Password);
+            Vm?.CheckPasswordCommand?.Execute(PasswordBox.Password);
         }
 
         private void IsPaneOpenPropertyChanged(DependencyObject sender, DependencyProperty dp)
@@ -57,7 +45,8 @@ namespace msdnus
 
         private void Splitter_OnPaneClosing(SplitView sender, SplitViewPaneClosingEventArgs args)
         {
-            if(Vm.IsIejimoMode) args.Cancel = true;
+            if (Vm.IsIejimoMode) 
+                args.Cancel = true;
         }
     }
 }

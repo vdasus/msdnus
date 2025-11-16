@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using msdnus.Shared;
 
 namespace msdnus.ViewModel
 {
