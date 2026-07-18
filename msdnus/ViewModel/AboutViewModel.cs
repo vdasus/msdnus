@@ -4,7 +4,6 @@ using msdnus.Shared;
 
 namespace msdnus.ViewModel
 {
-    [Magic]
     public sealed partial class AboutViewModel : ObservableObject
     {
         public string AppVersion { get; } = GetAppVersion();

@@ -5,19 +5,18 @@ using msdnus.Shared;
 
 namespace msdnus.ViewModel
 {
-    [Magic]
     public sealed partial class SettingsViewModel : ObservableObject
     {
         private readonly ISettingsProvider _settingsProvider;
 
         [ObservableProperty]
-        private string iejimo1;
+        public partial string? Iejimo1 { get; set; }
 
         [ObservableProperty]
-        private string iejimo2;
+        public partial string? Iejimo2 { get; set; }
 
         [ObservableProperty]
-        private string statusErrText = string.Empty;
+        public partial string StatusErrText { get; set; } = string.Empty;
 
         public bool IsDarkTheme
         {

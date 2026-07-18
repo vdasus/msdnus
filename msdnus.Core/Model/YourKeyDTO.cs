@@ -1,24 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using msdnus.Core.Shared;
-using DataReader = Lex.Db.Serialization.DataReader;
-using DataWriter = Lex.Db.Serialization.DataWriter;
-
 namespace msdnus.Core.Model
 {
     public class YourKeyDTO
     {
         public int Id { get; set; }
 
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
-        public List<YourKeyKeyDTO> Items { get; set; }
-
-        public YourKeyDTO()
-        {
-            Items = new List<YourKeyKeyDTO>();
-        }
+        public List<YourKeyKeyDTO> Items { get; set; } = new();
 
         public void MapFromYourKeyProduct_Key(rootYourKeyProduct_Key yk)
         {
@@ -34,8 +22,10 @@ namespace msdnus.Core.Model
 
     public class YourKeyDTOComparer : IEqualityComparer<YourKeyDTO>
     {
-        public bool Equals(YourKeyDTO g1, YourKeyDTO g2)
+        public bool Equals(YourKeyDTO? g1, YourKeyDTO? g2)
         {
+            if (ReferenceEquals(g1, g2)) return true;
+            if (g1 is null || g2 is null) return false;
             int cnt = (from zz in g1.Items from yy in g2.Items where zz.Value == yy.Value select zz).Count();
             return (g1.Name == g2.Name) && (cnt == g1.Items.Count);
         }
@@ -51,13 +41,13 @@ namespace msdnus.Core.Model
     {
         public int Id { get; set; }
 
-        public string ID { get; set; }
+        public string ID { get; set; } = string.Empty;
 
-        public string Type { get; set; }
+        public string Type { get; set; } = string.Empty;
 
-        public string ClaimedDate { get; set; }
+        public string ClaimedDate { get; set; } = string.Empty;
 
-        public string Value { get; set; }
+        public string Value { get; set; } = string.Empty;
 
         public void MapFromYourKeyProduct_KeyKey(rootYourKeyProduct_KeyKey ykk)
         {
@@ -65,33 +55,6 @@ namespace msdnus.Core.Model
             Type = ykk.Type;
             ClaimedDate = ykk.ClaimedDate;
             Value = ykk.Value;
-        }
-    }
-
-    public class CustomTypesSerializers
-    {
-        public static YourKeyKeyDTO ReadYourKeyKeyDTO(DataReader reader)
-        {
-            return Task.Run(() => new YourKeyKeyDTO
-            {
-                Id = reader.ReadInt32(),
-                ID = Utils.UnprotectFromBase64DataAsync(reader.ReadString()) ?? string.Empty,
-                Type = Utils.UnprotectFromBase64DataAsync(reader.ReadString()) ?? string.Empty,
-                Value = Utils.UnprotectFromBase64DataAsync(reader.ReadString()) ?? string.Empty,
-                ClaimedDate = Utils.UnprotectFromBase64DataAsync(reader.ReadString()) ?? string.Empty
-            }).Result;
-        }
-
-        public static void WriteYourKeyKeyDTO(DataWriter writer, YourKeyKeyDTO value)
-        {
-            Task.Run(() =>
-           {
-               writer.Write(value.Id);
-               writer.Write(Utils.ProtectToBase64Async(value.ID) ?? string.Empty);
-               writer.Write(Utils.ProtectToBase64Async(value.Type) ?? string.Empty);
-               writer.Write(Utils.ProtectToBase64Async(value.Value) ?? string.Empty);
-               writer.Write(Utils.ProtectToBase64Async(value.ClaimedDate) ?? string.Empty);
-           }).Wait();
         }
     }
 }

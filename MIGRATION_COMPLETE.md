@@ -1,5 +1,12 @@
 # ?? Complete WinUI 3 Migration - Final Summary
 
+> **SUPERSEDED (2026-07-18).** This report describes an earlier migration pass that was never
+> build-verified. The migration was completed and verified later — see
+> `docs/MODERNIZATION_PLAN.md` (plan + execution status) and `docs/PROJECT_OVERVIEW.md`
+> (current architecture). Notable differences from what is written below: Windows App SDK is
+> pinned to stable 2.3.1, Lex.Db was replaced with LiteDB, the Microsoft Graph SDK was replaced
+> with a direct REST call, and the tests use xUnit v3.
+
 ## Migration Status: **95% COMPLETE**
 
 Your msdnus application has been successfully migrated from UWP to modern Windows App SDK (WinUI 3) with .NET 10!
@@ -26,7 +33,7 @@ Your msdnus application has been successfully migrated from UWP to modern Window
 All 5 ViewModels completely modernized:
 
 | ViewModel | Status | Key Changes |
-|:----------|:------:|:------------|
+|-----------|--------|-------------|
 | MainViewModel | ? | 12+ commands, Microsoft Graph, MSAL auth, source generators |
 | SettingsViewModel | ? | Theme switching, password management, source generators |
 | AboutViewModel | ? | Version display with ObservableObject |

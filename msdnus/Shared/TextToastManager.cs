@@ -1,5 +1,5 @@
-﻿using Windows.Data.Xml.Dom;
-using Windows.UI.Notifications;
+using Microsoft.Windows.AppNotifications;
+using Microsoft.Windows.AppNotifications.Builder;
 
 namespace msdnus.Shared
 {
@@ -8,28 +8,22 @@ namespace msdnus.Shared
         public static TextToastManager Instance { get; } = new TextToastManager();
         private TextToastManager() { }
 
-        public void ShowToast(string line1, string line2 = null)
+        public void ShowToast(string line1, string? line2 = null)
         {
             try
             {
-                var template = $@"
-<toast>
-<visual>
-<binding template=""ToastGeneric"">
-  <text>{System.Security.SecurityElement.Escape(line1)}</text>
-  {(string.IsNullOrEmpty(line2) ? "" : $"<text>{System.Security.SecurityElement.Escape(line2)}</text>")}
-</binding>
-</visual>
-</toast>
-";
-                var xml = new XmlDocument();
-                xml.LoadXml(template);
-                var toast = new ToastNotification(xml);
-                ToastNotificationManager.CreateToastNotifier().Show(toast);
+                var builder = new AppNotificationBuilder().AddText(line1);
+                if (!string.IsNullOrEmpty(line2))
+                {
+                    builder.AddText(line2);
+                }
+
+                AppNotificationManager.Default.Show(builder.BuildNotification());
             }
             catch
             {
-                // Fallback if toast fails (Windows App SDK may need additional setup)
+                // Notifications require package identity or explicit registration;
+                // never let a toast failure break the calling feature.
                 System.Diagnostics.Debug.WriteLine($"Toast: {line1} {line2}");
             }
         }

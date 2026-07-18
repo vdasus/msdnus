@@ -14,13 +14,11 @@ using msdnus.Core.Model;
 using msdnus.Core.Shared;
 using msdnus.Services;
 using msdnus.Shared;
-using Microsoft.Graph;
 using Microsoft.Identity.Client;
 using WinRT.Interop;
 
 namespace msdnus.ViewModel
 {
-    [Magic]
     public sealed partial class MainViewModel : ObservableObject
     {
         private readonly IDataSource _datasource;
@@ -30,19 +28,19 @@ namespace msdnus.ViewModel
         private readonly IPublicClientApplication _msalClient;
 
         [ObservableProperty]
-        private NotifyTaskCompletion<List<YourKeyDTO>> dataItems;
+        public partial NotifyTaskCompletion<List<YourKeyDTO>>? DataItems { get; set; }
 
         [ObservableProperty]
-        private string textToSearch;
+        public partial string? TextToSearch { get; set; }
 
         [ObservableProperty]
-        private string statusText;
+        public partial string? StatusText { get; set; }
 
         [ObservableProperty]
-        private Visibility isProgress;
+        public partial Visibility IsProgress { get; set; }
 
         [ObservableProperty]
-        private bool isIejimoMode;
+        public partial bool IsIejimoMode { get; set; }
 
         public MainViewModel(
             IDataSource datasource, 
@@ -94,6 +92,7 @@ namespace msdnus.ViewModel
                 }
 
                 LockAll();
+                NotifyIfLegacyDatabasePresent();
                 DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetAllDataAsync());
             }
             catch (Exception ex)
@@ -204,27 +203,20 @@ namespace msdnus.ViewModel
                         .ExecuteAsync();
                 }
 
-                // Create Graph client
-                var graphClient = new GraphServiceClient(
-                    new DelegateAuthenticationProvider(async (requestMessage) =>
-                    {
-                        requestMessage.Headers.Authorization = 
-                            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", authResult.AccessToken);
-                        await Task.CompletedTask;
-                    }));
+                // Download the file from OneDrive via the Microsoft Graph REST endpoint
+                using var http = new System.Net.Http.HttpClient();
+                http.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", authResult.AccessToken);
 
-                // Download file from OneDrive
-                var stream = await graphClient.Me.Drive.Root
-                    .ItemWithPath("KeysExport.xml")
-                    .Content
-                    .Request()
-                    .GetAsync();
+                using var response = await http.GetAsync(
+                    "https://graph.microsoft.com/v1.0/me/drive/root:/KeysExport.xml:/content");
+                response.EnsureSuccessStatusCode();
 
                 using (var memoryStream = new MemoryStream())
                 {
-                    await stream.CopyToAsync(memoryStream);
+                    await response.Content.CopyToAsync(memoryStream);
                     memoryStream.Position = 0;
-                    if (!ImportDataAsync(memoryStream, true, true)) return;
+                    if (!ImportData(memoryStream, true, true)) return;
                 }
 
                 DataItems = new NotifyTaskCompletion<List<YourKeyDTO>>(_datatarget.GetAllDataAsync());
@@ -286,27 +278,27 @@ namespace msdnus.ViewModel
             ShowToast("Password reset successfully");
         }
 
-        partial void OnTextToSearchChanged(string value)
+        partial void OnTextToSearchChanged(string? value)
         {
             SearchStringChanged();
         }
 
         private async Task<bool> ImportDataAsync(StorageFile file, bool isCleanupBefore, bool isDistinct)
         {
-            root data = await _datasource.GetDataAsync(file);
-            return SaveData(data, isCleanupBefore, isDistinct);
+            using var stream = await file.OpenStreamForReadAsync();
+            return ImportData(stream, isCleanupBefore, isDistinct);
         }
 
-        private bool ImportDataAsync(Stream stream, bool isCleanupBefore, bool isDistinct)
+        private bool ImportData(Stream stream, bool isCleanupBefore, bool isDistinct)
         {
-            root data = _datasource.GetDataAsync(stream);
+            root data = _datasource.GetData(stream);
             return SaveData(data, isCleanupBefore, isDistinct);
         }
 
         private bool SaveData(root data, bool isCleanupBefore, bool isDistinct)
         {
             List<YourKeyDTO> list = new List<YourKeyDTO>();
-            var yourKey = data.Items[1] as rootYourKey;
+            var yourKey = data.Items?.OfType<rootYourKey>().FirstOrDefault();
 
             if (yourKey?.Product_Key == null) return false;
 
@@ -318,6 +310,25 @@ namespace msdnus.ViewModel
             }
 
             return _datatarget.SaveData(list, isCleanupBefore, isDistinct);
+        }
+
+        private void NotifyIfLegacyDatabasePresent()
+        {
+            try
+            {
+                // The pre-migration app stored data in a Lex.Db folder named "msdnusdb".
+                // That format (and its encryption) is not supported anymore — ask for a re-import.
+                var legacyDbPath = Path.Combine(AppEnvironment.DataFolder, "msdnusdb");
+                if (Directory.Exists(legacyDbPath))
+                {
+                    ShowToast("Data from a previous version was found",
+                        "Please re-import your keys XML file (the old database format is no longer supported).");
+                }
+            }
+            catch
+            {
+                // ignored — informational only
+            }
         }
 
         private void SetProgress(bool isShow)
@@ -334,9 +345,9 @@ namespace msdnus.ViewModel
             }
         }
 
-        private void ShowToast(string message)
+        private void ShowToast(string message, string? details = null)
         {
-            TextToastManager.Instance.ShowToast(message);
+            TextToastManager.Instance.ShowToast(message, details);
         }
     }
 }

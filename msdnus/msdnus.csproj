@@ -10,10 +10,15 @@
     <RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
     <DefaultLanguage>en-US</DefaultLanguage>
     <EnableMsixTooling>true</EnableMsixTooling>
-    <EnableDefaultPriItems>false</EnableDefaultPriItems>
-    <PackageCertificateKeyFile>msdnus_StoreKey.pfx</PackageCertificateKeyFile>
-    <PackageCertificateThumbprint>D082DDB8F24F09DD4433EE19D481B38176971753</PackageCertificateThumbprint>
+    <EnableDefaultPriItems>true</EnableDefaultPriItems>
     <PublishAot>false</PublishAot>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Version>1.6.0</Version>
+    <AssemblyVersion>1.6.0.0</AssemblyVersion>
+    <!-- Pass -p:UnpackagedRun=true to build a self-contained unpackaged app for the dev inner loop -->
+    <WindowsPackageType Condition="'$(UnpackagedRun)' == 'true'">None</WindowsPackageType>
+    <WindowsAppSDKSelfContained Condition="'$(UnpackagedRun)' == 'true'">true</WindowsAppSDKSelfContained>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,17 +26,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.0.0-experimental3" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.3.1" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.6901" />
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
-    <PackageReference Include="Microsoft.Graph" Version="5.68.0" />
-    <PackageReference Include="Microsoft.Identity.Client" Version="4.69.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PRIResource Include="Strings\**\*.resw" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.10" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.86.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -8,7 +8,6 @@ using Microsoft.UI.Xaml.Controls;
 
 namespace msdnus.ViewModel
 {
-    [Magic]
     public sealed partial class CoffeeCupViewModel : ObservableObject
     {
         const string COFFEE_CUP_IAP_NAME = "1 coffee cup";
@@ -16,7 +15,7 @@ namespace msdnus.ViewModel
         private readonly ISettingsProvider _settingsProvider;
 
         [ObservableProperty]
-        private bool isCoffeeCuped;
+        public partial bool IsCoffeeCuped { get; set; }
 
         public CoffeeCupViewModel(ISettingsProvider settingsProvider)
         {

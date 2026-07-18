@@ -221,4 +221,6 @@ temp/
 /msdnus/_scale-100.appx
 /msdnus/_pkginfo.txt
 /msdnus/_language-ru.appx
-/msdnus.Tests
+
+# Never commit signing certificates
+*.pfx

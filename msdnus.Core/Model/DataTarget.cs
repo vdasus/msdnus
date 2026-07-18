@@ -1,29 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Lex.Db;
+using LiteDB;
 
 namespace msdnus.Core.Model
 {
-    public class DataTarget: IDataTarget
+    /// <summary>
+    /// LiteDB-backed key store. The database file is encrypted with a password
+    /// (derived from the machine-bound key by the caller), so key values are
+    /// protected at rest without per-field encryption.
+    /// </summary>
+    public class DataTarget : IDataTarget
     {
-        private DbInstance _db;
+        private const string CollectionName = "keys";
+
+        private readonly LiteDatabase _db;
         private bool _disposed;
 
-        public DataTarget()
+        public DataTarget(string databasePath, string? password = null)
         {
-            Init();
+            var connectionString = new ConnectionString
+            {
+                Filename = databasePath,
+                Password = string.IsNullOrEmpty(password) ? null : password
+            };
+            _db = new LiteDatabase(connectionString);
+            Keys.EnsureIndex(x => x.Name);
         }
 
-        private void Init()
-        {
-            _db = new DbInstance("msdnusdb");
-            _db.Map<YourKeyDTO>()
-                .Automap(i => i.Id, true)
-                .WithIndex("Name", i => i.Name, StringComparer.OrdinalIgnoreCase);
-            _db.Initialize();
-        }
+        private ILiteCollection<YourKeyDTO> Keys => _db.GetCollection<YourKeyDTO>(CollectionName);
 
         public bool SaveData(List<YourKeyDTO> ykl, bool iscleanbefore, bool isdistinct)
         {
@@ -31,70 +33,55 @@ namespace msdnus.Core.Model
             {
                 if (iscleanbefore)
                 {
-                    _db.Purge();
-                    _db.Compact();
+                    Keys.DeleteAll();
                 }
-                var rez = isdistinct ? ykl.Distinct(new YourKeyDTOComparer()).ToArray() : ykl.ToArray();
-                _db.Save(rez);
+
+                var rez = isdistinct ? ykl.Distinct(new YourKeyDTOComparer()).ToList() : ykl;
+                Keys.Insert(rez);
+                return true;
             }
-            catch (Exception)
+            catch (LiteException)
             {
                 return false;
             }
-            return true;
         }
 
-        public async Task<List<YourKeyDTO>> GetAllDataAsync()
+        public Task<List<YourKeyDTO>> GetAllDataAsync()
         {
-            var tmp = await _db.Table<YourKeyDTO>().LoadAllAsync();
-            return tmp.OrderBy(x => x.Name).ToList();
+            var all = Keys.FindAll().OrderBy(x => x.Name).ToList();
+            return Task.FromResult(all);
         }
 
-        public async Task<List<YourKeyDTO>> GetDataValueByNameAsync(string name)
+        public Task<List<YourKeyDTO>> GetDataValueByNameAsync(string name)
         {
-            if (string.IsNullOrEmpty(name)) return await GetAllDataAsync();
+            if (string.IsNullOrEmpty(name)) return GetAllDataAsync();
 
-            var keys = _db.Table<YourKeyDTO>();
-            var index =
-                keys.IndexQuery<string>("Name").Where(x => (x ?? string.Empty).ToUpper().Contains(name.ToUpper()));
-            return await index.ToListAsync();
+            var found = Keys.FindAll()
+                .Where(x => (x.Name ?? string.Empty).Contains(name, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(x => x.Name)
+                .ToList();
+            return Task.FromResult(found);
         }
 
-        public async Task<bool> CleanDbAsync()
+        public Task<bool> CleanDbAsync()
         {
             try
             {
-                await _db.PurgeAsync();
-                await _db.CompactAsync();
-                return true;
+                Keys.DeleteAll();
+                return Task.FromResult(true);
             }
-            catch
+            catch (LiteException)
             {
-                return false;
+                return Task.FromResult(false);
             }
         }
 
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-            
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
             if (_disposed) return;
-            if (disposing)
-            {
-                _db.Dispose();
-            }
-                
+            _db.Dispose();
             _disposed = true;
-        }
-
-        ~DataTarget()
-        {
-            Dispose(false);
+            GC.SuppressFinalize(this);
         }
     }
 }

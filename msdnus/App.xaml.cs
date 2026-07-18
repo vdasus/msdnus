@@ -3,10 +3,12 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using msdnus.Core.Model;
+using msdnus.Core.Shared;
 using msdnus.Services;
 using msdnus.Shared;
 using msdnus.ViewModel;
 using System;
+using System.IO;
 
 namespace msdnus
 {
@@ -20,12 +22,31 @@ namespace msdnus
         {
             InitializeComponent();
 
+            UnhandledException += (_, e) =>
+            {
+                LogCrash("XamlUnhandled", e.Exception);
+                e.Handled = true;
+            };
+            AppDomain.CurrentDomain.UnhandledException += (_, e) =>
+                LogCrash("AppDomainUnhandled", e.ExceptionObject as Exception);
+            System.Threading.Tasks.TaskScheduler.UnobservedTaskException += (_, e) =>
+            {
+                LogCrash("UnobservedTask", e.Exception);
+                e.SetObserved();
+            };
+
             _host = Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) =>
                 {
                     // Register Services
+                    services.AddSingleton<ICryptoService, AesGcmCryptoService>();
                     services.AddSingleton<IDataSource, FileDataSource>();
-                    services.AddSingleton<IDataTarget, DataTarget>();
+                    services.AddSingleton<IDataTarget>(sp =>
+                    {
+                        var crypto = sp.GetRequiredService<ICryptoService>();
+                        var dbPath = Path.Combine(AppEnvironment.DataFolder, "msdnus.litedb");
+                        return new DataTarget(dbPath, crypto.DeriveSecret("msdnusdb"));
+                    });
                     services.AddSingleton<ISettingsProvider, SettingsProvider>();
                     services.AddSingleton<INavigationService, NavigationService>();
 
@@ -44,9 +65,6 @@ namespace msdnus
                     services.AddTransient<CoffeeCup>();
                 })
                 .Build();
-
-            // Initialize Lex.Db serialization
-            Lex.Db.Serialization.Extender.RegisterType<YourKeyKeyDTO, CustomTypesSerializers>(1000);
         }
 
         /// <summary>
@@ -56,14 +74,6 @@ namespace msdnus
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-
-#if DEBUG
-            if (System.Diagnostics.Debugger.IsAttached)
-            {
-                DebugSettings.EnableFrameRateCounter = true;
-            }
-#endif
-
             MainWindow = new Window
             {
                 Title = "msdnus - Password Manager"
@@ -94,6 +104,20 @@ namespace msdnus
         private void OnNavigationFailed(object sender, Microsoft.UI.Xaml.Navigation.NavigationFailedEventArgs e)
         {
             throw new Exception($"Failed to load page {e.SourcePageType.FullName}: {e.Exception}");
+        }
+
+        private static void LogCrash(string source, Exception? ex)
+        {
+            try
+            {
+                File.AppendAllText(
+                    Path.Combine(AppEnvironment.DataFolder, "crash.log"),
+                    $"{DateTime.Now:O} [{source}] {ex}{Environment.NewLine}");
+            }
+            catch
+            {
+                // logging must never crash the app
+            }
         }
     }
 }

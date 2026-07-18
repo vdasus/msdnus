@@ -44,7 +44,7 @@
                                  HorizontalAlignment="Left" Margin="4" VerticalAlignment="Top" MinWidth="248" />
                                  
                     <ScrollViewer Grid.Row="2">
-                        <ListBox x:Uid="Log2" ItemsSource="{x:Bind Vm.DataItems, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <ListBox x:Uid="Log2" ItemsSource="{x:Bind Vm.DataItems.Result, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Top">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
