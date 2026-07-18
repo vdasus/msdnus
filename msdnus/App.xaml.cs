@@ -98,6 +98,7 @@ namespace msdnus
             frame.Navigate(typeof(MainPage), e.Arguments);
 
             MainWindow.Content = frame;
+            MainWindow.Closed += (_, _) => _host.Dispose();
             MainWindow.Activate();
         }
 

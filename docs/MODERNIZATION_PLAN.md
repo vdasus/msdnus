@@ -27,9 +27,20 @@ All five mandatory phases were executed on 2026-07-18. Deviations from the origi
   default PIN, and navigation to Help/About/Settings/CoffeeCup were exercised via UI Automation;
   a data-binding crash (`ItemsSource` bound to `NotifyTaskCompletion` instead of `.Result`) was
   found and fixed this way. Global exception logging writes to `crash.log` in the app data folder.
-- Verified gates: solution builds with 0 errors; 23/23 tests pass; unsigned MSIX bundle builds.
-- Still requiring a human: signed-package install test, OneDrive import with a real Microsoft
-  account (legacy client ID risk, see §5), and Store submission.
+- Verified gates: solution builds with 0 errors; 23/23 tests pass (also in Release, mirroring
+  the CI steps); unsigned MSIX bundle builds. Runtime verified additionally: lock → unlock →
+  re-lock cycle, and graceful window close (the DI host and LiteDB are now disposed on
+  `MainWindow.Closed`, so the database checkpoints properly).
+- The GitHub Actions workflow is committed but has never run: the repository's `origin` points
+  to a non-existent local path (`D:\_TEMP\msdnus.git`) and no GitHub repository exists. Create
+  one and push to activate CI.
+- **Warning before publishing the repository anywhere**: `external/KeysExport.xml` contains
+  real product activation keys and is tracked in git history. Remove/rewrite it before making
+  the repository public.
+- Still requiring a human: one manual click-through of "Import from file" (the Windows file
+  dialog resists focus-free UI automation; the underlying parse/save/persist logic is fully
+  unit-tested), signed-package install test, OneDrive import with a real Microsoft account
+  (legacy client ID risk, see §5), and Store submission.
 
 ---
 
