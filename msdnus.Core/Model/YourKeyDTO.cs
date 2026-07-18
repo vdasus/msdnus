@@ -10,7 +10,9 @@ namespace msdnus.Core.Model
 
         public void MapFromYourKeyProduct_Key(rootYourKeyProduct_Key yk)
         {
-            Name = yk.Name;
+            Name = yk.Name ?? string.Empty;
+            if (yk.Key == null) return;
+
             foreach (var gg in yk.Key)
             {
                 var tt = new YourKeyKeyDTO();
@@ -32,8 +34,8 @@ namespace msdnus.Core.Model
 
         public int GetHashCode(YourKeyDTO obj)
         {
-            int sum = obj.Items.Aggregate(0, (current, zz) => current ^ zz.Value.GetHashCode());
-            return obj.Name.GetHashCode() ^ sum;
+            int sum = obj.Items.Aggregate(0, (current, zz) => current ^ (zz.Value ?? string.Empty).GetHashCode());
+            return (obj.Name ?? string.Empty).GetHashCode() ^ sum;
         }
     }
 
@@ -51,10 +53,12 @@ namespace msdnus.Core.Model
 
         public void MapFromYourKeyProduct_KeyKey(rootYourKeyProduct_KeyKey ykk)
         {
-            ID = ykk.ID;
-            Type = ykk.Type;
-            ClaimedDate = ykk.ClaimedDate;
-            Value = ykk.Value;
+            // Empty XML elements/attributes deserialize as null — never let that
+            // propagate into the DTO (comparer and UI expect non-null strings).
+            ID = ykk.ID ?? string.Empty;
+            Type = ykk.Type ?? string.Empty;
+            ClaimedDate = ykk.ClaimedDate ?? string.Empty;
+            Value = ykk.Value ?? string.Empty;
         }
     }
 }
