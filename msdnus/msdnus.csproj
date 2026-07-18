@@ -19,6 +19,9 @@
     <!-- Pass -p:UnpackagedRun=true to build a self-contained unpackaged app for the dev inner loop -->
     <WindowsPackageType Condition="'$(UnpackagedRun)' == 'true'">None</WindowsPackageType>
     <WindowsAppSDKSelfContained Condition="'$(UnpackagedRun)' == 'true'">true</WindowsAppSDKSelfContained>
+    <!-- Packaged and unpackaged builds must never share build artifacts (XBF/PRI resource paths differ) -->
+    <IntermediateOutputPath Condition="'$(UnpackagedRun)' == 'true'">obj\unpackaged\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+    <OutputPath Condition="'$(UnpackagedRun)' == 'true'">bin\unpackaged\$(Platform)\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>

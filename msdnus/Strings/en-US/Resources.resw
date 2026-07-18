@@ -1,343 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="aboutbutton.Label" xml:space="preserve">
-    <value>About ...</value>
-  </data>
-  <data name="aboutbutton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>About ...</value>
-  </data>
-  <data name="appname.Text" xml:space="preserve">
-    <value>msdnus</value>
-  </data>
-  <data name="butcopy.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Copy key to clipboard</value>
-  </data>
-  <data name="cantunsnap" xml:space="preserve">
-    <value>Can't unsnap app</value>
-  </data>
-  <data name="copyedtext" xml:space="preserve">
-    <value>Key is copied to clipboard</value>
-  </data>
-  <data name="enterpin.Header" xml:space="preserve">
-    <value>Enter PIN</value>
-  </data>
-  <data name="enterpin.PlaceholderText" xml:space="preserve">
-    <value>Default is "123"</value>
-  </data>
-  <data name="enterpin2.Header" xml:space="preserve">
-    <value>Confirm PIN</value>
-  </data>
-  <data name="enterpin2.PlaceholderText" xml:space="preserve">
-    <value>Default is "123"</value>
-  </data>
-  <data name="fromonedrbutton.Label" xml:space="preserve">
-    <value>Import from OneDrive</value>
-  </data>
-  <data name="fromonedrbutton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Import KeysExport.xml file from the root of yours OneDrive</value>
-  </data>
-  <data name="helpbutton.Label" xml:space="preserve">
-    <value>Help</value>
-  </data>
-  <data name="IsDarkTheme.Header" xml:space="preserve">
-    <value>Dark theme</value>
-  </data>
-  <data name="lbcdt.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Claimed Date</value>
-  </data>
-  <data name="lbtyp.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Type</value>
-  </data>
-  <data name="lbval.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Key</value>
-  </data>
-  <data name="likebutton.Label" xml:space="preserve">
-    <value>Coffee cup</value>
-  </data>
-  <data name="likebutton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Support developer with amount less, than a coffeee cup...</value>
-  </data>
-  <data name="loadbutton.Label" xml:space="preserve">
-    <value>Import from file</value>
-  </data>
-  <data name="loadbutton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Import from local file</value>
-  </data>
-  <data name="loadednimported" xml:space="preserve">
-    <value>Loaded and imported</value>
-  </data>
-  <data name="lockbutton.Label" xml:space="preserve">
-    <value>Lock</value>
-  </data>
-  <data name="lockbutton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Lock to PIN code</value>
-  </data>
-  <data name="savepin.Content" xml:space="preserve">
-    <value>Save new PIN</value>
-  </data>
-  <data name="settingsbutton.Label" xml:space="preserve">
-    <value>Settings</value>
-  </data>
-  <data name="settingsbutton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Just customize app...</value>
-  </data>
-  <data name="srctxt.PlaceholderText" xml:space="preserve">
-    <value>Enter text to filter</value>
-  </data>
-  <data name="statusloading.Label" xml:space="preserve">
-    <value>Loading ...</value>
-  </data>
-  <data name="iejsaved" xml:space="preserve">
-    <value>PIN saved</value>
-  </data>
-  <data name="iejerror" xml:space="preserve">
-    <value>Must be the same and not empty</value>
-  </data>
-  <data name="helpdsc.Text" xml:space="preserve">
-    <value>Login to your msdn account and make export to the XML file. Then put file to your phone or to the root folder of OneDrive.
-
-If you prefer importing from OneDrive - file must be in root folder (not any subfolders) with name KeysExport.xml
-
-Then import to application using buttons:</value>
-  </data>
-  <data name="helpdsc2.Text" xml:space="preserve">
-    <value>All data imported to application is encrypted.</value>
-  </data>
-  <data name="resetiej.Text" xml:space="preserve">
-    <value>Reset password to default "123" (All data will be lost)</value>
-  </data>
-  <data name="iejreset" xml:space="preserve">
-    <value>Password was reset to "123". Data cleaned.</value>
-  </data>
-  <data name="rusure" xml:space="preserve">
-    <value>Are you sure? All data will be lost</value>
-  </data>
-  <data name="buycoffee.Content" xml:space="preserve">
-    <value>Buy cup of coffee to author</value>
-  </data>
-  <data name="purcerror" xml:space="preserve">
-    <value>Something wrong... Not in the cards ...</value>
-  </data>
-  <data name="purcok" xml:space="preserve">
-    <value>Thank You!</value>
-  </data>
-  <data name="abAuthor.Text" xml:space="preserve">
-    <value>Author: </value>
-  </data>
-  <data name="abAuthorValue.Text" xml:space="preserve">
-    <value>vdasus</value>
-  </data>
-  <data name="abCopyr.Text" xml:space="preserve">
-    <value>copyright © 2016 vdasus</value>
-  </data>
-  <data name="abDesc.Text" xml:space="preserve">
-    <value>Description: </value>
-  </data>
-  <data name="abDescValue.Text" xml:space="preserve">
-    <value>Your MSDN keys in your pocket</value>
-  </data>
-  <data name="abHInformation.Header" xml:space="preserve">
-    <value>Information</value>
-  </data>
-  <data name="abHistory.Header" xml:space="preserve">
-    <value>History</value>
-  </data>
-  <data name="abHThanks.Header" xml:space="preserve">
-    <value>Thanks to: </value>
-  </data>
-  <data name="abPublisher.Text" xml:space="preserve">
-    <value>Publisher: </value>
-  </data>
-  <data name="abPublisherValue.Text" xml:space="preserve">
-    <value>vdasus</value>
-  </data>
-  <data name="abRateme.Content" xml:space="preserve">
-    <value>Rate Me</value>
-  </data>
-  <data name="abSupMail.Content" xml:space="preserve">
-    <value>support@vdasus.com</value>
-  </data>
-  <data name="abSupMail.NavigateUri" xml:space="preserve">
-    <value>mailto:support@vdasus.com?subject=msdnus feedback</value>
-  </data>
-  <data name="abSupPage.Content" xml:space="preserve">
-    <value>support.vdasus.com</value>
-  </data>
-  <data name="abSupPage.NavigateUri" xml:space="preserve">
-    <value>http://support.vdasus.com</value>
-  </data>
-  <data name="abVer1.Text" xml:space="preserve">
-    <value>1.0</value>
-  </data>
-  <data name="abVer1Value.Text" xml:space="preserve">
-    <value>First release</value>
-  </data>
-  <data name="cantstart" xml:space="preserve">
-    <value>Something wrong, sorry...</value>
-  </data>
-  <data name="abVer133.Text" xml:space="preserve">
-    <value>1.3.3</value>
-  </data>
-  <data name="abVer133Value.Text" xml:space="preserve">
-    <value>* Small fixes</value>
-  </data>
-  <data name="abVer134.Text" xml:space="preserve">
-    <value>1.3.5</value>
-  </data>
-  <data name="abVer134Value.Text" xml:space="preserve">
-    <value>* Small fixes of password saving</value>
-  </data>
-  <data name="abPrivacy.Content" xml:space="preserve">
-    <value>Privacy Policy</value>
-  </data>
-  <data name="abPrivacy.NavigateUri" xml:space="preserve">
-    <value>http://support.vdasus.com/law/en/pp_no.html</value>
-  </data>
-  <data name="abVer136.Text" xml:space="preserve">
-    <value>1.3.6</value>
-  </data>
-  <data name="abVer136Value.Text" xml:space="preserve">
-    <value>* Bug fixes</value>
-  </data>
-  <data name="abVer141.Text" xml:space="preserve">
-    <value>1.4.1</value>
-  </data>
-  <data name="abVer141Value.Text" xml:space="preserve">
-    <value>* Changed encryption type</value>
-  </data>
-  <data name="abVer15.Text" xml:space="preserve">
-    <value>1.5</value>
-  </data>
-  <data name="abVer15Value.Text" xml:space="preserve">
-    <value>* Finally fixed password reset bug</value>
-  </data>
-  <data name="abVer151.Text" xml:space="preserve">
-    <value>1.5.1</value>
-  </data>
-  <data name="abVer151Value.Text" xml:space="preserve">
-    <value>* Fixed localization error</value>
-  </data>
-  <data name="abVer16.Text" xml:space="preserve">
-    <value>1.6</value>
-  </data>
-  <data name="abVer16Value.Text" xml:space="preserve">
-    <value>Renewed OneDrive</value>
-  </data>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="SearchBox.PlaceholderText" xml:space="preserve"><value>Search products (Ctrl+F)</value></data>
+  <data name="ImportFileLabel.Text" xml:space="preserve"><value>Import</value></data>
+  <data name="ImportFileButton.ToolTipService.ToolTip" xml:space="preserve"><value>Import keys XML file (Ctrl+O)</value></data>
+  <data name="ImportOneDriveButton.ToolTipService.ToolTip" xml:space="preserve"><value>Import KeysExport.xml from OneDrive</value></data>
+  <data name="SettingsButton.ToolTipService.ToolTip" xml:space="preserve"><value>Settings</value></data>
+  <data name="AboutButton.ToolTipService.ToolTip" xml:space="preserve"><value>About</value></data>
+  <data name="LockButton.ToolTipService.ToolTip" xml:space="preserve"><value>Lock (Ctrl+L)</value></data>
+  <data name="AboutDescription.Text" xml:space="preserve"><value>Offline vault for MSDN / Visual Studio Subscriptions product keys.</value></data>
+  <data name="EmptyTitle.Text" xml:space="preserve"><value>No keys yet</value></data>
+  <data name="EmptyHint.Text" xml:space="preserve"><value>Export your product keys XML from my.visualstudio.com (Subscriptions → Product Keys → Export) and import the file here.</value></data>
+  <data name="EmptyImportButton.Content" xml:space="preserve"><value>Import keys XML</value></data>
+  <data name="PinBox.PlaceholderText" xml:space="preserve"><value>PIN (default is 123)</value></data>
+  <data name="ResetPinButton.Content" xml:space="preserve"><value>Forgot PIN? Reset (erases all data)</value></data>
+  <data name="SettingsDialog.Title" xml:space="preserve"><value>Settings</value></data>
+  <data name="SettingsDialog.PrimaryButtonText" xml:space="preserve"><value>Save</value></data>
+  <data name="SettingsDialog.CloseButtonText" xml:space="preserve"><value>Cancel</value></data>
+  <data name="ThemeToggle.Header" xml:space="preserve"><value>Dark theme</value></data>
+  <data name="NewPin1.Header" xml:space="preserve"><value>New PIN</value></data>
+  <data name="NewPin2.Header" xml:space="preserve"><value>Repeat new PIN</value></data>
+  <data name="ResultsFmt" xml:space="preserve"><value>{0} products</value></data>
+  <data name="MsgCopied" xml:space="preserve"><value>Key copied to clipboard</value></data>
+  <data name="MsgImportOk" xml:space="preserve"><value>Imported {0} products</value></data>
+  <data name="MsgImportErr" xml:space="preserve"><value>Import failed</value></data>
+  <data name="MsgImportBad" xml:space="preserve"><value>The file does not look like an MSDN keys export</value></data>
+  <data name="MsgPinSaved" xml:space="preserve"><value>PIN changed</value></data>
+  <data name="MsgPinMismatch" xml:space="preserve"><value>PINs are empty or do not match</value></data>
+  <data name="MsgPinReset" xml:space="preserve"><value>PIN reset to &quot;123&quot;, data erased</value></data>
+  <data name="MsgLegacyDb" xml:space="preserve"><value>Data from a previous version was found — please re-import your keys XML.</value></data>
+  <data name="DlgResetTitle" xml:space="preserve"><value>Reset PIN</value></data>
+  <data name="DlgResetText" xml:space="preserve"><value>Reset the PIN to &quot;123&quot;? All imported keys will be erased.</value></data>
+  <data name="DlgOk" xml:space="preserve"><value>Reset</value></data>
+  <data name="DlgCancel" xml:space="preserve"><value>Cancel</value></data>
 </root>

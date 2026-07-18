@@ -49,19 +49,15 @@ XML export (file / OneDrive)
 
 ```
 msdnus.sln
-├── msdnus/                        — WinUI 3 app host
-│   ├── App.xaml.cs                — DI container setup, MSAL init, window bootstrap
-│   ├── MainPage.xaml / .cs        — primary key list view
-│   ├── Settings.xaml / .cs        — password change + dark/light theme toggle
-│   ├── About / Help / CoffeeCup   — informational + donation pages
-│   ├── ViewModel/                 — MVVM ViewModels (one per page)
-│   │   ├── MainViewModel.cs       — data load, search, import, lock/unlock, OneDrive
-│   │   └── SettingsViewModel.cs   — password management, theme
+├── msdnus/                        — WinUI 3 app host (single page, no navigation)
+│   ├── App.xaml.cs                — DI container setup, Mica window bootstrap, crash logging
+│   ├── MainPage.xaml / .cs        — the whole UI: lock overlay, search, key list,
+│   │                                settings dialog, about flyout, InfoBar feedback
+│   ├── ViewModel/MainViewModel.cs — search, import (file/OneDrive), lock/unlock, PIN, theme
 │   └── Shared/                    — UI helpers
-│       ├── SettingsProvider.cs    — roaming + local ApplicationData wrapper
-│       ├── TextToastManager.cs    — in-app toast notifications
-│       ├── ThemeAwareFrame.cs     — dynamic theme switching
-│       └── converters/            — BoolToVisible, InverseBool, StringFormat
+│       ├── SettingsProvider.cs    — ApplicationData / JSON-file settings (packaged/unpackaged)
+│       ├── AppEnvironment.cs      — package-identity detection + data folder
+│       └── Loc.cs                 — resource strings with English fallback
 │
 ├── msdnus.Core/                   — platform-agnostic domain + data layer
 │   ├── Model/
@@ -99,8 +95,9 @@ dotnet build msdnus.sln -p:Platform=x64
 dotnet test msdnus.Tests/msdnus.Tests.csproj
 
 # dev inner loop: self-contained unpackaged build, runs without MSIX deployment
+# (note: unpackaged output goes to bin/unpackaged — packaged and unpackaged artifacts never mix)
 dotnet build msdnus/msdnus.csproj -p:Platform=x64 -p:UnpackagedRun=true
-./msdnus/bin/x64/Debug/net10.0-windows10.0.19041.0/msdnus.exe
+./msdnus/bin/unpackaged/x64/Debug/net10.0-windows10.0.19041.0/msdnus.exe
 
 # unsigned MSIX package
 dotnet build msdnus/msdnus.csproj -c Release -p:Platform=x64 -p:GenerateAppxPackageOnBuild=true -p:AppxPackageSigningEnabled=false
