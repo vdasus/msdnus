@@ -224,3 +224,7 @@ temp/
 
 # Never commit signing certificates
 *.pfx
+
+# Real MSDN key exports must never be committed (anonymized *.old sample is fine)
+external/KeysExport.xml
+KeysExport2*.xml
