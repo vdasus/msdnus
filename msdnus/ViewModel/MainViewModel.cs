@@ -71,7 +71,9 @@ namespace msdnus.ViewModel
             {
                 if (_settingsProvider.IsFirstRun)
                 {
-                    ResetIejimoPwd();
+                    // First run: seed the default PIN silently — no UI exists yet
+                    // (the window content is not assigned at this point), so no dialog.
+                    _settingsProvider.SetIejimoParameter("123");
                     _settingsProvider.IsFirstRun = false;
                 }
 
@@ -259,13 +261,16 @@ namespace msdnus.ViewModel
         [RelayCommand]
         private async Task ResetIejimoPwd()
         {
+            var xamlRoot = App.MainWindow?.Content?.XamlRoot;
+            if (xamlRoot == null) return;
+
             var dialog = new ContentDialog
             {
                 Title = "Reset Password",
                 Content = "Are you sure you want to reset the password?",
                 PrimaryButtonText = "Ok",
                 CloseButtonText = "Cancel",
-                XamlRoot = App.MainWindow.Content.XamlRoot
+                XamlRoot = xamlRoot
             };
 
             var result = await dialog.ShowAsync();

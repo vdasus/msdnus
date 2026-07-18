@@ -28,6 +28,9 @@ namespace msdnus.ViewModel
         {
             try
             {
+                var xamlRoot = App.MainWindow?.Content?.XamlRoot;
+                if (xamlRoot == null) return;
+
                 // Show dialog for donation/support
                 var dialog = new ContentDialog
                 {
@@ -36,7 +39,7 @@ namespace msdnus.ViewModel
                              "In-app purchases are being updated for Windows App SDK. " +
                              "Please visit our website or GitHub to support development.",
                     PrimaryButtonText = "OK",
-                    XamlRoot = App.MainWindow.Content.XamlRoot
+                    XamlRoot = xamlRoot
                 };
 
                 await dialog.ShowAsync();
