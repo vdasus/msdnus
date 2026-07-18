@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "msdnus (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "msdnus (Unpackaged)": {
+      "commandName": "Project",
+      "commandLineArgs": "",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
