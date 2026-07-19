@@ -4,26 +4,30 @@ namespace msdnus.Core.Model
 {
     /// <summary>
     /// LiteDB-backed key store. The database file is encrypted with a password
-    /// (derived from the machine-bound key by the caller), so key values are
-    /// protected at rest without per-field encryption.
+    /// (derived from the user PIN by the caller), so key values are protected at
+    /// rest without per-field encryption.
     /// </summary>
     public class DataTarget : IDataTarget
     {
         private const string CollectionName = "keys";
 
-        private readonly LiteDatabase _db;
+        private readonly string _databasePath;
+        private LiteDatabase _db;
         private bool _disposed;
 
         public DataTarget(string databasePath, string? password = null)
         {
-            var connectionString = new ConnectionString
-            {
-                Filename = databasePath,
-                Password = string.IsNullOrEmpty(password) ? null : password
-            };
-            _db = new LiteDatabase(connectionString);
+            _databasePath = databasePath;
+            _db = OpenDatabase(databasePath, password);
             Keys.EnsureIndex(x => x.Name);
         }
+
+        private static LiteDatabase OpenDatabase(string path, string? password) =>
+            new(new ConnectionString
+            {
+                Filename = path,
+                Password = string.IsNullOrEmpty(password) ? null : password
+            });
 
         private ILiteCollection<YourKeyDTO> Keys => _db.GetCollection<YourKeyDTO>(CollectionName);
 
@@ -74,6 +78,21 @@ namespace msdnus.Core.Model
             {
                 return Task.FromResult(false);
             }
+        }
+
+        public void ChangePassword(string? newPassword)
+        {
+            // Re-encrypt by reading all documents, then rewriting them into a fresh
+            // database file encrypted with the new password. Robust and cheap for the
+            // small key stores used here, and independent of LiteDB's Rebuild quirks.
+            var all = Keys.FindAll().ToList();
+
+            _db.Dispose();
+            File.Delete(_databasePath);
+
+            _db = OpenDatabase(_databasePath, newPassword);
+            Keys.EnsureIndex(x => x.Name);
+            if (all.Count > 0) Keys.Insert(all);
         }
 
         public void Dispose()

@@ -1,33 +1,38 @@
+using System;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace msdnus.Core.Shared
 {
     /// <summary>
-    /// AES-GCM encryption with a machine-bound key. The key is derived from the machine name
-    /// plus a fixed application salt, so protected data cannot be decrypted on another machine.
+    /// AES-GCM encryption with a key derived from a user PIN/passphrase and a random
+    /// per-vault salt (PBKDF2-SHA256). The key is <b>not</b> bound to the machine, so an
+    /// encrypted vault can be synced across machines (e.g. via Dropbox) and opened anywhere
+    /// with the correct PIN. The PIN may contain any characters, not just digits.
     /// </summary>
     public sealed class AesGcmCryptoService : ICryptoService
     {
-        private const string AppSalt = "1908B56935BF-msdnus-v2";
+        /// <summary>Default PBKDF2 iteration count. High enough to make brute-force expensive.</summary>
+        public const int DefaultIterations = 300_000;
+
         private const int KeyLength = 32;
         private const int NonceLength = 12;
         private const int TagLength = 16;
-        private const int Pbkdf2Iterations = 100_000;
 
         private readonly byte[] _key;
 
-        /// <param name="keySeed">
-        /// Key material seed. Defaults to the machine name, which binds the key to this machine.
-        /// Tests may pass a fixed seed.
-        /// </param>
-        public AesGcmCryptoService(string? keySeed = null)
+        /// <param name="pin">User PIN or passphrase (any characters).</param>
+        /// <param name="salt">Random per-vault salt (16+ bytes recommended). Not secret.</param>
+        /// <param name="iterations">PBKDF2-SHA256 iteration count.</param>
+        public AesGcmCryptoService(string pin, byte[] salt, int iterations = DefaultIterations)
         {
-            var seed = string.IsNullOrEmpty(keySeed) ? Environment.MachineName : keySeed;
+            if (salt is null || salt.Length == 0)
+                throw new ArgumentException("A non-empty salt is required.", nameof(salt));
+
             _key = Rfc2898DeriveBytes.Pbkdf2(
-                Encoding.UTF8.GetBytes(seed + AppSalt),
-                Encoding.UTF8.GetBytes(AppSalt),
-                Pbkdf2Iterations,
+                Encoding.UTF8.GetBytes(pin ?? string.Empty),
+                salt,
+                iterations,
                 HashAlgorithmName.SHA256,
                 KeyLength);
         }
@@ -88,9 +93,12 @@ namespace msdnus.Core.Shared
 
         public string DeriveSecret(string purpose)
         {
+            // Domain-separated one-way derivation from the master key. Used for the
+            // per-profile database passwords and the PIN verifier — none of which
+            // reveal the master key or each other.
             var derived = Rfc2898DeriveBytes.Pbkdf2(
                 _key,
-                Encoding.UTF8.GetBytes(purpose + AppSalt),
+                Encoding.UTF8.GetBytes("msdnus:" + purpose),
                 1,
                 HashAlgorithmName.SHA256,
                 KeyLength);

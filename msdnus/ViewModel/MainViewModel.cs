@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -21,11 +22,11 @@ namespace msdnus.ViewModel
     public sealed partial class MainViewModel : ObservableObject
     {
         private readonly IDataSource _datasource;
-        private readonly IDataTarget _datatarget;
-        private readonly ISettingsProvider _settingsProvider;
+        private readonly VaultService _vault;
         private readonly IPublicClientApplication _msalClient;
 
         private CancellationTokenSource? _infoCts;
+        private bool _suppressProfileChange;
 
         [ObservableProperty]
         public partial List<YourKeyDTO> Products { get; set; } = new();
@@ -48,7 +49,17 @@ namespace msdnus.ViewModel
         [ObservableProperty]
         public partial InfoBarSeverity InfoSeverity { get; set; } = InfoBarSeverity.Success;
 
+        [ObservableProperty]
+        public partial string? SelectedProfileName { get; set; }
+
+        public ObservableCollection<string> Profiles { get; } = new();
+
         public bool IsUnlocked => !IsLocked;
+
+        /// <summary>True on first run (or after a reset): the user must create a PIN instead of entering one.</summary>
+        public bool NeedsPinSetup => !_vault.HasPin;
+
+        public bool HasPin => _vault.HasPin;
 
         public bool HasProducts => Products.Count > 0;
 
@@ -60,24 +71,20 @@ namespace msdnus.ViewModel
 
         public bool IsDarkTheme
         {
-            get => _settingsProvider.IsDarkTheme;
+            get => _vault.Settings.IsDarkTheme;
             set
             {
-                if (_settingsProvider.IsDarkTheme == value) return;
-                _settingsProvider.IsDarkTheme = value;
+                if (_vault.Settings.IsDarkTheme == value) return;
+                _vault.SaveTheme(value);
                 OnPropertyChanged();
                 ApplyTheme();
             }
         }
 
-        public MainViewModel(
-            IDataSource datasource,
-            IDataTarget datatarget,
-            ISettingsProvider settingsProvider)
+        public MainViewModel(IDataSource datasource, VaultService vault)
         {
             _datasource = datasource;
-            _datatarget = datatarget;
-            _settingsProvider = settingsProvider;
+            _vault = vault;
 
             _msalClient = PublicClientApplicationBuilder
                 .Create("000000004017CE14")
@@ -85,15 +92,8 @@ namespace msdnus.ViewModel
                 .WithAuthority("https://login.microsoftonline.com/consumers")
                 .Build();
 
-            if (_settingsProvider.IsFirstRun)
-            {
-                _settingsProvider.SetIejimoParameter("123");
-                _settingsProvider.IsFirstRun = false;
-            }
-
             IsLocked = true;
             NotifyIfLegacyDatabasePresent();
-            _ = RefreshAsync();
         }
 
         partial void OnIsLockedChanged(bool value) => OnPropertyChanged(nameof(IsUnlocked));
@@ -107,34 +107,200 @@ namespace msdnus.ViewModel
 
         partial void OnSearchTextChanged(string? value) => _ = RefreshAsync();
 
-        private async Task RefreshAsync()
+        partial void OnSelectedProfileNameChanged(string? value)
         {
-            try
-            {
-                Products = await _datatarget.GetDataValueByNameAsync(SearchText ?? string.Empty);
-            }
-            catch (Exception ex)
-            {
-                ShowInfo(ex.Message, InfoBarSeverity.Error);
-            }
+            if (_suppressProfileChange || string.IsNullOrEmpty(value)) return;
+            _vault.SelectProfile(value);
+            _ = RefreshAsync();
         }
 
-        [RelayCommand]
-        private void CheckPassword(string password)
+        // ---- Unlock / PIN --------------------------------------------------
+
+        /// <summary>Unlocks an existing vault with the entered PIN.</summary>
+        public void SubmitPin(string pin)
         {
-            var storedPassword = _settingsProvider.GetIejimoParameterAsync();
-
-            if (string.IsNullOrEmpty(storedPassword) || password != storedPassword)
+            if (!_vault.TryUnlock(pin))
+            {
+                ShowInfo(Loc.Get("MsgWrongPin", "Wrong PIN"), InfoBarSeverity.Error);
                 return;
+            }
 
+            OnUnlocked();
+        }
+
+        /// <summary>Creates the first PIN (first run / after reset) and unlocks. Returns false when the PINs do not match.</summary>
+        public bool CreatePin(string pin1, string pin2)
+        {
+            if (string.IsNullOrEmpty(pin1) || pin1 != pin2)
+            {
+                ShowInfo(Loc.Get("MsgPinMismatch", "PINs are empty or do not match"), InfoBarSeverity.Warning);
+                return false;
+            }
+
+            _vault.CreatePin(pin1);
+            OnPropertyChanged(nameof(NeedsPinSetup));
+            OnPropertyChanged(nameof(HasPin));
+            OnUnlocked();
+            return true;
+        }
+
+        /// <summary>Called from the settings dialog. Re-encrypts all profiles with the new PIN.</summary>
+        public bool TryChangePin(string pin1, string pin2)
+        {
+            if (string.IsNullOrEmpty(pin1) || pin1 != pin2)
+            {
+                ShowInfo(Loc.Get("MsgPinMismatch", "PINs are empty or do not match"), InfoBarSeverity.Warning);
+                return false;
+            }
+
+            if (!_vault.ChangePin(pin1))
+            {
+                ShowInfo(Loc.Get("MsgPinChangeFailed", "Could not change the PIN"), InfoBarSeverity.Error);
+                return false;
+            }
+
+            ShowInfo(Loc.Get("MsgPinSaved", "PIN changed, everything re-encrypted"), InfoBarSeverity.Success);
+            return true;
+        }
+
+        private void OnUnlocked()
+        {
             IsLocked = false;
+            RefreshProfiles();
+            _ = RefreshAsync();
         }
 
         [RelayCommand]
         private void Lock()
         {
             SearchText = string.Empty;
+            _vault.Lock();
             IsLocked = true;
+        }
+
+        [RelayCommand]
+        private async Task ResetPin()
+        {
+            var xamlRoot = App.MainWindow?.Content?.XamlRoot;
+            if (xamlRoot == null) return;
+
+            var dialog = new ContentDialog
+            {
+                Title = Loc.Get("DlgResetTitle", "Reset everything"),
+                Content = Loc.Get("DlgResetText",
+                    "Forgot the PIN? All profiles and imported keys will be permanently erased and you will set a new PIN."),
+                PrimaryButtonText = Loc.Get("DlgOk", "Reset"),
+                CloseButtonText = Loc.Get("DlgCancel", "Cancel"),
+                DefaultButton = ContentDialogButton.Close,
+                XamlRoot = xamlRoot
+            };
+
+            if (await dialog.ShowAsync() != ContentDialogResult.Primary) return;
+
+            _vault.ResetAll();
+            IsLocked = true;
+            Products = new List<YourKeyDTO>();
+            RefreshProfiles();
+            OnPropertyChanged(nameof(NeedsPinSetup));
+            OnPropertyChanged(nameof(HasPin));
+            ShowInfo(Loc.Get("MsgVaultReset", "Vault reset — create a new PIN"), InfoBarSeverity.Informational);
+        }
+
+        // ---- Profiles ------------------------------------------------------
+
+        [RelayCommand]
+        private async Task AddProfile()
+        {
+            var xamlRoot = App.MainWindow?.Content?.XamlRoot;
+            if (xamlRoot == null) return;
+
+            var input = new TextBox { PlaceholderText = Loc.Get("ProfileNameHint", "Profile name") };
+            var dialog = new ContentDialog
+            {
+                Title = Loc.Get("DlgAddProfileTitle", "New profile"),
+                Content = input,
+                PrimaryButtonText = Loc.Get("DlgCreate", "Create"),
+                CloseButtonText = Loc.Get("DlgCancel", "Cancel"),
+                DefaultButton = ContentDialogButton.Primary,
+                XamlRoot = xamlRoot
+            };
+
+            if (await dialog.ShowAsync() != ContentDialogResult.Primary) return;
+
+            if (!_vault.AddProfile(input.Text))
+            {
+                ShowInfo(Loc.Get("MsgProfileInvalid", "Empty name or a profile with that name already exists"),
+                    InfoBarSeverity.Warning);
+                return;
+            }
+
+            SearchText = string.Empty;
+            RefreshProfiles();
+            await RefreshAsync();
+        }
+
+        [RelayCommand]
+        private async Task DeleteProfile()
+        {
+            var name = _vault.SelectedProfile;
+            if (string.IsNullOrEmpty(name)) return;
+
+            if (_vault.ProfileNames.Count <= 1)
+            {
+                ShowInfo(Loc.Get("MsgLastProfile", "At least one profile is required"), InfoBarSeverity.Warning);
+                return;
+            }
+
+            var xamlRoot = App.MainWindow?.Content?.XamlRoot;
+            if (xamlRoot == null) return;
+
+            var dialog = new ContentDialog
+            {
+                Title = Loc.Get("DlgDeleteProfileTitle", "Delete profile"),
+                Content = string.Format(
+                    Loc.Get("DlgDeleteProfileText", "Delete profile \"{0}\" and all its keys?"), name),
+                PrimaryButtonText = Loc.Get("DlgDelete", "Delete"),
+                CloseButtonText = Loc.Get("DlgCancel", "Cancel"),
+                DefaultButton = ContentDialogButton.Close,
+                XamlRoot = xamlRoot
+            };
+
+            if (await dialog.ShowAsync() != ContentDialogResult.Primary) return;
+
+            _vault.RemoveProfile(name);
+            SearchText = string.Empty;
+            RefreshProfiles();
+            await RefreshAsync();
+        }
+
+        private void RefreshProfiles()
+        {
+            _suppressProfileChange = true;
+            Profiles.Clear();
+            foreach (var n in _vault.ProfileNames) Profiles.Add(n);
+            SelectedProfileName = _vault.SelectedProfile;
+            _suppressProfileChange = false;
+        }
+
+        // ---- Data ----------------------------------------------------------
+
+        private async Task RefreshAsync()
+        {
+            var target = _vault.Current;
+            if (target == null)
+            {
+                Products = new List<YourKeyDTO>();
+                return;
+            }
+
+            try
+            {
+                Products = await target.GetDataValueByNameAsync(SearchText ?? string.Empty);
+            }
+            catch (Exception ex)
+            {
+                ShowInfo(ex.Message, InfoBarSeverity.Error);
+            }
         }
 
         [RelayCommand]
@@ -223,44 +389,6 @@ namespace msdnus.ViewModel
             }
         }
 
-        [RelayCommand]
-        private async Task ResetPin()
-        {
-            var xamlRoot = App.MainWindow?.Content?.XamlRoot;
-            if (xamlRoot == null) return;
-
-            var dialog = new ContentDialog
-            {
-                Title = Loc.Get("DlgResetTitle", "Reset PIN"),
-                Content = Loc.Get("DlgResetText", "Reset the PIN to \"123\"? All imported keys will be erased."),
-                PrimaryButtonText = Loc.Get("DlgOk", "Reset"),
-                CloseButtonText = Loc.Get("DlgCancel", "Cancel"),
-                DefaultButton = ContentDialogButton.Close,
-                XamlRoot = xamlRoot
-            };
-
-            if (await dialog.ShowAsync() != ContentDialogResult.Primary) return;
-
-            await _datatarget.CleanDbAsync();
-            _settingsProvider.SetIejimoParameter("123");
-            await RefreshAsync();
-            ShowInfo(Loc.Get("MsgPinReset", "PIN reset to \"123\", data erased"), InfoBarSeverity.Informational);
-        }
-
-        /// <summary>Called from the settings dialog. Returns false when the PINs do not match.</summary>
-        public bool TryChangePin(string pin1, string pin2)
-        {
-            if (string.IsNullOrEmpty(pin1) || pin1 != pin2)
-            {
-                ShowInfo(Loc.Get("MsgPinMismatch", "PINs are empty or do not match"), InfoBarSeverity.Warning);
-                return false;
-            }
-
-            _settingsProvider.SetIejimoParameter(pin1);
-            ShowInfo(Loc.Get("MsgPinSaved", "PIN changed"), InfoBarSeverity.Success);
-            return true;
-        }
-
         private async Task FinishImportAsync(bool imported)
         {
             if (!imported)
@@ -276,6 +404,9 @@ namespace msdnus.ViewModel
 
         private bool ImportData(Stream stream)
         {
+            var target = _vault.Current;
+            if (target == null) return false;
+
             root data = _datasource.GetData(stream);
             var yourKey = data.Items?.OfType<rootYourKey>().FirstOrDefault();
 
@@ -289,7 +420,7 @@ namespace msdnus.ViewModel
                 list.Add(dto);
             }
 
-            return _datatarget.SaveData(list, iscleanbefore: true, isdistinct: true);
+            return target.SaveData(list, iscleanbefore: true, isdistinct: true);
         }
 
         private void NotifyIfLegacyDatabasePresent()

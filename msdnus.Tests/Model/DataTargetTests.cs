@@ -135,5 +135,25 @@ namespace msdnus.Tests.Model
 
             openWithWrongPassword.Should().Throw<LiteDB.LiteException>();
         }
+
+        [Fact]
+        [Trait("Category", "IntegrationTest")]
+        [Trait("Priority", "High")]
+        public async Task ChangePassword_ReEncrypts_OldPasswordStopsWorking()
+        {
+            _target.SaveData(new List<YourKeyDTO> { NewDto("PERSISTED") }, true, true);
+
+            _target.ChangePassword("new-password");
+            _target.Dispose();
+
+            using (var reopened = new DataTarget(_dbPath, "new-password"))
+            {
+                var loaded = await reopened.GetAllDataAsync();
+                loaded.Should().ContainSingle().Which.Name.Should().Be("PERSISTED");
+            }
+
+            var openWithOldPassword = () => new DataTarget(_dbPath, "test-password");
+            openWithOldPassword.Should().Throw<LiteDB.LiteException>();
+        }
     }
 }

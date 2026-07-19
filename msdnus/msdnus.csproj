@@ -14,14 +14,26 @@
     <PublishAot>false</PublishAot>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Version>1.6.0</Version>
-    <AssemblyVersion>1.6.0.0</AssemblyVersion>
+    <Version>2.0.0</Version>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <!-- Embeds a Win32 icon resource into the unpackaged .exe (packaged builds get their icon from Package.appxmanifest tiles) -->
+    <ApplicationIcon>Assets\AppIcon.ico</ApplicationIcon>
     <!-- Pass -p:UnpackagedRun=true to build a self-contained unpackaged app for the dev inner loop -->
     <WindowsPackageType Condition="'$(UnpackagedRun)' == 'true'">None</WindowsPackageType>
     <WindowsAppSDKSelfContained Condition="'$(UnpackagedRun)' == 'true'">true</WindowsAppSDKSelfContained>
     <!-- Packaged and unpackaged builds must never share build artifacts (XBF/PRI resource paths differ) -->
     <IntermediateOutputPath Condition="'$(UnpackagedRun)' == 'true'">obj\unpackaged\$(Platform)\$(Configuration)\</IntermediateOutputPath>
     <OutputPath Condition="'$(UnpackagedRun)' == 'true'">bin\unpackaged\$(Platform)\$(Configuration)\</OutputPath>
+    <!-- Single-file self-contained publish for the unpackaged distributable (one .exe, WinAppSDK natives self-extracted at first run) -->
+    <PublishSingleFile Condition="'$(UnpackagedRun)' == 'true'">true</PublishSingleFile>
+    <SelfContained Condition="'$(UnpackagedRun)' == 'true'">true</SelfContained>
+    <IncludeNativeLibrariesForSelfExtract Condition="'$(UnpackagedRun)' == 'true'">true</IncludeNativeLibrariesForSelfExtract>
+    <!-- Compress the embedded payload (~100 MB smaller). Requires self-contained; first launch is slightly slower. -->
+    <EnableCompressionInSingleFile Condition="'$(UnpackagedRun)' == 'true'">true</EnableCompressionInSingleFile>
+    <DebugType Condition="'$(UnpackagedRun)' == 'true'">none</DebugType>
+    <DebugSymbols Condition="'$(UnpackagedRun)' == 'true'">false</DebugSymbols>
+    <!-- Don't copy .pdb of referenced projects (e.g. msdnus.Core) into the single-file output -->
+    <AllowedReferenceRelatedFileExtensions Condition="'$(UnpackagedRun)' == 'true'">none</AllowedReferenceRelatedFileExtensions>
   </PropertyGroup>
 
   <ItemGroup>

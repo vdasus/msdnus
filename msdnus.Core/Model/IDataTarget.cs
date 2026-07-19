@@ -10,5 +10,8 @@ namespace msdnus.Core.Model
         Task<List<YourKeyDTO>> GetAllDataAsync();
         Task<List<YourKeyDTO>> GetDataValueByNameAsync(string name);
         Task<bool> CleanDbAsync();
+
+        /// <summary>Re-encrypts the whole database file with a new password (or removes encryption when null/empty).</summary>
+        void ChangePassword(string? newPassword);
     }
 }

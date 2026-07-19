@@ -37,15 +37,9 @@ namespace msdnus
             _host = Host.CreateDefaultBuilder()
                 .ConfigureServices((_, services) =>
                 {
-                    services.AddSingleton<ICryptoService, AesGcmCryptoService>();
                     services.AddSingleton<IDataSource, FileDataSource>();
-                    services.AddSingleton<IDataTarget>(sp =>
-                    {
-                        var crypto = sp.GetRequiredService<ICryptoService>();
-                        var dbPath = Path.Combine(AppEnvironment.DataFolder, "msdnus.litedb");
-                        return new DataTarget(dbPath, crypto.DeriveSecret("msdnusdb"));
-                    });
-                    services.AddSingleton<ISettingsProvider, SettingsProvider>();
+                    services.AddSingleton<AppSettingsStore>();
+                    services.AddSingleton<VaultService>();
                     services.AddSingleton<MainViewModel>();
                 })
                 .Build();
@@ -63,8 +57,8 @@ namespace msdnus
             MainWindow.Content = page;
 
             // Apply the saved theme before the window becomes visible
-            var settings = Services.GetRequiredService<ISettingsProvider>();
-            page.RequestedTheme = settings.IsDarkTheme ? ElementTheme.Dark : ElementTheme.Light;
+            var settings = Services.GetRequiredService<AppSettingsStore>();
+            page.RequestedTheme = settings.Settings.IsDarkTheme ? ElementTheme.Dark : ElementTheme.Light;
 
             MainWindow.ExtendsContentIntoTitleBar = true;
             MainWindow.SetTitleBar(page.FindName("AppTitleBar") as UIElement);

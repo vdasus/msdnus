@@ -27,7 +27,7 @@ namespace msdnus
             RegisterAccelerator(VirtualKey.O, () => { if (Vm.IsUnlocked) Vm.ImportFromFileCommand.Execute(null); });
             RegisterAccelerator(VirtualKey.L, () => { if (Vm.IsUnlocked) Vm.LockCommand.Execute(null); });
 
-            Loaded += (_, _) => PinBox.Focus(FocusState.Programmatic);
+            Loaded += (_, _) => FocusPinEntry();
             Vm.PropertyChanged += OnVmPropertyChanged;
         }
 
@@ -46,21 +46,55 @@ namespace msdnus
         {
             if (e.PropertyName != nameof(Vm.IsLocked)) return;
 
+            PinBox.Password = string.Empty;
+            SetupPin1.Password = string.Empty;
+            SetupPin2.Password = string.Empty;
+
             if (Vm.IsLocked)
-            {
-                PinBox.Password = string.Empty;
-                PinBox.Focus(FocusState.Programmatic);
-            }
+                FocusPinEntry();
             else
-            {
-                PinBox.Password = string.Empty;
                 SearchBox.Focus(FocusState.Programmatic);
-            }
         }
 
-        private void PinBox_OnPasswordChanged(object sender, RoutedEventArgs e)
+        private void FocusPinEntry()
         {
-            Vm.CheckPasswordCommand.Execute(PinBox.Password);
+            if (Vm.NeedsPinSetup)
+                SetupPin1.Focus(FocusState.Programmatic);
+            else
+                PinBox.Focus(FocusState.Programmatic);
+        }
+
+        private void PinBox_OnKeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key != VirtualKey.Enter) return;
+            Vm.SubmitPin(PinBox.Password);
+            e.Handled = true;
+        }
+
+        private void UnlockButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Vm.SubmitPin(PinBox.Password);
+        }
+
+        private void SetupPin_OnKeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key != VirtualKey.Enter) return;
+            TryCreatePin();
+            e.Handled = true;
+        }
+
+        private void CreatePinButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            TryCreatePin();
+        }
+
+        private void TryCreatePin()
+        {
+            if (Vm.CreatePin(SetupPin1.Password, SetupPin2.Password))
+            {
+                SetupPin1.Password = string.Empty;
+                SetupPin2.Password = string.Empty;
+            }
         }
 
         private void SearchBox_OnKeyDown(object sender, KeyRoutedEventArgs e)

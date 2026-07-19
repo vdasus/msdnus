@@ -29,14 +29,22 @@ namespace msdnus.Shared
 
         private static string GetDataFolder()
         {
+            // Packaged (MSIX) builds cannot write next to the executable (read-only install
+            // location), so they keep using the per-user LocalFolder.
+            // Unpackaged builds are fully portable: the database, settings and everything else
+            // live in the same directory as the .exe, so the whole folder can be synced (e.g.
+            // via Dropbox) and carried between machines.
+            string folder;
             if (IsPackaged)
             {
-                return Windows.Storage.ApplicationData.Current.LocalFolder.Path;
+                folder = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
+            }
+            else
+            {
+                folder = Path.GetDirectoryName(Environment.ProcessPath)
+                         ?? AppContext.BaseDirectory;
             }
 
-            var folder = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "msdnus");
             Directory.CreateDirectory(folder);
             return folder;
         }
