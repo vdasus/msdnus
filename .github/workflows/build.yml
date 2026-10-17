@@ -2,9 +2,9 @@ name: Build & Test
 
 on:
   push:
-    branches: [develop, master, main, upgrade-to-UAP10]
+    branches: [main]
   pull_request:
-    branches: [develop, master, main]
+    branches: [main]
 
 jobs:
   build:
