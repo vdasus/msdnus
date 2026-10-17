@@ -119,9 +119,20 @@ namespace msdnus.ViewModel
         /// <summary>Unlocks an existing vault with the entered PIN.</summary>
         public void SubmitPin(string pin)
         {
-            if (!_vault.TryUnlock(pin))
+            try
             {
-                ShowInfo(Loc.Get("MsgWrongPin", "Wrong PIN"), InfoBarSeverity.Error);
+                if (!_vault.TryUnlock(pin))
+                {
+                    ShowInfo(Loc.Get("MsgWrongPin", "Wrong PIN"), InfoBarSeverity.Error);
+                    return;
+                }
+            }
+            catch (LiteDB.LiteException ex)
+            {
+                // PIN is right but the profile database does not open (damaged or encrypted with another key).
+                _vault.Lock();
+                ShowInfo(string.Format(Loc.Get("MsgProfileOpenFailedFmt", "Profile database cannot be opened: {0}"), ex.Message),
+                    InfoBarSeverity.Error);
                 return;
             }
 

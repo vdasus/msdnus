@@ -79,7 +79,12 @@ namespace msdnus.Shared
             return true;
         }
 
-        /// <summary>Re-encrypts every profile with a new PIN. Must be unlocked.</summary>
+        /// <summary>
+        /// Re-encrypts every profile with a new PIN. Must be unlocked.
+        /// Atomic: each profile is copied into a new file first; settings.json (new salt, verifier
+        /// and file names) is the single commit point; old files are deleted only after it.
+        /// A failure before the commit leaves the vault exactly as it was, under the old PIN.
+        /// </summary>
         public bool ChangePin(string newPin)
         {
             if (_crypto == null) return false;
@@ -91,19 +96,34 @@ namespace msdnus.Shared
             _current?.Dispose();
             _current = null;
 
-            foreach (var p in Settings.Profiles)
+            // Old and new file of each profile; ProfileInfo is only mutated after all copies succeed.
+            var staged = new List<(ProfileInfo Profile, ProfileInfo Old, ProfileInfo New)>();
+            try
             {
-                var path = DbPath(p);
-                if (!File.Exists(path)) continue;
+                foreach (var p in Settings.Profiles)
+                {
+                    var copy = new ProfileInfo { Name = p.Name, File = NewDbFileName() };
+                    staged.Add((p, new ProfileInfo { Name = p.Name, File = p.File }, copy));
+                    if (!File.Exists(DbPath(p))) continue;
 
-                using var t = new DataTarget(path, oldCrypto.DeriveSecret(DbPurpose(p)));
-                t.ChangePassword(newCrypto.DeriveSecret(DbPurpose(p)));
+                    using var t = new DataTarget(DbPath(p), oldCrypto.DeriveSecret(DbPurpose(p)));
+                    t.ExportTo(DbPath(copy), newCrypto.DeriveSecret(DbPurpose(copy)));
+                }
+            }
+            catch (Exception ex) when (ex is LiteDB.LiteException or IOException or UnauthorizedAccessException)
+            {
+                foreach (var s in staged) TryDeleteDb(s.New);
+                OpenSelectedProfile();
+                return false;
             }
 
+            foreach (var s in staged) s.Profile.File = s.New.File;
             Settings.KdfSalt = Convert.ToBase64String(newSalt);
             Settings.KdfIterations = AesGcmCryptoService.DefaultIterations;
             Settings.PinVerifier = newCrypto.DeriveSecret(VerifierPurpose);
             _store.Save();
+
+            foreach (var s in staged) TryDeleteDb(s.Old);
 
             _crypto = newCrypto;
             OpenSelectedProfile();
@@ -237,6 +257,10 @@ namespace msdnus.Shared
             {
                 var path = DbPath(p);
                 if (File.Exists(path)) File.Delete(path);
+                // LiteDB keeps uncommitted pages in a "<name>-log<ext>" file next to the database.
+                var log = Path.Combine(AppEnvironment.DataFolder,
+                    Path.GetFileNameWithoutExtension(p.File) + "-log" + Path.GetExtension(p.File));
+                if (File.Exists(log)) File.Delete(log);
             }
             catch
             {

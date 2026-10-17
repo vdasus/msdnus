@@ -139,21 +139,32 @@ namespace msdnus.Tests.Model
         [Fact]
         [Trait("Category", "IntegrationTest")]
         [Trait("Priority", "High")]
-        public async Task ChangePassword_ReEncrypts_OldPasswordStopsWorking()
+        public async Task ExportTo_WritesCopyWithNewPassword_SourceKeepsOldPassword()
         {
             _target.SaveData(new List<YourKeyDTO> { NewDto("PERSISTED") }, true, true);
+            var exportPath = Path.Combine(Path.GetTempPath(), $"msdnus-tests-{Guid.NewGuid():N}.litedb");
 
-            _target.ChangePassword("new-password");
-            _target.Dispose();
-
-            using (var reopened = new DataTarget(_dbPath, "new-password"))
+            try
             {
-                var loaded = await reopened.GetAllDataAsync();
-                loaded.Should().ContainSingle().Which.Name.Should().Be("PERSISTED");
-            }
+                _target.ExportTo(exportPath, "new-password");
+                _target.Dispose();
 
-            var openWithOldPassword = () => new DataTarget(_dbPath, "test-password");
-            openWithOldPassword.Should().Throw<LiteDB.LiteException>();
+                using (var exported = new DataTarget(exportPath, "new-password"))
+                {
+                    var loaded = await exported.GetAllDataAsync();
+                    loaded.Should().ContainSingle().Which.Name.Should().Be("PERSISTED");
+                }
+
+                var openExportWithOldPassword = () => new DataTarget(exportPath, "test-password");
+                openExportWithOldPassword.Should().Throw<LiteDB.LiteException>();
+
+                using var source = new DataTarget(_dbPath, "test-password");
+                (await source.GetAllDataAsync()).Should().ContainSingle().Which.Name.Should().Be("PERSISTED");
+            }
+            finally
+            {
+                if (File.Exists(exportPath)) File.Delete(exportPath);
+            }
         }
     }
 }

@@ -42,7 +42,10 @@ namespace msdnus.Shared
 
         public void Save()
         {
-            File.WriteAllText(_path, JsonSerializer.Serialize(Settings, JsonOptions));
+            // Write-then-rename: settings.json is the commit point of a PIN change, a torn write would lose the vault.
+            var tmp = _path + ".tmp";
+            File.WriteAllText(tmp, JsonSerializer.Serialize(Settings, JsonOptions));
+            File.Move(tmp, _path, overwrite: true);
         }
     }
 }

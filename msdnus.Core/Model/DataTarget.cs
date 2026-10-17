@@ -80,19 +80,17 @@ namespace msdnus.Core.Model
             }
         }
 
-        public void ChangePassword(string? newPassword)
+        public void ExportTo(string targetPath, string? password)
         {
-            // Re-encrypt by reading all documents, then rewriting them into a fresh
-            // database file encrypted with the new password. Robust and cheap for the
-            // small key stores used here, and independent of LiteDB's Rebuild quirks.
+            // Writes a copy into a fresh file instead of rewriting in place: the source stays
+            // intact until the caller commits, and a stale "-log" file next to the old database
+            // (e.g. one a sync client kept locked) can never be mixed with the new password.
             var all = Keys.FindAll().ToList();
 
-            _db.Dispose();
-            File.Delete(_databasePath);
-
-            _db = OpenDatabase(_databasePath, newPassword);
-            Keys.EnsureIndex(x => x.Name);
-            if (all.Count > 0) Keys.Insert(all);
+            using var target = OpenDatabase(targetPath, password);
+            var keys = target.GetCollection<YourKeyDTO>(CollectionName);
+            keys.EnsureIndex(x => x.Name);
+            if (all.Count > 0) keys.Insert(all);
         }
 
         public void Dispose()

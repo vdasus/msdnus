@@ -11,7 +11,7 @@ namespace msdnus.Core.Model
         Task<List<YourKeyDTO>> GetDataValueByNameAsync(string name);
         Task<bool> CleanDbAsync();
 
-        /// <summary>Re-encrypts the whole database file with a new password (or removes encryption when null/empty).</summary>
-        void ChangePassword(string? newPassword);
+        /// <summary>Copies all data into a new database file encrypted with <paramref name="password"/> (unencrypted when null/empty). The source is left untouched.</summary>
+        void ExportTo(string targetPath, string? password);
     }
 }
