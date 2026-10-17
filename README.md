@@ -40,3 +40,7 @@ dotnet publish msdnus\msdnus.csproj -c Release -r win-x64 -p:Platform=x64 -p:Unp
 ```
 
 More detail: [docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md).
+
+## License
+
+[MIT](LICENSE).
